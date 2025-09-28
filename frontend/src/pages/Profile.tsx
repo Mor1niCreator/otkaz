@@ -62,7 +62,7 @@ export function Profile() {
   const updateCurrency = async (currency: string) => {
     try {
       setSaving(true);
-      await axios.put('/api/users/currency', { currency });
+      await axios.post('/api/users/currency', { currency });
       await fetchProfile();
     } catch (error) {
       console.error('Failed to update currency:', error);
@@ -74,7 +74,7 @@ export function Profile() {
   const updateLocale = async (locale: string) => {
     try {
       setSaving(true);
-      await axios.put('/api/users/locale', { locale });
+      await axios.post('/api/users/locale', { locale });
       changeLanguage(locale);
       await fetchProfile();
     } catch (error) {
@@ -87,7 +87,7 @@ export function Profile() {
   const updateTimezone = async (timezone: string) => {
     try {
       setSaving(true);
-      await axios.put('/api/users/timezone', { timezone });
+      await axios.post('/api/users/timezone', { timezone });
       await fetchProfile();
     } catch (error) {
       console.error('Failed to update timezone:', error);
@@ -99,7 +99,7 @@ export function Profile() {
   const updateReminderTime = async (time: string) => {
     try {
       setSaving(true);
-      await axios.put('/api/users/reminder', { reminder_time: time });
+      await axios.post('/api/users/reminder', { reminder_time: time });
       await fetchProfile();
     } catch (error) {
       console.error('Failed to update reminder time:', error);

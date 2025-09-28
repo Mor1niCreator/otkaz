@@ -1,8 +1,6 @@
 services:
   app:
-    build: 
-      context: .
-      dockerfile: Dockerfile
+    build: .
     ports:
       - "8080:8080"
     volumes:
@@ -32,4 +30,3 @@ services:
       - FX_SUPPORTED=USD,EUR,JPY,GBP,AUD,CAD,CHF,CNY,HKD,SGD,SEK,KRW,NOK,NZD,INR,MXN,BRL,ZAR,TRY,PLN,TWD,THB,IDR,MYR,PHP,VND,AED,SAR,DKK,ILS,RUB,BYN,KZT,KGS,TJS,TMT,UZS,AMD,AZN,MDL,UAH
       - CRYPTO_CACHE_TTL_HOURS=24
       - CRYPTO_TOP_EXCLUDE=USDT,USDC,BUSD,TUSD,DAI,FDUSD,USDP
-    restart: unless-stopped

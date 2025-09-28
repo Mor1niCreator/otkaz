@@ -3,6 +3,7 @@ import { Target, Plus, Trash2, Edit } from 'lucide-react';
 import { useI18nStrict } from '../hooks/useI18nStrict';
 import { useFX } from '../hooks/useFX';
 import { ComicPanel } from '../components/ComicPanel';
+import { ROIBlock } from '../components/ROIBlock';
 import axios from 'axios';
 
 interface Goal {

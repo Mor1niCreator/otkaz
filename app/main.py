@@ -6,7 +6,7 @@ import os
 from .middleware import setup_middleware
 from .routers import (
     auth, users, entries, goals, presets, stats, 
-    referrals, fx, crypto, export, health
+    referrals, fx, crypto, export, health, achievements, ranks
 )
 from .config import settings
 import logging
@@ -42,6 +42,8 @@ app.include_router(fx.router)
 app.include_router(crypto.router)
 app.include_router(export.router)
 app.include_router(health.router)
+app.include_router(achievements.router)
+app.include_router(ranks.router)
 
 # Mount static files (built frontend)
 if os.path.exists("/app/static"):

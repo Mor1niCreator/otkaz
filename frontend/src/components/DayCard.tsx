@@ -77,7 +77,7 @@ export function DayCard({
           <Calendar size={16} className="text-muted" />
           <span className="font-medium">{formatDate(date)}</span>
           {isToday && (
-            <span className="badge badge-success text-xs">Сегодня</span>
+              <span className="badge badge-success text-xs">{t('calendar.today')}</span>
           )}
         </div>
         <button

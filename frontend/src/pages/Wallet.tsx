@@ -3,7 +3,6 @@ import { Wallet as WalletIcon, TrendingUp, Calendar, Target } from 'lucide-react
 import { useI18nStrict } from '../hooks/useI18nStrict';
 import { useFX } from '../hooks/useFX';
 import { ComicPanel } from '../components/ComicPanel';
-import { clsx } from 'clsx';
 import axios from 'axios';
 
 interface StatsResponse {

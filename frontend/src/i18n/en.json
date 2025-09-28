@@ -122,7 +122,8 @@
     "current_value": "Current Value",
     "disclaimer": "This is not financial advice. Past performance does not guarantee future results.",
     "loading": "Loading crypto data...",
-    "error": "Error loading crypto data"
+    "error": "Error loading crypto data",
+    "no_data": "No data to display"
   },
   "profile": {
     "title": "Profile",
