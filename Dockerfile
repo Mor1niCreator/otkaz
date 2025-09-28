@@ -1,6 +1,6 @@
 FROM python:3.11-slim
 
-# Install Node.js for frontend build
+# Install Node.js 18
 RUN apt-get update && apt-get install -y curl ca-certificates gnupg \
     && mkdir -p /etc/apt/keyrings \
     && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y curl ca-certificates gnupg \
 
 WORKDIR /app
 
-# Copy package files
+# Copy package files and install frontend dependencies
 COPY frontend/package*.json ./frontend/
 RUN cd frontend && npm ci --prefer-offline --no-audit --no-fund
 
@@ -18,7 +18,7 @@ RUN cd frontend && npm ci --prefer-offline --no-audit --no-fund
 COPY frontend/ ./frontend/
 RUN cd frontend && npm run build
 
-# Copy backend requirements
+# Copy backend requirements and install
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
