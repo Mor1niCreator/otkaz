@@ -7,9 +7,8 @@ from ..db import get_db
 from ..models import User, Entry
 from ..schemas import EntryCreate, EntryUpdate, Entry as EntrySchema
 from ..fx import fx_manager
-from ..points import points_calculator
+from ..points import points_calculator, achievement_checker, rank_calculator
 from ..referrals import referral_manager
-from ..points import achievement_checker, rank_calculator
 import logging
 
 logger = logging.getLogger(__name__)
