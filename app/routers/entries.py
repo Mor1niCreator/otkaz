@@ -9,8 +9,7 @@ from ..schemas import EntryCreate, EntryUpdate, Entry as EntrySchema
 from ..fx import fx_manager
 from ..points import points_calculator
 from ..referrals import referral_manager
-from ..achievement_checker import achievement_checker
-from ..rank_calculator import rank_calculator
+from ..points import achievement_checker, rank_calculator
 import logging
 
 logger = logging.getLogger(__name__)
@@ -92,9 +91,12 @@ async def create_entry(
         referral_manager.check_first_action_bonus(db, user, entry_amount_usd)
         
         # Calculate and update points
+        start_day = entry.entry_date.replace(hour=0, minute=0, second=0, microsecond=0)
+        end_day = entry.entry_date.replace(hour=23, minute=59, second=59, microsecond=999999)
         daily_entries = db.query(Entry).filter(
             Entry.user_id == user.id,
-            Entry.entry_date == entry.entry_date.date()
+            Entry.entry_date >= start_day,
+            Entry.entry_date <= end_day
         ).all()
         
         daily_points = points_calculator.calculate_daily_points(user, daily_entries, rates)

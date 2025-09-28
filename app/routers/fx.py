@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from ..db import get_db
+from datetime import datetime
 from ..models import User, FXRate
 from ..schemas import FXRatesResponse, FXRateResponse
 from ..fx import fx_manager

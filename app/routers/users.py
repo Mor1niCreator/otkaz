@@ -4,7 +4,7 @@ from ..db import get_db
 from ..models import User
 from ..schemas import UserUpdate, User as UserSchema, CurrencyEnum, LocaleEnum
 from ..config import settings
-from ..rank_calculator import rank_calculator
+from ..points import rank_calculator
 import logging
 
 logger = logging.getLogger(__name__)
@@ -31,15 +31,15 @@ async def get_user_profile(user: User = Depends(get_current_user)):
     return {"user": UserSchema.from_orm(user)}
 
 
-@router.put("/currency")
+@router.post("/currency")
 async def update_currency(
-    currency: CurrencyEnum,
+    payload: dict,
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Update user currency"""
-    
-    if currency not in settings.supported_currencies:
+    currency = payload.get("currency")
+    if not currency or currency not in settings.supported_currencies:
         raise HTTPException(status_code=400, detail="Unsupported currency")
     
     user.currency = currency
@@ -48,37 +48,41 @@ async def update_currency(
     return {"message": "Currency updated successfully", "currency": currency}
 
 
-@router.put("/locale")
+@router.post("/locale")
 async def update_locale(
-    locale: LocaleEnum,
+    payload: dict,
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Update user locale"""
-    
+    locale = payload.get("locale")
+    if locale not in [LocaleEnum.RU, LocaleEnum.EN]:
+        raise HTTPException(status_code=400, detail="Unsupported locale")
     user.locale = locale
     db.commit()
     
     return {"message": "Locale updated successfully", "locale": locale}
 
 
-@router.put("/timezone")
+@router.post("/timezone")
 async def update_timezone(
-    timezone: str,
+    payload: dict,
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Update user timezone"""
-    
+    timezone = payload.get("timezone")
+    if not timezone:
+        raise HTTPException(status_code=400, detail="Invalid timezone")
     user.timezone = timezone
     db.commit()
     
     return {"message": "Timezone updated successfully", "timezone": timezone}
 
 
-@router.put("/reminder")
+@router.post("/reminder")
 async def update_reminder_time(
-    reminder_time: str,
+    payload: dict,
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -86,6 +90,7 @@ async def update_reminder_time(
     
     # Validate time format (HH:MM)
     try:
+        reminder_time = payload.get("reminder_time", "")
         hour, minute = map(int, reminder_time.split(":"))
         if not (0 <= hour <= 23 and 0 <= minute <= 59):
             raise ValueError

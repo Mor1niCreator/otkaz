@@ -118,16 +118,12 @@ export function Calendar() {
   };
 
   const formatCurrency = (amountUSD: number) => {
-    // Convert USD to user currency (simplified - in real app use FX rates)
-    const rate = userCurrency === 'VND' ? 24000 : 1; // Simplified conversion
-    const amount = amountUSD * rate;
-    
     return new Intl.NumberFormat('ru-RU', {
       style: 'currency',
       currency: userCurrency,
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
-    }).format(amount);
+    }).format(amountUSD);
   };
 
   const navigateMonth = (direction: 'prev' | 'next') => {

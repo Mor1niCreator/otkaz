@@ -70,9 +70,9 @@ function App() {
     changeLanguage(newLang);
     
     if (user) {
-      axios.put('/api/users/locale', { locale: newLang })
-        .then(response => {
-          setUser(response.data.user);
+      axios.post('/api/users/locale', { locale: newLang })
+        .then(() => {
+          return axios.get('/api/users/me').then(r => setUser(r.data.user));
         })
         .catch(error => {
           console.error('Failed to update locale:', error);
