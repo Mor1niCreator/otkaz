@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
 import { motion } from 'framer-motion';
 import { useTranslation } from '@/lib/i18n';
+import { getUserFromStorage } from '@/lib/user-sync';
 
 interface Achievement {
   id: string;
@@ -31,12 +32,11 @@ export default function AchievementsPage() {
   const { t } = useTranslation(user?.language || 'en');
 
   useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (!userData) {
+    const parsedUser = getUserFromStorage();
+    if (!parsedUser) {
       router.push('/');
       return;
     }
-    const parsedUser = JSON.parse(userData);
     setUser(parsedUser);
     loadAchievements(parsedUser.id);
   }, [router]);

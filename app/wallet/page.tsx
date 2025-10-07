@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useTranslation } from '@/lib/i18n';
+import { formatCurrency, convertCurrency } from '@/lib/currency-utils';
+import { getUserFromStorage } from '@/lib/user-sync';
 
 export default function WalletPage() {
   const router = useRouter();
@@ -20,12 +22,11 @@ export default function WalletPage() {
   const { t } = useTranslation(user?.language || 'en');
 
   useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (!userData) {
+    const parsedUser = getUserFromStorage();
+    if (!parsedUser) {
       router.push('/');
       return;
     }
-    const parsedUser = JSON.parse(userData);
     setUser(parsedUser);
     setUserPoints(Number(parsedUser.points) || 0);
     loadStats(parsedUser.id);
@@ -57,11 +58,19 @@ export default function WalletPage() {
 
   if (!user) return null;
 
+  // Convert USD amounts to user's currency
+  const convertedStats = {
+    today: convertCurrency(stats.today, user.currency),
+    week: convertCurrency(stats.week, user.currency),
+    month: convertCurrency(stats.month, user.currency),
+    allTime: convertCurrency(stats.allTime, user.currency),
+  };
+
   const chartData = [
-    { name: t('today'), amount: stats.today },
-    { name: t('thisWeek'), amount: stats.week },
-    { name: t('thisMonth'), amount: stats.month },
-    { name: 'All Time', amount: stats.allTime },
+    { name: t('today'), amount: convertedStats.today },
+    { name: t('thisWeek'), amount: convertedStats.week },
+    { name: t('thisMonth'), amount: convertedStats.month },
+    { name: 'All Time', amount: convertedStats.allTime },
   ];
 
   return (
@@ -73,7 +82,7 @@ export default function WalletPage() {
           <div className="text-center">
             <p className="text-white text-lg mb-2">{t('totalSavings')}</p>
             <p className="text-6xl font-bold text-white mb-2">
-              ${stats.allTime.toFixed(2)}
+              {formatCurrency(convertedStats.allTime, user.currency)}
             </p>
             <p className="text-white text-sm">
               {userPoints.toFixed(0)} {t('points')} • {user.rank}
@@ -84,15 +93,15 @@ export default function WalletPage() {
         <div className="grid grid-cols-3 gap-3">
           <div className="bg-comic-yellow rounded-xl border-4 border-black p-4 text-center">
             <p className="text-xs text-gray-700 mb-1">{t('today')}</p>
-            <p className="text-2xl font-bold">${stats.today.toFixed(2)}</p>
+            <p className="text-2xl font-bold">{formatCurrency(convertedStats.today, user.currency)}</p>
           </div>
           <div className="bg-comic-lime rounded-xl border-4 border-black p-4 text-center">
             <p className="text-xs text-gray-700 mb-1">{t('thisWeek')}</p>
-            <p className="text-2xl font-bold">${stats.week.toFixed(2)}</p>
+            <p className="text-2xl font-bold">{formatCurrency(convertedStats.week, user.currency)}</p>
           </div>
           <div className="bg-comic-cyan rounded-xl border-4 border-black p-4 text-center">
             <p className="text-xs text-gray-700 mb-1">{t('thisMonth')}</p>
-            <p className="text-2xl font-bold">${stats.month.toFixed(2)}</p>
+            <p className="text-2xl font-bold">{formatCurrency(convertedStats.month, user.currency)}</p>
           </div>
         </div>
       </div>

@@ -7,6 +7,7 @@ import { CURRENCIES } from '@/lib/currencies';
 import { RANKS, getRankForPoints } from '@/lib/ranks';
 import toast from 'react-hot-toast';
 import { useTranslation } from '@/lib/i18n';
+import { getUserFromStorage } from '@/lib/user-sync';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -18,15 +19,14 @@ export default function ProfilePage() {
   const { t } = useTranslation(user?.language || 'en');
 
   useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (!userData) {
+    const parsedUser = getUserFromStorage();
+    if (!parsedUser) {
       router.push('/');
       return;
     }
-    const parsedUser = JSON.parse(userData);
     setUser(parsedUser);
-    setCurrency(parsedUser.currency);
-    setLanguage(parsedUser.language);
+    setCurrency(parsedUser.currency || 'USD');
+    setLanguage(parsedUser.language || 'en');
   }, [router]);
 
   const handleSave = async () => {

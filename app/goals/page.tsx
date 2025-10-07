@@ -5,6 +5,9 @@ import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
 import toast from 'react-hot-toast';
 import { useTranslation } from '@/lib/i18n';
+import { formatCurrency, convertCurrency } from '@/lib/currency-utils';
+import { DEFAULT_GOALS } from '@/lib/default-goals';
+import { getUserFromStorage } from '@/lib/user-sync';
 
 interface Goal {
   id: string;
@@ -40,12 +43,11 @@ export default function GoalsPage() {
   const { t } = useTranslation(user?.language || 'en');
 
   useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (!userData) {
+    const parsedUser = getUserFromStorage();
+    if (!parsedUser) {
       router.push('/');
       return;
     }
-    const parsedUser = JSON.parse(userData);
     setUser(parsedUser);
     loadGoals(parsedUser.id);
   }, [router]);
@@ -57,10 +59,36 @@ export default function GoalsPage() {
       if (res.ok) {
         setGoals(data.goals);
         setTotalSavings(data.totalSavings);
+        
+        // Create default goals if none exist
+        if (data.goals.length === 0) {
+          await createDefaultGoals(userId);
+        }
       }
     } catch (error) {
       console.error('Failed to load goals:', error);
     }
+  };
+
+  const createDefaultGoals = async (userId: string) => {
+    for (const goal of DEFAULT_GOALS) {
+      try {
+        await fetch('/api/goals/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId,
+            name: `${goal.icon} ${goal.name}`,
+            targetAmount: goal.targetUSD,
+            currency: 'USD',
+          }),
+        });
+      } catch (error) {
+        console.error('Failed to create default goal:', error);
+      }
+    }
+    // Reload goals after creating defaults
+    loadGoals(userId);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -117,7 +145,7 @@ export default function GoalsPage() {
         <h1 className="text-4xl font-bold mb-2">🎯 {t('yourGoals')}</h1>
         <div className="bg-comic-yellow rounded-xl border-4 border-black p-4 mt-4">
           <p className="text-sm text-gray-700">{t('totalSavings')}</p>
-          <p className="text-3xl font-bold">${totalSavings.toFixed(2)}</p>
+          <p className="text-3xl font-bold">{formatCurrency(convertCurrency(totalSavings, user.currency), user.currency)}</p>
         </div>
       </div>
 
@@ -140,13 +168,16 @@ export default function GoalsPage() {
           <div className="space-y-4">
             {goals.map((goal) => {
               const progress = Math.min((totalSavings / goal.usdTarget) * 100, 100);
+              const convertedSavings = convertCurrency(totalSavings, user.currency);
+              const convertedTarget = convertCurrency(goal.usdTarget, user.currency);
+              
               return (
                 <div key={goal.id} className="bg-white rounded-xl border-4 border-black p-4">
                   <div className="flex justify-between items-start mb-3">
                     <div>
                       <h3 className="font-bold text-lg">{goal.name}</h3>
                       <p className="text-sm text-gray-700">
-                        {t('target')}: ${goal.usdTarget.toFixed(2)}
+                        {t('target')}: {formatCurrency(convertedTarget, user.currency)}
                       </p>
                     </div>
                     <div className="text-right">
@@ -162,7 +193,7 @@ export default function GoalsPage() {
                     />
                   </div>
                   <p className="text-xs text-gray-600 mt-2 text-center">
-                    ${totalSavings.toFixed(2)} / ${goal.usdTarget.toFixed(2)}
+                    {formatCurrency(convertedSavings, user.currency)} / {formatCurrency(convertedTarget, user.currency)}
                   </p>
                 </div>
               );
@@ -175,7 +206,7 @@ export default function GoalsPage() {
         <div className="comic-panel mb-6">
           <h2 className="text-2xl font-bold mb-4">{t('cryptoROICalculator')}</h2>
           <p className="text-sm text-gray-700 mb-4">
-            {t('cryptoROIDescription')}
+            See what your {formatCurrency(convertCurrency(totalSavings, user.currency), user.currency)} would be worth if you invested it in top cryptocurrencies 5 years ago!
           </p>
           
           {!showCrypto ? (

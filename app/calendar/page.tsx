@@ -6,6 +6,7 @@ import Navigation from '@/components/Navigation';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 import { useTranslation } from '@/lib/i18n';
+import { formatCurrency, getCurrencySymbol } from '@/lib/currency-utils';
 
 interface Entry {
   id: string;
@@ -13,6 +14,7 @@ interface Entry {
   pricePerUnit: number;
   quantity: number;
   category: string;
+  currency: string;
   usdAmount: number;
   date: string;
 }
@@ -40,12 +42,11 @@ export default function CalendarPage() {
   const { t } = useTranslation(user?.language || 'en');
 
   useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (!userData) {
+    const parsedUser = getUserFromStorage();
+    if (!parsedUser) {
       router.push('/');
       return;
     }
-    const parsedUser = JSON.parse(userData);
     setUser(parsedUser);
     loadEntries(parsedUser.id);
   }, [router]);
@@ -112,7 +113,9 @@ export default function CalendarPage() {
 
   if (!user) return null;
 
-  const todayTotal = entries.reduce((sum, e) => sum + e.usdAmount, 0);
+  // Calculate total in USD, then convert to user's currency
+  const todayTotalUSD = entries.reduce((sum, e) => sum + e.usdAmount, 0);
+  const todayTotal = convertCurrency(todayTotalUSD, user.currency || 'USD');
 
   return (
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto">
@@ -121,7 +124,7 @@ export default function CalendarPage() {
         <p className="text-xl text-gray-700">{format(new Date(), 'MMMM d, yyyy')}</p>
         <div className="mt-4 bg-comic-yellow rounded-xl border-4 border-black p-4 text-center">
           <p className="text-sm text-gray-700">{t('savedToday')}</p>
-          <p className="text-4xl font-bold">${todayTotal.toFixed(2)}</p>
+          <p className="text-4xl font-bold">{formatCurrency(todayTotal, user?.currency || 'USD')}</p>
         </div>
       </div>
 
@@ -136,7 +139,7 @@ export default function CalendarPage() {
             >
               <div className="text-4xl mb-2">{preset.icon}</div>
               <div className="font-bold">{preset.name}</div>
-              <div className="text-sm text-gray-700">${preset.price}</div>
+              <div className="text-sm text-gray-700">{getCurrencySymbol(user?.currency || 'USD')}{preset.price}</div>
             </button>
           ))}
         </div>
@@ -232,11 +235,11 @@ export default function CalendarPage() {
                 <div>
                   <div className="font-bold text-lg">{entry.name}</div>
                   <div className="text-sm text-gray-700">
-                    {entry.quantity}x @ ${entry.pricePerUnit.toFixed(2)} • {entry.category}
+                    {entry.quantity}x @ {formatCurrency(entry.pricePerUnit, entry.currency)} • {entry.category}
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="font-bold text-xl">${entry.usdAmount.toFixed(2)}</div>
+                  <div className="font-bold text-xl">{formatCurrency(entry.pricePerUnit * entry.quantity, entry.currency)}</div>
                   <div className="text-xs text-gray-600">{format(new Date(entry.date), 'HH:mm')}</div>
                 </div>
               </div>
