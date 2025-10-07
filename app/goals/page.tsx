@@ -272,8 +272,3 @@ export default function GoalsPage() {
     </div>
   );
 }
-
-      <Navigation />
-    </div>
-  );
-}
