@@ -11,8 +11,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const { userId, name, pricePerUnit, quantity, category, note, currency } = req.body;
 
+    console.log('Create entry request:', { userId, name, pricePerUnit, quantity, category, currency });
+
     if (!userId || !name || !pricePerUnit || !category || !currency) {
-      return res.status(400).json({ error: 'Missing required fields' });
+      console.error('Missing fields:', { userId: !!userId, name: !!name, pricePerUnit: !!pricePerUnit, category: !!category, currency: !!currency });
+      return res.status(400).json({ 
+        error: 'Missing required fields',
+        missing: {
+          userId: !userId,
+          name: !name,
+          pricePerUnit: !pricePerUnit,
+          category: !category,
+          currency: !currency,
+        }
+      });
     }
 
     const totalAmount = pricePerUnit * (quantity || 1);

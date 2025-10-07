@@ -87,7 +87,7 @@ export default function CalendarPage() {
           ...formData,
           pricePerUnit: parseFloat(formData.pricePerUnit),
           quantity: parseFloat(formData.quantity),
-          currency: user.currency,
+          currency: user.currency || 'USD', // Fallback to USD
         }),
       });
 
