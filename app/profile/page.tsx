@@ -6,6 +6,7 @@ import Navigation from '@/components/Navigation';
 import { CURRENCIES } from '@/lib/currencies';
 import { RANKS, getRankForPoints } from '@/lib/ranks';
 import toast from 'react-hot-toast';
+import { useTranslation } from '@/lib/i18n';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -13,6 +14,8 @@ export default function ProfilePage() {
   const [editMode, setEditMode] = useState(false);
   const [currency, setCurrency] = useState('USD');
   const [language, setLanguage] = useState('en');
+  
+  const { t } = useTranslation(user?.language || 'en');
 
   useEffect(() => {
     const userData = localStorage.getItem('user');
@@ -45,7 +48,7 @@ export default function ProfilePage() {
         localStorage.setItem('user', JSON.stringify(updatedUser));
         setUser(updatedUser);
         setEditMode(false);
-        toast.success('Settings saved! ✅');
+        toast.success(t('settingsSaved') + ' ✅');
         
         // Reload page to apply changes
         setTimeout(() => window.location.reload(), 500);
@@ -65,7 +68,7 @@ export default function ProfilePage() {
   const copyReferralLink = () => {
     const link = `${window.location.origin}/?ref=${user.referralCode}`;
     navigator.clipboard.writeText(link);
-    toast.success('Referral link copied! 📋');
+    toast.success(t('referralLinkCopied') + ' 📋');
   };
 
   if (!user) return null;
@@ -80,7 +83,7 @@ export default function ProfilePage() {
   return (
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto">
       <div className="comic-panel mb-6">
-        <h1 className="text-4xl font-bold mb-2">👤 Profile</h1>
+        <h1 className="text-4xl font-bold mb-2">👤 {t('profile')}</h1>
         <div className="bg-gradient-to-r from-comic-purple to-comic-pink rounded-2xl border-4 border-black p-6 mt-4 text-white">
           <p className="text-2xl font-bold mb-1">{user.name || user.email}</p>
           <p className="text-sm opacity-90">{user.email}</p>
@@ -88,17 +91,17 @@ export default function ProfilePage() {
       </div>
 
       <div className="comic-panel mb-6">
-        <h2 className="text-2xl font-bold mb-4">🏆 Rank & Progress</h2>
+        <h2 className="text-2xl font-bold mb-4">{t('rankProgress')}</h2>
         <div className="bg-comic-yellow rounded-xl border-4 border-black p-4 mb-4">
           <div className="flex justify-between items-center mb-2">
             <div>
-              <p className="text-sm text-gray-700">Current Rank</p>
+              <p className="text-sm text-gray-700">{t('currentRank')}</p>
               <p className="text-2xl font-bold" style={{ color: currentRank.color }}>
                 {language === 'ru' ? currentRank.nameRu : currentRank.name}
               </p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-gray-700">Points</p>
+              <p className="text-sm text-gray-700">{t('points')}</p>
               <p className="text-3xl font-bold">{user.points.toFixed(0)}</p>
             </div>
           </div>
@@ -107,7 +110,7 @@ export default function ProfilePage() {
         {nextRank && (
           <div>
             <div className="flex justify-between items-center mb-2">
-              <p className="text-sm text-gray-700">Next Rank</p>
+              <p className="text-sm text-gray-700">{t('nextRank')}</p>
               <p className="font-bold" style={{ color: nextRank.color }}>
                 {language === 'ru' ? nextRank.nameRu : nextRank.name}
               </p>
@@ -116,19 +119,19 @@ export default function ProfilePage() {
               <div className="progress-fill" style={{ width: `${progressToNext}%` }} />
             </div>
             <p className="text-xs text-center text-gray-600 mt-2">
-              {(nextRank.minPoints - user.points).toFixed(0)} points to go!
+              {(nextRank.minPoints - user.points).toFixed(0)} {t('pointsToGo')}
             </p>
           </div>
         )}
       </div>
 
       <div className="comic-panel mb-6">
-        <h2 className="text-2xl font-bold mb-4">🤝 Referral System</h2>
+        <h2 className="text-2xl font-bold mb-4">{t('referralSystem')}</h2>
         <div className="bg-comic-cyan rounded-xl border-4 border-black p-4 mb-3">
-          <p className="text-sm text-gray-700 mb-2">Your Referral Code</p>
+          <p className="text-sm text-gray-700 mb-2">{t('yourReferralCode')}</p>
           <p className="text-3xl font-bold text-center mb-2">{user.referralCode}</p>
           <button onClick={copyReferralLink} className="w-full comic-button text-sm">
-            📋 Copy Link
+            {t('copyLink')}
           </button>
         </div>
         <div className="text-sm text-gray-700 space-y-1">
@@ -141,20 +144,20 @@ export default function ProfilePage() {
 
       <div className="comic-panel mb-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">⚙️ Settings</h2>
+          <h2 className="text-2xl font-bold">{t('settings')}</h2>
           {!editMode && (
             <button
               onClick={() => setEditMode(true)}
               className="bg-comic-lime border-4 border-black rounded-full px-4 py-2 font-bold shadow-comic"
             >
-              Edit
+              {t('edit')}
             </button>
           )}
         </div>
 
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-bold mb-2">Currency</label>
+            <label className="block text-sm font-bold mb-2">{t('currency')}</label>
             <select
               value={currency}
               onChange={(e) => setCurrency(e.target.value)}
@@ -170,7 +173,7 @@ export default function ProfilePage() {
           </div>
 
           <div>
-            <label className="block text-sm font-bold mb-2">Language</label>
+            <label className="block text-sm font-bold mb-2">{t('language')}</label>
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
@@ -185,13 +188,13 @@ export default function ProfilePage() {
           {editMode && (
             <div className="flex gap-2">
               <button onClick={handleSave} className="flex-1 comic-button">
-                Save
+                {t('save')}
               </button>
               <button
                 onClick={() => setEditMode(false)}
                 className="flex-1 comic-button-secondary"
               >
-                Cancel
+                {t('cancel')}
               </button>
             </div>
           )}
@@ -202,7 +205,7 @@ export default function ProfilePage() {
         onClick={handleLogout}
         className="w-full bg-red-500 text-white font-bold py-3 px-6 rounded-full border-4 border-black shadow-comic hover:shadow-comic-lg transition-all"
       >
-        🚪 Logout
+        🚪 {t('logout')}
       </button>
 
       <Navigation />

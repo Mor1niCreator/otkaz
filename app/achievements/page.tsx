@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
 import { motion } from 'framer-motion';
+import { useTranslation } from '@/lib/i18n';
 
 interface Achievement {
   id: string;
@@ -26,6 +27,8 @@ export default function AchievementsPage() {
   const [user, setUser] = useState<any>(null);
   const [unlocked, setUnlocked] = useState<UserAchievement[]>([]);
   const [all, setAll] = useState<Achievement[]>([]);
+  
+  const { t } = useTranslation(user?.language || 'en');
 
   useEffect(() => {
     const userData = localStorage.getItem('user');
@@ -59,11 +62,11 @@ export default function AchievementsPage() {
   return (
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto">
       <div className="comic-panel mb-6">
-        <h1 className="text-4xl font-bold mb-4">🏅 Achievements</h1>
+        <h1 className="text-4xl font-bold mb-4">🏅 {t('achievementsTitle')}</h1>
         
         <div className="bg-comic-yellow rounded-xl border-4 border-black p-4 mb-4">
           <div className="flex justify-between items-center mb-2">
-            <p className="font-bold">Progress</p>
+            <p className="font-bold">{t('progress')}</p>
             <p className="text-2xl font-bold">{unlocked.length}/{all.length}</p>
           </div>
           <div className="progress-bar">
@@ -106,7 +109,7 @@ export default function AchievementsPage() {
                     </p>
                   )}
                   {!isUnlocked && (
-                    <p className="text-xs text-gray-500 mt-1">🔒 Locked</p>
+                    <p className="text-xs text-gray-500 mt-1">{t('locked')}</p>
                   )}
                 </div>
               </div>

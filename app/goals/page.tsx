@@ -35,6 +35,8 @@ export default function GoalsPage() {
     name: '',
     targetAmount: '',
   });
+  
+  const { t } = useTranslation(user?.language || 'en');
 
   useEffect(() => {
     const userData = localStorage.getItem('user');
@@ -78,7 +80,7 @@ export default function GoalsPage() {
       const data = await res.json();
 
       if (res.ok) {
-        toast.success('Goal created! 🎯');
+        toast.success(t('createGoal') + '! 🎯');
         setShowForm(false);
         setFormData({ name: '', targetAmount: '' });
         loadGoals(user.id);
@@ -111,9 +113,9 @@ export default function GoalsPage() {
   return (
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto">
       <div className="comic-panel mb-6">
-        <h1 className="text-4xl font-bold mb-2">🎯 Your Goals</h1>
+        <h1 className="text-4xl font-bold mb-2">🎯 {t('yourGoals')}</h1>
         <div className="bg-comic-yellow rounded-xl border-4 border-black p-4 mt-4">
-          <p className="text-sm text-gray-700">Total Savings</p>
+          <p className="text-sm text-gray-700">{t('totalSavings')}</p>
           <p className="text-3xl font-bold">${totalSavings.toFixed(2)}</p>
         </div>
       </div>
@@ -131,7 +133,7 @@ export default function GoalsPage() {
 
         {goals.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
-            No goals yet. Create your first goal! 🎯
+            {t('noGoalsYet')}
           </div>
         ) : (
           <div className="space-y-4">
@@ -143,7 +145,7 @@ export default function GoalsPage() {
                     <div>
                       <h3 className="font-bold text-lg">{goal.name}</h3>
                       <p className="text-sm text-gray-700">
-                        Target: ${goal.usdTarget.toFixed(2)}
+                        {t('target')}: ${goal.usdTarget.toFixed(2)}
                       </p>
                     </div>
                     <div className="text-right">
@@ -170,10 +172,9 @@ export default function GoalsPage() {
 
       {totalSavings > 0 && (
         <div className="comic-panel mb-6">
-          <h2 className="text-2xl font-bold mb-4">💎 Crypto-ROI Calculator</h2>
+          <h2 className="text-2xl font-bold mb-4">{t('cryptoROICalculator')}</h2>
           <p className="text-sm text-gray-700 mb-4">
-            See what your ${totalSavings.toFixed(2)} would be worth if you invested it
-            in top cryptocurrencies 5 years ago!
+            {t('cryptoROIDescription')}
           </p>
           
           {!showCrypto ? (
@@ -221,7 +222,7 @@ export default function GoalsPage() {
                 </div>
               ))}
               <p className="text-xs text-center text-gray-500 italic mt-4">
-                * Not financial advice. Past performance doesn't guarantee future results.
+                {t('disclaimer')}
               </p>
             </div>
           )}
@@ -231,11 +232,11 @@ export default function GoalsPage() {
       {showForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="comic-panel max-w-md w-full">
-            <h2 className="text-2xl font-bold mb-4">Create Goal</h2>
+            <h2 className="text-2xl font-bold mb-4">{t('createGoal')}</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 type="text"
-                placeholder="Goal name (e.g., AirPods, Trip to Bangkok)"
+                placeholder={t('goalName')}
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
@@ -244,7 +245,7 @@ export default function GoalsPage() {
               <input
                 type="number"
                 step="0.01"
-                placeholder="Target amount"
+                placeholder={t('targetAmount')}
                 value={formData.targetAmount}
                 onChange={(e) => setFormData({ ...formData, targetAmount: e.target.value })}
                 required
@@ -252,20 +253,25 @@ export default function GoalsPage() {
               />
               <div className="flex gap-2">
                 <button type="submit" className="flex-1 comic-button">
-                  Create
+                  {t('save')}
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowForm(false)}
                   className="flex-1 comic-button-secondary"
                 >
-                  Cancel
+                  {t('cancel')}
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
+
+      <Navigation />
+    </div>
+  );
+}
 
       <Navigation />
     </div>
