@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
 import toast from 'react-hot-toast';
+import { useTranslation } from '@/lib/i18n';
 
 interface Goal {
   id: string;
