@@ -1,0 +1,71 @@
+╔════════════════════════════════════════════════════════════╗
+║                                                            ║
+║         💰 ОТКАЗНИК PWA - INSTANT START GUIDE 💰          ║
+║                                                            ║
+╚════════════════════════════════════════════════════════════╝
+
+🚀 GET RUNNING IN 3 COMMANDS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. npm install
+2. npm run db:init
+3. npm run dev
+
+Then open: http://localhost:3000
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✨ WHAT YOU GET:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📅 Calendar       - Track daily refusals
+💰 Wallet         - View savings stats & charts
+🎯 Goals          - Set targets + Crypto ROI
+🏅 Achievements   - Unlock 8 achievements
+🧩 Ranks          - Progress through 5 ranks
+🤝 Referrals      - Earn bonus points
+👤 Profile        - 30+ currencies, RU/EN
+📱 PWA            - Install on mobile, works offline
+🎨 Comic Style    - Beautiful cartoon UI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📖 DOCUMENTATION:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+START_HERE.md       - Overview & quick start
+HOW_TO_RUN.md       - Detailed run instructions
+README.md           - Full documentation
+FEATURES.md         - Feature breakdown
+PROJECT_SUMMARY.md  - What was created
+DEPLOYMENT.md       - Production deployment
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🛠️ USEFUL COMMANDS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+npm run dev         - Start dev server
+npm run db:studio   - View database
+npm run build       - Build for production
+npm start           - Run production build
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 FIRST STEPS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Register account
+2. Add first refusal (☕ Coffee)
+3. Check points in Wallet
+4. Set a goal
+5. Explore achievements
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎉 READY TO LAUNCH!
+
+Copy-paste into terminal:
+npm install && npm run db:init && npm run dev
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

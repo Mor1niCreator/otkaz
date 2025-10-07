@@ -1,400 +1,221 @@
-# Отказник - Refusal Tracker
+# 💰 Отказник - Gamified Savings PWA
 
-Полнофункциональное веб-приложение для отслеживания ежедневных "отказов" от трат с системой поинтов, ачивок, рангов и крипто-ROI анализа.
+**Отказник** is a full-featured Progressive Web App (PWA) that helps users track daily refusals, save money, earn achievements, and visualize crypto ROI potential.
 
-## 🚀 Особенности
+## ✨ Features
 
-- **📅 Календарь отказов**: Добавляйте записи о том, от чего отказались сегодня
-- **💰 Мультивалютность**: Поддержка 30+ валют с автоматическим пересчетом
-- **🏆 Система достижений**: 8 различных ачивок за разные типы отказов
-- **⭐ Ранги**: 5 уровней от "Новичка-эконома" до "Легенды дисциплины"
-- **👥 Реферальная система**: Приглашайте друзей и получайте бонусы
-- **📈 Crypto-ROI**: Смотрите, что было бы, вложи вы сэкономленные деньги 5 лет назад
-- **🌍 Интернационализация**: Полная поддержка RU/EN с переключением языка
-- **📱 PWA**: Установка на мобильные устройства с офлайн-функциональностью
-- **🔒 Безопасность**: CSP, rate-limiting, валидация данных
+### 📅 Calendar
+- Track daily refusals with name, price, quantity, category
+- Quick presets for common items (coffee, cigarettes, soda, fast food)
+- Category-based bonuses (+20% for habits)
+- Real-time points calculation with streak multipliers
 
-## 🛠 Технологический стек
+### 💰 Wallet
+- View savings: Today / Week / Month / All Time
+- Interactive charts and statistics
+- Points tracking and rank progression
+- Beautiful comic-style UI
 
-### Backend
-- **Python 3.11** + **FastAPI** + **Uvicorn**
-- **SQLAlchemy** + **Alembic** для работы с БД
-- **SQLite** для хранения данных
-- **APScheduler** для фоновых задач
-- **httpx** для внешних API
+### 🎯 Goals
+- Set personal savings goals (e.g., "AirPods - $250")
+- Visual progress bars showing completion percentage
+- **Crypto-ROI Calculator**: See what your savings would be worth if invested in top 10 cryptocurrencies 5 years ago
+- Historical price comparisons and multipliers
 
-### Frontend
-- **React 18** + **TypeScript**
-- **Vite** для сборки
-- **react-i18next** для интернационализации
-- **Lucide React** для иконок
-- **CSS Modules** с комикс-стилем
+### 🏅 Achievements
+8 unique achievements with unlock animations:
+- ☕ Coffee Breaker
+- 🥤 Sugar Free (7 days)
+- 🚬 Smoke Out (14 days)
+- 🥷 Budget Ninja ($40+)
+- ⚡ Momentum (21 day streak)
+- 🦸 Ref Hero (3 referrals)
+- 👑 Consistency King/Queen (60 days)
+- 🛡️ Iron Will (30 days)
 
-### Внешние API
-- **CoinGecko** для криптовалютных данных
-- **exchangerate.host** (primary) + **ECB** (fallback) для курсов валют
+### 🤝 Referral System
+- Unique referral code for each user
+- Bonus points:
+  - +50 pts when referral makes first entry
+  - +20 pts for new user on signup
+  - +25 pts for active referrals (5+ days/week)
+- Anti-fraud protection
 
-## 📦 Установка и запуск
+### 🧩 Ranks
+Progressive rank system based on total points:
+- Novice Saver (0 pts)
+- Habit Hacker (50 pts)
+- Frugal Master (150 pts)
+- Willpower Pro (300 pts)
+- Discipline Legend (500 pts)
 
-### Требования
-- Docker и Docker Compose
-- Node.js 18+ (для разработки)
+### 👤 Profile
+- 30+ world currencies + all CIS currencies
+- Language switcher (RU/EN)
+- Timezone settings
+- Referral link sharing
+- CSV export (future)
 
-### Быстрый старт
+## 🚀 Tech Stack
 
-1. **Клонируйте репозиторий**
+- **Framework**: Next.js 14 (App Router)
+- **Language**: TypeScript
+- **Database**: Prisma + SQLite
+- **Styling**: Tailwind CSS (Comic-style theme)
+- **Animations**: Framer Motion
+- **Charts**: Recharts
+- **i18n**: i18next
+- **State**: SWR for data fetching
+- **Validation**: Zod
+- **PWA**: Service Worker, Web Manifest
+
+## 📦 Installation
+
 ```bash
-git clone <repository-url>
-cd otkaznik
-```
-
-2. **Настройте окружение**
-```bash
-cp .env.example .env
-# Отредактируйте .env при необходимости
-```
-
-3. **Запустите приложение**
-```bash
-docker compose up --build
-```
-
-4. **Откройте в браузере**
-```
-http://localhost:8080
-```
-
-### Разработка
-
-1. **Backend разработка**
-```bash
-cd app
-pip install -r requirements.txt
-alembic upgrade head
-python -m uvicorn main:app --reload
-```
-
-2. **Frontend разработка**
-```bash
-cd frontend
+# Install dependencies
 npm install
+
+# Initialize database
+chmod +x scripts/init-db.sh
+./scripts/init-db.sh
+
+# Or manually:
+npx prisma generate
+npx prisma migrate dev --name init
+npx tsx prisma/seed.ts
+
+# Run development server
 npm run dev
 ```
 
-## 🏗 Архитектура
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### Структура проекта
-```
-/app                    # Backend (FastAPI)
-  main.py              # Главный файл приложения
-  config.py            # Конфигурация
-  db.py                # Подключение к БД
-  models.py            # SQLAlchemy модели
-  schemas.py           # Pydantic схемы
-  fx.py                # Система валют и курсов
-  crypto.py             # Crypto-ROI функциональность
-  points.py             # Система поинтов и ачивок
-  referrals.py          # Реферальная система
-  routers/              # API роутеры
-  middleware.py         # Middleware (CORS, security, etc.)
+## 📱 PWA Installation
 
-/frontend              # Frontend (React + TypeScript)
-  src/
-    pages/             # Страницы приложения
-    components/        # React компоненты
-    hooks/             # Custom hooks
-    i18n/              # Переводы (ru.json, en.json)
-    assets/            # Статические ресурсы
+The app can be installed as a PWA on mobile devices:
 
-/alembic/              # Миграции БД
-  versions/            # Файлы миграций
-```
+1. Open the app in your mobile browser
+2. Tap "Add to Home Screen"
+3. The app will work offline and sync when online
 
-### База данных
+## 🎨 Design
 
-**Основные таблицы:**
-- `users` - пользователи (анонимные, по сессиям)
-- `entries` - записи об отказах
-- `goals` - цели пользователей
-- `presets` - быстрые пресеты для добавления
-- `user_achievements` - достижения пользователей
-- `referral_events` - события реферальной системы
-- `fx_rates` - кеш курсов валют
-- `crypto_data` - кеш криптовалютных данных
-- `audit_logs` - логи для аудита
+The app features a unique **comic-style aesthetic**:
+- Speech bubbles and comic panels
+- Bold black borders and shadows
+- Pastel backgrounds with vibrant accents (lime, orange, cyan)
+- Smooth animations (spring/ease-out)
+- Mobile-first responsive design (9:16 ratio)
+- Cartoon-style icons and mascots
 
-## 🔧 Конфигурация
+## 🌐 Internationalization
 
-### Переменные окружения (.env)
+Full RU/EN support for:
+- All UI elements
+- Error messages
+- Achievement names/descriptions
+- Charts and tables
+- Date/time formatting
+
+## 💸 Currency System
+
+- Supports 30+ global currencies
+- Exchange rates locked at entry creation
+- All calculations in USD backend
+- UI displays in user's selected currency
+- Real-time conversion on currency change
+
+## 💎 Crypto ROI
+
+Integration with CoinGecko API:
+- Top 10 cryptocurrencies (excluding stablecoins)
+- Historical prices (5 years ago)
+- Current prices
+- ROI multipliers
+- Projected value of savings
+
+**Disclaimer**: Not financial advice. Past performance doesn't guarantee future results.
+
+## 🔧 Configuration
+
+### Environment Variables
+
+Create a `.env` file:
 
 ```env
-# Основные настройки
-APP_BASE_URL=http://localhost:8080
-DEFAULT_TIMEZONE=Asia/Ho_Chi_Minh
-DEFAULT_LOCALE=ru
-DEFAULT_CURRENCY=VND
-
-# Безопасность
-SESSION_SECRET=change_me_in_production
-CSP_ENABLED=1
-RATE_LIMIT_RPS=5
-RATE_LIMIT_BURST=20
-
-# Система поинтов
-POINTS_K_USD=1.0
-HABIT_BONUS_RATE=0.20
-STREAK_MAX_MULT=2.0
-MIN_VALID_ENTRY_USD=1.0
-
-# Реферальная система
-REF_BONUS_FIRST_ACTION=50
-REF_WELCOME_POINTS=20
-REF_WEEKLY_ACTIVE_BONUS=25
-REF_WEEKLY_ACTIVE_THRESHOLD=5
-REF_BONUS_COOLDOWN_DAYS=7
-
-# Валюты и курсы
-FX_PRIMARY=exchangerate_host
-FX_FALLBACK=ecb
-FX_REFRESH_MINUTES=180
-FX_CACHE_TTL_HOURS=24
-FX_SUPPORTED=USD,EUR,JPY,GBP,AUD,CAD,CHF,CNY,HKD,SGD,SEK,KRW,NOK,NZD,INR,MXN,BRL,ZAR,TRY,PLN,TWD,THB,IDR,MYR,PHP,VND,AED,SAR,DKK,ILS,RUB,BYN,KZT,KGS,TJS,TMT,UZS,AMD,AZN,MDL,UAH
-
-# Криптовалюты
-CRYPTO_CACHE_TTL_HOURS=24
-CRYPTO_TOP_EXCLUDE=USDT,USDC,BUSD,TUSD,DAI,FDUSD,USDP
+DATABASE_URL="file:./dev.db"
+NEXTAUTH_SECRET="your-secret-key"
+NEXTAUTH_URL="http://localhost:3000"
 ```
 
-## 📊 API Документация
+### Prisma
 
-После запуска приложения доступна по адресу:
-- **Swagger UI**: http://localhost:8080/api/docs
-- **ReDoc**: http://localhost:8080/api/redoc
+Database schema is in `prisma/schema.prisma`. After changes:
 
-### Основные эндпоинты
-
-- `POST /api/auth/anon` - Создание анонимного пользователя
-- `GET /api/users/me` - Профиль текущего пользователя
-- `GET/POST/PUT/DELETE /api/entries` - Управление записями
-- `GET/POST/PUT/DELETE /api/goals` - Управление целями
-- `GET /api/stats` - Статистика пользователя
-- `GET /api/referrals` - Реферальная информация
-- `POST /api/referrals/claim` - Применение реферального кода
-- `GET /api/crypto/roi` - Crypto-ROI данные
-- `GET /api/fx/rates` - Курсы валют
-- `GET /api/export/csv` - Экспорт данных в CSV
-
-## 🎨 Дизайн и UX
-
-### Комикс-стиль
-- Панели с рамками и тенями
-- "Speech bubbles" для диалогов
-- Пастельные цвета + яркие акценты
-- Крупные карточки и кнопки
-- Пружинящие анимации
-
-### Цветовая схема
-- **Primary**: Зеленый (#4ade80)
-- **Secondary**: Оранжевый (#f59e0b)
-- **Accent**: Красно-оранжевый (#f97316)
-- **Background**: Светло-серый (#fafafa)
-- **Surface**: Белый (#ffffff)
-
-## 🔒 Безопасность
-
-### Заголовки безопасности
-- **CSP**: Строгая политика контента
-- **HSTS**: HTTP Strict Transport Security (в продакшене)
-- **X-Content-Type-Options**: nosniff
-- **X-Frame-Options**: DENY
-- **Referrer-Policy**: strict-origin-when-cross-origin
-
-### Аутентификация
-- Сессионные cookies (HttpOnly, SameSite=Lax)
-- HMAC подпись сессий
-- Rate limiting по IP и сессии
-
-### Валидация
-- Pydantic схемы для всех входных данных
-- Enum для валют и языков
-- Санитизация строк
-- Лимиты на размеры полей
-
-## 📱 PWA Функциональность
-
-### Манифест
-- Название: "Отказник - Refusal Tracker"
-- Короткое имя: "Отказник"
-- Иконки: 72x72 до 512x512
-- Тема: Зеленая (#4ade80)
-- Отображение: standalone
-
-### Service Worker
-- Кеширование статических ресурсов
-- Офлайн-функциональность
-- Background sync для офлайн записей
-- Push уведомления (готово к настройке)
-
-## 🌍 Интернационализация
-
-### Поддерживаемые языки
-- **Русский** (ru) - по умолчанию
-- **Английский** (en)
-
-### Переводы
-- Все тексты интерфейса
-- Сообщения об ошибках
-- CSV заголовки при экспорте
-- Валидационные сообщения
-
-### Переключение языка
-- Кнопка в навигации
-- Сохранение в localStorage
-- Мгновенное обновление всего UI
-
-## 📈 Система поинтов и достижений
-
-### Расчет поинтов
-```python
-base_points = floor(savings_usd / K_USD)
-streak_mult = min(1 + 0.05 * (streak_days - 1), 2.0)
-habit_bonus = 0.20 if has_habit_category else 0.0
-daily_points = floor(base_points * streak_mult * (1 + habit_bonus))
-```
-
-### Достижения
-1. **Coffee Breaker** - первая запись с кофе
-2. **Sugar Free** - 7 дней без сладких напитков
-3. **Smoke Out** - 14 дней без курения
-4. **Budget Ninja** - накоплено $40+
-5. **Momentum** - серия 21 день
-6. **Ref Hero** - 3 успешных реферала
-7. **Consistency** - 60 дней записей
-8. **Iron Will** - 30 дней без пропусков
-
-### Ранги
-1. **Novice Saver** (0-99 поинтов)
-2. **Habit Hacker** (100-299 поинтов)
-3. **Frugal Master** (300-799 поинтов)
-4. **Willpower Pro** (800-1999 поинтов)
-5. **Discipline Legend** (2000+ поинтов)
-
-## 💰 Реферальная система
-
-### Типы событий
-- **FIRST_ACTION** (+50 поинтов) - реферал сделал первую запись
-- **WELCOME** (+20 поинтов) - приветственные поинты новому пользователю
-- **WEEKLY_ACTIVE** (+25 поинтов) - недельная активность реферала
-
-### Анти-фрод меры
-- Кулдаун 7 дней между начислениями
-- Запрет саморефералов
-- Валидация минимальной суммы записи
-- Аудит всех событий
-
-## 🚀 Crypto-ROI
-
-### Алгоритм
-1. Получение топ-10 криптовалют (исключая стейблкоины)
-2. Исторические цены 5 лет назад
-3. Расчет: `coins = saved_usd / price_5y_ago`
-4. Текущая стоимость: `coins * price_now`
-5. Конвертация в валюту пользователя
-
-### Кеширование
-- Данные кешируются на 24 часа
-- Exponential backoff при ошибках
-- Fallback на старые данные
-
-## 🧪 Тестирование
-
-### Тест-чеклист консистентности
-
-#### Валюты
-- [ ] Смена VND→RUB→KZT→USD корректна на всех экранах
-- [ ] Экспорт CSV корректен
-- [ ] История с `fx_rate_to_usd` согласована
-
-#### Поинты
-- [ ] Не меняются от валюты профиля при одинаковых записях
-- [ ] Расчет стрика корректен
-- [ ] Бонусы за привычки работают
-
-#### Ачивки/Ранги
-- [ ] Срабатывают идентично при любой валюте
-- [ ] Пороги отображаются в текущей валюте
-- [ ] Прогресс к следующему рангу корректен
-
-#### Рефералы
-- [ ] `MIN_VALID_ENTRY_USD` работает для любой валюты
-- [ ] Недельные бонусы считают дни активности
-- [ ] Анти-фрод меры работают
-
-#### Crypto-ROI
-- [ ] Исключены стейблкоины
-- [ ] Расчет 5 лет назад валиден
-- [ ] Кеш/повторы работают
-- [ ] Пересчет в валюту UI корректен
-
-#### i18n
-- [ ] RU/EN меняют всё (кнопки, подписи, ошибки, CSV)
-- [ ] Переключение языка мгновенное
-- [ ] Нет "жестких" строк в коде
-
-#### Безопасность
-- [ ] CSP/Rate-limit/Session/Headers включены
-- [ ] Валидация входных данных
-- [ ] Аудит логирование
-
-## 🚀 Деплой в продакшн
-
-### Docker Production
 ```bash
-# Сборка образа
-docker build -t otkaznik:latest .
-
-# Запуск с переменными окружения
-docker run -d \
-  --name otkaznik \
-  -p 8080:8080 \
-  -v ./data:/data \
-  -e SESSION_SECRET=your_strong_secret \
-  -e CSP_ENABLED=1 \
-  -e APP_BASE_URL=https://yourdomain.com \
-  otkaznik:latest
+npx prisma migrate dev --name your_migration_name
+npx prisma generate
 ```
 
-### Переменные для продакшна
-- `SESSION_SECRET` - сильный случайный ключ
-- `APP_BASE_URL` - ваш домен с HTTPS
-- `CSP_ENABLED=1` - включить CSP
-- `RATE_LIMIT_RPS` - настроить лимиты
-- `FX_REFRESH_MINUTES` - частота обновления курсов
+## 📊 Database Schema
 
-### HTTPS и безопасность
-- Настройте SSL сертификат
-- Обновите CSP для вашего домена
-- Включите HSTS заголовки
-- Настройте мониторинг и логирование
+- **User**: Auth, settings, points, rank, referral code
+- **Entry**: Daily refusals with price, category, USD conversion
+- **Goal**: Savings goals with progress tracking
+- **Achievement**: 8 predefined achievements
+- **UserAchievement**: User unlock history
+- **Referral**: Referral relationships and bonuses
 
-## 📝 Лицензия
+## 🧪 Development
 
-MIT License - см. файл LICENSE
+```bash
+# Run dev server
+npm run dev
 
-## 🤝 Вклад в проект
+# Build for production
+npm run build
 
-1. Fork репозитория
-2. Создайте feature branch
-3. Commit изменения
-4. Push в branch
-5. Создайте Pull Request
+# Start production server
+npm start
 
-## 📞 Поддержка
+# Lint
+npm run lint
+```
 
-- **Issues**: GitHub Issues
-- **Документация**: README.md
-- **API Docs**: /api/docs после запуска
+## 🎯 Points System
+
+Points calculation:
+- Base: 1 point = $1 saved
+- Category bonus: +20% for "habits"
+- Streak multiplier: Up to 2x based on consecutive days
+- Referral bonuses: +20/+25/+50 pts
+
+## 🔒 Security
+
+- Passwords hashed with bcrypt (12 rounds)
+- Client-side session management
+- Anti-fraud referral system
+- Input validation with Zod schemas
+
+## 📈 Future Enhancements
+
+- [ ] Push notifications for daily reminders
+- [ ] CSV/PDF export functionality
+- [ ] Social sharing features
+- [ ] Leaderboards
+- [ ] More achievements
+- [ ] Real-time currency API integration
+- [ ] Backup/restore functionality
+- [ ] Dark mode
+
+## 📄 License
+
+MIT License - feel free to use for personal or commercial projects!
+
+## 🤝 Contributing
+
+Contributions welcome! Please open an issue or PR.
 
 ---
 
-**Дисклеймер**: Crypto-ROI функциональность предназначена только для развлечения и не является финансовым советом. Прошлые результаты не гарантируют будущих.
+**Made with 💪 and ☕ (that I refused!)**
