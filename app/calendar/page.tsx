@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
+import { useTranslation } from '@/lib/i18n';
 
 interface Entry {
   id: string;
@@ -16,11 +17,11 @@ interface Entry {
   date: string;
 }
 
-const PRESETS = [
-  { name: 'Coffee', icon: '☕', price: 3, category: 'drinks' },
-  { name: 'Cigarettes', icon: '🚬', price: 8, category: 'habits' },
-  { name: 'Soda', icon: '🥤', price: 2, category: 'drinks' },
-  { name: 'Fast Food', icon: '🍔', price: 12, category: 'food' },
+const getPresets = (t: any) => [
+  { name: t('coffee'), icon: '☕', price: 3, category: 'drinks' },
+  { name: t('cigarettes'), icon: '🚬', price: 8, category: 'habits' },
+  { name: t('soda'), icon: '🥤', price: 2, category: 'drinks' },
+  { name: t('fastFood'), icon: '🍔', price: 12, category: 'food' },
 ];
 
 export default function CalendarPage() {
@@ -35,6 +36,8 @@ export default function CalendarPage() {
     category: 'other',
     note: '',
   });
+  
+  const { t } = useTranslation(user?.language || 'en');
 
   useEffect(() => {
     const userData = localStorage.getItem('user');
@@ -59,6 +62,8 @@ export default function CalendarPage() {
     }
   };
 
+  const PRESETS = getPresets(t);
+  
   const handlePreset = (preset: typeof PRESETS[0]) => {
     setFormData({
       name: preset.name,
@@ -89,12 +94,16 @@ export default function CalendarPage() {
       const data = await res.json();
 
       if (res.ok) {
-        toast.success(`+${data.pointsEarned.toFixed(1)} points! 🎉`);
+        toast.success(`+${data.pointsEarned.toFixed(1)} ${t('pointsEarned')} 🎉`);
+        // Update user points in localStorage
+        const updatedUser = { ...user, points: (Number(user.points) || 0) + data.pointsEarned };
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        setUser(updatedUser);
         setShowForm(false);
         setFormData({ name: '', pricePerUnit: '', quantity: '1', category: 'other', note: '' });
         loadEntries(user.id);
       } else {
-        toast.error(data.error);
+        toast.error(data.error || 'Failed to create entry');
       }
     } catch (error) {
       toast.error('Network error');
@@ -108,16 +117,16 @@ export default function CalendarPage() {
   return (
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto">
       <div className="comic-panel mb-6">
-        <h1 className="text-4xl font-bold mb-2">📅 Today's Refusals</h1>
+        <h1 className="text-4xl font-bold mb-2">📅 {t('todaysRefusals')}</h1>
         <p className="text-xl text-gray-700">{format(new Date(), 'MMMM d, yyyy')}</p>
         <div className="mt-4 bg-comic-yellow rounded-xl border-4 border-black p-4 text-center">
-          <p className="text-sm text-gray-700">Saved Today</p>
+          <p className="text-sm text-gray-700">{t('savedToday')}</p>
           <p className="text-4xl font-bold">${todayTotal.toFixed(2)}</p>
         </div>
       </div>
 
       <div className="comic-panel mb-6">
-        <h2 className="text-2xl font-bold mb-4">⚡ Quick Add</h2>
+        <h2 className="text-2xl font-bold mb-4">⚡ {t('quickAdd')}</h2>
         <div className="grid grid-cols-2 gap-3">
           {PRESETS.map((preset) => (
             <button
@@ -135,18 +144,18 @@ export default function CalendarPage() {
           onClick={() => setShowForm(true)}
           className="w-full mt-4 comic-button"
         >
-          + Custom Entry
+          {t('customEntry')}
         </button>
       </div>
 
       {showForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="comic-panel max-w-md w-full">
-            <h2 className="text-2xl font-bold mb-4">Add Refusal</h2>
+            <h2 className="text-2xl font-bold mb-4">{t('addRefusal')}</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 type="text"
-                placeholder="What did you refuse?"
+                placeholder={t('whatDidYouRefuse')}
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
@@ -156,7 +165,7 @@ export default function CalendarPage() {
                 <input
                   type="number"
                   step="0.01"
-                  placeholder="Price"
+                  placeholder={t('price')}
                   value={formData.pricePerUnit}
                   onChange={(e) => setFormData({ ...formData, pricePerUnit: e.target.value })}
                   required
@@ -165,7 +174,7 @@ export default function CalendarPage() {
                 <input
                   type="number"
                   step="0.1"
-                  placeholder="Qty"
+                  placeholder={t('quantity')}
                   value={formData.quantity}
                   onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
                   className="w-20 px-4 py-3 border-4 border-black rounded-xl"
@@ -176,15 +185,15 @@ export default function CalendarPage() {
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                 className="w-full px-4 py-3 border-4 border-black rounded-xl"
               >
-                <option value="habits">Habits 🔥 (+20% bonus)</option>
-                <option value="food">Food 🍔</option>
-                <option value="drinks">Drinks ☕</option>
-                <option value="entertainment">Entertainment 🎮</option>
-                <option value="shopping">Shopping 🛍️</option>
-                <option value="other">Other 📦</option>
+                <option value="habits">{t('habits')}</option>
+                <option value="food">{t('food')}</option>
+                <option value="drinks">{t('drinks')}</option>
+                <option value="entertainment">{t('entertainment')}</option>
+                <option value="shopping">{t('shopping')}</option>
+                <option value="other">{t('other')}</option>
               </select>
               <textarea
-                placeholder="Note (optional)"
+                placeholder={t('note')}
                 value={formData.note}
                 onChange={(e) => setFormData({ ...formData, note: e.target.value })}
                 className="w-full px-4 py-3 border-4 border-black rounded-xl"
@@ -192,14 +201,14 @@ export default function CalendarPage() {
               />
               <div className="flex gap-2">
                 <button type="submit" className="flex-1 comic-button">
-                  Save
+                  {t('save')}
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowForm(false)}
                   className="flex-1 comic-button-secondary"
                 >
-                  Cancel
+                  {t('cancel')}
                 </button>
               </div>
             </form>
@@ -208,10 +217,10 @@ export default function CalendarPage() {
       )}
 
       <div className="comic-panel">
-        <h2 className="text-2xl font-bold mb-4">Today's Entries</h2>
+        <h2 className="text-2xl font-bold mb-4">{t('todaysEntries')}</h2>
         {entries.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
-            No refusals yet today. Start saving! 💪
+            {t('noRefusalsYet')}
           </div>
         ) : (
           <div className="space-y-3">

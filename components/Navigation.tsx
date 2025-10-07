@@ -2,17 +2,30 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
-const navItems = [
-  { href: '/calendar', label: 'Calendar', icon: '📅' },
-  { href: '/wallet', label: 'Wallet', icon: '💰' },
-  { href: '/goals', label: 'Goals', icon: '🎯' },
-  { href: '/achievements', label: 'Achievements', icon: '🏅' },
-  { href: '/profile', label: 'Profile', icon: '👤' },
-];
+import { useEffect, useState } from 'react';
+import { useTranslation } from '@/lib/i18n';
 
 export default function Navigation() {
   const pathname = usePathname();
+  const [lang, setLang] = useState<'en' | 'ru'>('en');
+  
+  useEffect(() => {
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      const user = JSON.parse(userData);
+      setLang(user.language || 'en');
+    }
+  }, []);
+  
+  const { t } = useTranslation(lang);
+  
+  const navItems = [
+    { href: '/calendar', label: t('calendar'), icon: '📅' },
+    { href: '/wallet', label: t('wallet'), icon: '💰' },
+    { href: '/goals', label: t('goals'), icon: '🎯' },
+    { href: '/achievements', label: t('achievements'), icon: '🏅' },
+    { href: '/profile', label: t('profile'), icon: '👤' },
+  ];
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-white border-t-4 border-black shadow-comic-lg z-50">

@@ -26,12 +26,35 @@ export default function ProfilePage() {
     setLanguage(parsedUser.language);
   }, [router]);
 
-  const handleSave = () => {
-    const updatedUser = { ...user, currency, language };
-    localStorage.setItem('user', JSON.stringify(updatedUser));
-    setUser(updatedUser);
-    setEditMode(false);
-    toast.success('Settings saved! ✅');
+  const handleSave = async () => {
+    try {
+      const res = await fetch('/api/user/update', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user.id,
+          currency,
+          language,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        const updatedUser = { ...user, currency, language };
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        setUser(updatedUser);
+        setEditMode(false);
+        toast.success('Settings saved! ✅');
+        
+        // Reload page to apply changes
+        setTimeout(() => window.location.reload(), 500);
+      } else {
+        toast.error(data.error || 'Failed to save settings');
+      }
+    } catch (error) {
+      toast.error('Network error');
+    }
   };
 
   const handleLogout = () => {
