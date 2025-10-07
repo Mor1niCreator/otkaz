@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Toaster } from 'react-hot-toast';
 
@@ -6,12 +6,15 @@ export const metadata: Metadata = {
   title: 'Отказник - Gamified Savings PWA',
   description: 'Track your savings, earn achievements, and see crypto ROI',
   manifest: '/manifest.json',
-  themeColor: '#FFB74D',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
     title: 'Отказник',
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#FFB74D',
 };
 
 export default function RootLayout({
