@@ -97,13 +97,20 @@ export default function CalendarPage() {
 
       if (res.ok) {
         toast.success(`+${data.pointsEarned.toFixed(1)} ${t('pointsEarned')} 🎉`);
+        
         // Update user points in localStorage
         const updatedUser = { ...user, points: (Number(user.points) || 0) + data.pointsEarned };
         localStorage.setItem('user', JSON.stringify(updatedUser));
         setUser(updatedUser);
+        
+        // Reload entries to show new entry and update today's total
+        await loadEntries(user.id);
+        
+        // Reset form and close
         setShowForm(false);
         setFormData({ name: '', pricePerUnit: '', quantity: '1', category: 'other', note: '' });
-        loadEntries(user.id);
+        
+        console.log(`Entry created successfully. Entries reloaded.`);
       } else {
         toast.error(data.error || 'Failed to create entry');
       }
