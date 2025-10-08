@@ -6,7 +6,8 @@ import Navigation from '@/components/Navigation';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 import { useTranslation } from '@/lib/i18n';
-import { formatCurrency, getCurrencySymbol } from '@/lib/currency-utils';
+import { formatCurrency, getCurrencySymbol, convertCurrency } from '@/lib/currency-utils';
+import { getUserFromStorage } from '@/lib/user-sync';
 
 interface Entry {
   id: string;
