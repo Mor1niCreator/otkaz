@@ -41,15 +41,21 @@ export default function WalletPage() {
         fetch(`/api/entries/list?userId=${userId}`).then(r => r.json()),
       ]);
 
-      setStats({
+      const newStats = {
         today: today.totalUSD || 0,
         week: week.totalUSD || 0,
         month: month.totalUSD || 0,
         allTime: all.totalUSD || 0,
-      });
-      // Update points from latest data
-      if (all.totalUSD) {
-        setUserPoints(all.totalUSD);
+      };
+      
+      setStats(newStats);
+      
+      console.log(`Wallet stats loaded: Today ${newStats.today} USD, All time ${newStats.allTime} USD`);
+      
+      // Update points from user object, not from totalUSD
+      const currentUser = getUserFromStorage();
+      if (currentUser) {
+        setUserPoints(Number(currentUser.points) || 0);
       }
     } catch (error) {
       console.error('Failed to load stats:', error);
@@ -121,6 +127,15 @@ export default function WalletPage() {
 
       <div className="speech-bubble mb-6">
         <p className="text-center text-lg">
+          <strong>{t('keepItUp')}</strong><br />
+          {t('everyRefusal')}
+        </p>
+      </div>
+
+      <Navigation />
+    </div>
+  );
+} className="text-center text-lg">
           <strong>{t('keepItUp')}</strong><br />
           {t('everyRefusal')}
         </p>

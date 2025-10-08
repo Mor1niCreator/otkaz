@@ -58,6 +58,7 @@ export default function CalendarPage() {
       const data = await res.json();
       if (res.ok) {
         setEntries(data.entries);
+        console.log(`Loaded ${data.entries.length} entries for today`);
       }
     } catch (error) {
       console.error('Failed to load entries:', error);
