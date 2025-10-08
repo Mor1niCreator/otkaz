@@ -60,9 +60,12 @@ export default function GoalsPage() {
         setGoals(data.goals);
         setTotalSavings(data.totalSavings);
         
-        // Create default goals if none exist
-        if (data.goals.length === 0) {
+        console.log(`Goals loaded: ${data.goals.length} goals, Total savings: ${data.totalSavings} USD`);
+        
+        // Create default goals if none exist (only once!)
+        if (data.goals.length === 0 && !localStorage.getItem('defaultGoalsCreated')) {
           await createDefaultGoals(userId);
+          localStorage.setItem('defaultGoalsCreated', 'true');
         }
       }
     } catch (error) {
@@ -71,9 +74,12 @@ export default function GoalsPage() {
   };
 
   const createDefaultGoals = async (userId: string) => {
+    console.log('Creating default goals...');
+    
+    const createdGoals = [];
     for (const goal of DEFAULT_GOALS) {
       try {
-        await fetch('/api/goals/create', {
+        const res = await fetch('/api/goals/create', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -83,12 +89,19 @@ export default function GoalsPage() {
             currency: 'USD',
           }),
         });
+        if (res.ok) {
+          const data = await res.json();
+          createdGoals.push(data.goal);
+        }
       } catch (error) {
         console.error('Failed to create default goal:', error);
       }
     }
-    // Reload goals after creating defaults
-    loadGoals(userId);
+    
+    console.log(`Created ${createdGoals.length} default goals`);
+    
+    // Update state directly instead of reloading
+    setGoals(createdGoals);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -214,58 +227,84 @@ export default function GoalsPage() {
 
       {totalSavings > 0 && (
         <div className="comic-panel mb-6">
-          <h2 className="text-2xl font-bold mb-4">{t('cryptoROICalculator')}</h2>
-          <p className="text-sm text-gray-700 mb-4">
-            See what your {formatCurrency(convertCurrency(totalSavings, user.currency), user.currency)} would be worth if you invested it in top cryptocurrencies 5 years ago!
-          </p>
+          <h2 className="text-2xl font-bold mb-4">🚀 {t('cryptoROICalculator')}</h2>
+          <div className="bg-comic-yellow rounded-xl border-4 border-black p-4 mb-4">
+            <p className="text-sm text-gray-700 mb-2">
+              {t('yourSavings')}: <span className="font-bold">{formatCurrency(convertCurrency(totalSavings, user.currency), user.currency)}</span>
+            </p>
+            <p className="text-xs text-gray-600">
+              See what this would be worth if you invested in top cryptocurrencies 5 years ago!
+            </p>
+          </div>
           
           {!showCrypto ? (
             <button
               onClick={loadCryptoROI}
               disabled={loadingCrypto}
-              className="w-full comic-button"
+              className="comic-button bg-comic-orange w-full py-4 text-lg"
             >
-              {loadingCrypto ? 'Loading...' : '🚀 Calculate Crypto ROI'}
+              {loadingCrypto ? '⏳ Calculating...' : '🚀 Calculate Crypto ROI'}
             </button>
           ) : (
             <div className="space-y-3">
+              <div className="text-sm text-gray-700 mb-3 text-center">
+                💡 Click on any crypto to see detailed breakdown
+              </div>
               {cryptoData.map((crypto) => (
                 <div
                   key={crypto.symbol}
-                  className="bg-gradient-to-r from-comic-purple to-comic-pink rounded-xl border-4 border-black p-4"
+                  className="bg-gradient-to-r from-white to-gray-50 rounded-xl border-4 border-black p-4 hover:shadow-comic-lg transition-all cursor-pointer hover:-translate-y-1"
+                  onClick={() => {
+                    const convertedYourValue = convertCurrency(crypto.yourValue, user.currency);
+                    const convertedOriginal = convertCurrency(totalSavings, user.currency);
+                    const profit = convertedYourValue - convertedOriginal;
+                    const roiPercent = ((crypto.multiplier - 1) * 100).toFixed(0);
+                    
+                    alert(`🔥 ${crypto.name} (${crypto.symbol})
+
+📊 Performance:
+• 5 years ago: $${crypto.price5YearsAgo.toFixed(2)}
+• Today: $${crypto.currentPrice.toFixed(2)}
+• Growth: ${crypto.multiplier.toFixed(1)}x
+
+💰 Your Investment:
+• Original: ${formatCurrency(convertedOriginal, user.currency)}
+• Would be: ${formatCurrency(convertedYourValue, user.currency)}
+• Profit: ${formatCurrency(profit, user.currency)}
+
+🎯 Return on Investment: +${roiPercent}%`);
+                  }}
                 >
-                  <div className="flex justify-between items-center mb-2">
-                    <div>
-                      <p className="font-bold text-lg">{crypto.symbol}</p>
-                      <p className="text-xs text-gray-700">{crypto.name}</p>
+                  <div className="flex justify-between items-center">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="font-bold text-xl">{crypto.symbol}</div>
+                        <div className="text-xs bg-comic-lime px-2 py-1 rounded-full border-2 border-black font-bold">
+                          {crypto.multiplier.toFixed(1)}x
+                        </div>
+                      </div>
+                      <div className="text-sm text-gray-700">{crypto.name}</div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        ${crypto.price5YearsAgo.toFixed(2)} → ${crypto.currentPrice.toFixed(2)}
+                      </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-2xl font-bold text-green-600">
-                        {crypto.multiplier.toFixed(1)}x
-                      </p>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-3 gap-2 text-xs">
-                    <div>
-                      <p className="text-gray-600">5Y Ago</p>
-                      <p className="font-bold">${crypto.price5YearsAgo.toFixed(2)}</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-600">Now</p>
-                      <p className="font-bold">${crypto.currentPrice.toFixed(2)}</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-600">Your Value</p>
-                      <p className="font-bold text-green-600">
-                        ${crypto.yourValue.toFixed(2)}
-                      </p>
+                      <div className="text-2xl font-bold text-comic-orange">
+                        {formatCurrency(convertCurrency(crypto.yourValue, user.currency), user.currency)}
+                      </div>
+                      <div className="text-xs text-gray-600 mt-1">
+                        +{formatCurrency(convertCurrency(crypto.yourValue - totalSavings, user.currency), user.currency)} profit
+                      </div>
                     </div>
                   </div>
                 </div>
               ))}
-              <p className="text-xs text-center text-gray-500 italic mt-4">
-                {t('disclaimer')}
-              </p>
+              
+              <div className="bg-comic-cyan rounded-xl border-4 border-black p-4 mt-4">
+                <div className="text-sm text-gray-700 text-center">
+                  💎 Best performer: <span className="font-bold">{cryptoData[0]?.symbol}</span> ({cryptoData[0]?.multiplier.toFixed(1)}x)
+                </div>
+              </div>
             </div>
           )}
         </div>
