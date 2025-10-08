@@ -30,6 +30,17 @@ export default function WalletPage() {
     setUser(parsedUser);
     setUserPoints(Number(parsedUser.points) || 0);
     loadStats(parsedUser.id);
+    
+    // Reload stats when page becomes visible
+    const handleVisibilityChange = () => {
+      if (!document.hidden && parsedUser) {
+        console.log('Page visible, reloading wallet stats...');
+        loadStats(parsedUser.id);
+      }
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, [router]);
 
   const loadStats = async (userId: string) => {
@@ -127,15 +138,6 @@ export default function WalletPage() {
 
       <div className="speech-bubble mb-6">
         <p className="text-center text-lg">
-          <strong>{t('keepItUp')}</strong><br />
-          {t('everyRefusal')}
-        </p>
-      </div>
-
-      <Navigation />
-    </div>
-  );
-} className="text-center text-lg">
           <strong>{t('keepItUp')}</strong><br />
           {t('everyRefusal')}
         </p>
