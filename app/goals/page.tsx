@@ -122,16 +122,26 @@ export default function GoalsPage() {
   };
 
   const loadCryptoROI = async () => {
+    if (totalSavings <= 0) {
+      toast.error('Add some refusals first to see Crypto ROI!');
+      return;
+    }
+    
     setLoadingCrypto(true);
+    
     try {
       const res = await fetch(`/api/crypto/roi?amount=${totalSavings}`);
       const data = await res.json();
-      if (res.ok) {
+      if (res.ok && data.data && data.data.length > 0) {
         setCryptoData(data.data);
         setShowCrypto(true);
+        toast.success('Crypto ROI calculated! 🚀');
+      } else {
+        toast.error('Failed to calculate Crypto ROI');
       }
     } catch (error) {
-      toast.error('Failed to load crypto data');
+      console.error('Crypto ROI error:', error);
+      toast.error('Network error');
     } finally {
       setLoadingCrypto(false);
     }

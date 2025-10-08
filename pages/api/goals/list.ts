@@ -21,13 +21,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       orderBy: { createdAt: 'desc' },
     });
 
-    // Get user's total savings in USD
-    const user = await prisma.user.findUnique({
-      where: { id: userId as string },
-      select: { points: true },
+    // Get user's total savings in USD (from all entries)
+    const entries = await prisma.entry.findMany({
+      where: { userId: userId as string },
+      select: { usdAmount: true },
     });
 
-    const totalSavings = user?.points || 0;
+    const totalSavings = entries.reduce((sum, entry) => sum + entry.usdAmount, 0);
 
     return res.status(200).json({ goals, totalSavings });
   } catch (error) {

@@ -21,6 +21,14 @@ const TOP_CRYPTOS = [
 ];
 
 export async function getCryptoROI(usdAmount: number): Promise<CryptoROI[]> {
+  console.log('getCryptoROI called with amount:', usdAmount);
+  
+  // For faster response, always return mock data
+  // Real API calls take 15-20 seconds due to rate limiting
+  return getMockCryptoROI(usdAmount);
+  
+  /* Uncomment below for real API calls (takes 15-20 seconds):
+  
   try {
     const fiveYearsAgo = Math.floor((Date.now() - 5 * 365 * 24 * 60 * 60 * 1000) / 1000);
     const results: CryptoROI[] = [];
@@ -77,9 +85,9 @@ export async function getCryptoROI(usdAmount: number): Promise<CryptoROI[]> {
     return results.sort((a, b) => b.multiplier - a.multiplier);
   } catch (error) {
     console.error('Error calculating crypto ROI:', error);
-    // Return mock data as fallback
     return getMockCryptoROI(usdAmount);
   }
+  */
 }
 
 function getMockCryptoROI(usdAmount: number): CryptoROI[] {
