@@ -11,26 +11,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const { userId, name, pricePerUnit, quantity, category, note, currency } = req.body;
 
-    console.log('Create entry request:', { userId, name, pricePerUnit, quantity, category, currency });
-
     if (!userId || !name || !pricePerUnit || !category || !currency) {
-      console.error('Missing fields:', { userId: !!userId, name: !!name, pricePerUnit: !!pricePerUnit, category: !!category, currency: !!currency });
-      return res.status(400).json({ 
-        error: 'Missing required fields',
-        missing: {
-          userId: !userId,
-          name: !name,
-          pricePerUnit: !pricePerUnit,
-          category: !category,
-          currency: !currency,
-        }
-      });
+      return res.status(400).json({ error: 'Missing required fields' });
     }
 
     const totalAmount = pricePerUnit * (quantity || 1);
     const usdAmount = await convertToUSD(totalAmount, currency);
 
-    console.log(`Entry: ${name} - ${totalAmount} ${currency} = ${usdAmount.toFixed(2)} USD`);
+    console.log(`[API] Entry: ${name} - ${totalAmount} ${currency} = ${usdAmount.toFixed(2)} USD`);
 
     // Create entry
     const entry = await prisma.entry.create({
@@ -50,7 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Calculate and add points
     const points = await calculatePoints(usdAmount, category, userId);
     
-    console.log(`Points earned: ${points.toFixed(2)} (from ${usdAmount.toFixed(2)} USD)`);
+    console.log(`[API] Points earned: ${points.toFixed(2)} (from ${usdAmount.toFixed(2)} USD)`);
     
     await prisma.user.update({
       where: { id: userId },

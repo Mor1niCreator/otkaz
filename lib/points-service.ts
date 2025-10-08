@@ -47,17 +47,3 @@ export async function getUserStreak(userId: string): Promise<number> {
 
   return streak;
 }
-
-export async function updateUserPoints(userId: string): Promise<void> {
-  const entries = await prisma.entry.findMany({
-    where: { userId },
-    select: { usdAmount: true },
-  });
-
-  const totalPoints = entries.reduce((sum, entry) => sum + entry.usdAmount, 0);
-
-  await prisma.user.update({
-    where: { id: userId },
-    data: { points: totalPoints },
-  });
-}

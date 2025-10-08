@@ -8,20 +8,16 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'comic-yellow': '#FFF9C4',
+        'comic-yellow': '#FFD54F',
         'comic-orange': '#FFB74D',
-        'comic-lime': '#DCE775',
+        'comic-pink': '#FF80AB',
+        'comic-purple': '#BA68C8',
         'comic-cyan': '#4DD0E1',
-        'comic-pink': '#F48FB1',
-        'comic-purple': '#CE93D8',
-        'comic-bg': '#FFF8E1',
+        'comic-lime': '#AED581',
       },
       boxShadow: {
-        'comic': '4px 4px 0px rgba(0,0,0,0.2)',
-        'comic-lg': '6px 6px 0px rgba(0,0,0,0.2)',
-      },
-      fontFamily: {
-        'comic': ['"Comic Sans MS"', 'cursive', 'sans-serif'],
+        'comic': '4px 4px 0px #000',
+        'comic-lg': '8px 8px 0px #000',
       },
     },
   },

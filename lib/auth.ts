@@ -1,14 +1,14 @@
-import { compare, hash } from 'bcryptjs';
+import bcrypt from 'bcryptjs';
 import { nanoid } from 'nanoid';
 
 export async function hashPassword(password: string): Promise<string> {
-  return hash(password, 12);
+  return bcrypt.hash(password, 10);
 }
 
 export async function verifyPassword(password: string, hashedPassword: string): Promise<boolean> {
-  return compare(password, hashedPassword);
+  return bcrypt.compare(password, hashedPassword);
 }
 
 export function generateReferralCode(): string {
-  return nanoid(8).toUpperCase();
+  return nanoid(8);
 }

@@ -32,6 +32,7 @@ export default function CalendarPage() {
   const [user, setUser] = useState<any>(null);
   const [entries, setEntries] = useState<Entry[]>([]);
   const [showForm, setShowForm] = useState(false);
+  const [todayTotal, setTodayTotal] = useState(0);
   const [formData, setFormData] = useState({
     name: '',
     pricePerUnit: '',
@@ -58,12 +59,23 @@ export default function CalendarPage() {
       const data = await res.json();
       if (res.ok) {
         setEntries(data.entries);
-        console.log(`Loaded ${data.entries.length} entries for today, Total USD: ${data.totalUSD}`);
+        console.log(`[Calendar] Loaded ${data.entries.length} entries, Total USD: ${data.totalUSD}`);
       }
     } catch (error) {
       console.error('Failed to load entries:', error);
     }
   };
+
+  // Update todayTotal whenever entries change
+  useEffect(() => {
+    if (!user) return;
+    
+    const todayTotalUSD = entries.reduce((sum, e) => sum + (e.usdAmount || 0), 0);
+    const converted = convertCurrency(todayTotalUSD, user.currency || 'USD');
+    setTodayTotal(converted);
+    
+    console.log(`[Calendar] Today total: ${todayTotalUSD.toFixed(2)} USD = ${formatCurrency(converted, user.currency)}`);
+  }, [entries, user?.currency]);
 
   const PRESETS = getPresets(t);
   
@@ -90,7 +102,7 @@ export default function CalendarPage() {
           ...formData,
           pricePerUnit: parseFloat(formData.pricePerUnit),
           quantity: parseFloat(formData.quantity),
-          currency: user.currency || 'USD', // Fallback to USD
+          currency: user.currency || 'USD',
         }),
       });
 
@@ -99,19 +111,16 @@ export default function CalendarPage() {
       if (res.ok) {
         toast.success(`+${data.pointsEarned.toFixed(1)} ${t('pointsEarned')} 🎉`);
         
-        // Update user points in localStorage
         const updatedUser = { ...user, points: (Number(user.points) || 0) + data.pointsEarned };
         localStorage.setItem('user', JSON.stringify(updatedUser));
         setUser(updatedUser);
         
-        // Reload entries to show new entry and update today's total
         await loadEntries(user.id);
         
-        // Reset form and close
         setShowForm(false);
         setFormData({ name: '', pricePerUnit: '', quantity: '1', category: 'other', note: '' });
         
-        console.log(`Entry created successfully. Entries reloaded.`);
+        console.log(`[Calendar] Entry created successfully`);
       } else {
         toast.error(data.error || 'Failed to create entry');
       }

@@ -1,13 +1,13 @@
 export const DEFAULT_GOALS = [
   {
     name: 'iPhone 17 Pro',
-    targetUSD: 1199, // Starting price estimate
+    targetUSD: 1199,
     icon: '📱',
     description: 'Latest flagship smartphone',
   },
   {
     name: 'Ray-Ban Aviator Sunglasses',
-    targetUSD: 165, // Classic Aviator price
+    targetUSD: 165,
     icon: '🕶️',
     description: 'Classic aviator style',
   },
@@ -24,10 +24,3 @@ export const DEFAULT_GOALS = [
     description: 'Short vacation getaway',
   },
 ];
-
-export function getDefaultGoalsForUser(currency: string) {
-  return DEFAULT_GOALS.map(goal => ({
-    ...goal,
-    currency,
-  }));
-}

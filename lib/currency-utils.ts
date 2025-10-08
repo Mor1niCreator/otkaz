@@ -11,7 +11,6 @@ export function formatCurrency(amount: number, currencyCode: string): string {
 }
 
 export function convertCurrency(amountInUSD: number, toCurrency: string): number {
-  // Mock rates - in production use real API
   const rates: Record<string, number> = {
     USD: 1,
     EUR: 0.92,

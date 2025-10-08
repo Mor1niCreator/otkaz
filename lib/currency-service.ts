@@ -1,4 +1,4 @@
-// Simple currency exchange rates (in production, use real API like exchangerate-api.com)
+// Currency exchange rates: 1 USD = X currency
 const MOCK_RATES: Record<string, number> = {
   USD: 1,
   EUR: 0.92,
@@ -36,22 +36,23 @@ const MOCK_RATES: Record<string, number> = {
   CZK: 23.2,
 };
 
-export async function getExchangeRate(from: string, to: string = 'USD'): Promise<number> {
-  if (from === to) return 1;
-  
-  // Convert to USD first, then to target currency
-  const fromRate = MOCK_RATES[from] || 1;
-  const toRate = MOCK_RATES[to] || 1;
-  
-  return toRate / fromRate;
-}
-
 export async function convertToUSD(amount: number, currency: string): Promise<number> {
+  if (currency === 'USD') return amount;
+
   const rate = MOCK_RATES[currency] || 1;
-  return amount / rate;
+  
+  // Convert TO USD by dividing
+  // Example: 50,000 VND / 24,500 = 2.04 USD
+  const usdAmount = amount / rate;
+  
+  console.log(`[Currency] Converting ${amount} ${currency} to USD: ${usdAmount.toFixed(4)}`);
+  
+  return usdAmount;
 }
 
 export async function convertFromUSD(usdAmount: number, currency: string): Promise<number> {
+  if (currency === 'USD') return usdAmount;
+  
   const rate = MOCK_RATES[currency] || 1;
   return usdAmount * rate;
 }
