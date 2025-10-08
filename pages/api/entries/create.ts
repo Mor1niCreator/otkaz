@@ -30,6 +30,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const totalAmount = pricePerUnit * (quantity || 1);
     const usdAmount = await convertToUSD(totalAmount, currency);
 
+    console.log(`Entry: ${name} - ${totalAmount} ${currency} = ${usdAmount.toFixed(2)} USD`);
+
     // Create entry
     const entry = await prisma.entry.create({
       data: {
@@ -47,6 +49,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Calculate and add points
     const points = await calculatePoints(usdAmount, category, userId);
+    
+    console.log(`Points earned: ${points.toFixed(2)} (from ${usdAmount.toFixed(2)} USD)`);
+    
     await prisma.user.update({
       where: { id: userId },
       data: { points: { increment: points } },
