@@ -1,0 +1,137 @@
+════════════════════════════════════════════════════════════
+         📋 ИНСТРУКЦИЯ: ЗАМЕНИТЕ ФАЙЛ CALENDAR ════════════════════════════════════════════════════════════
+
+❌ ПРОБЛЕМА:
+
+   В C:\otkaznik\app\calendar\page.tsx СТАРАЯ версия
+   Нужно заменить на НОВУЮ исправленную версию
+
+────────────────────────────────────────────────────────────
+
+⚡ РЕШЕНИЕ (выберите один):
+
+────────────────────────────────────────────────────────────
+
+ВАРИАНТ 1: СКОПИРОВАТЬ ГОТОВЫЙ ФАЙЛ
+
+1. Откройте файл: CALENDAR_PAGE_FIXED.tsx
+   (он в корне проекта)
+
+2. Скопируйте ВСЁ содержимое (Ctrl+A, Ctrl+C)
+
+3. Откройте: C:\otkaznik\app\calendar\page.tsx
+   в любом редакторе (Notepad++, VS Code)
+
+4. Удалите ВСЁ содержимое
+
+5. Вставьте скопированное (Ctrl+V)
+
+6. Сохраните (Ctrl+S)
+
+7. Вернитесь в PowerShell:
+   npm run dev
+
+────────────────────────────────────────────────────────────
+
+ВАРИАНТ 2: РУЧНОЕ ИСПРАВЛЕНИЕ (3 изменения)
+
+Откройте C:\otkaznik\app\calendar\page.tsx
+
+═══════════════════════════════════════════════════════════
+
+ИЗМЕНЕНИЕ 1: Добавьте state для todayTotal
+
+Найдите (строка ~34):
+```
+const [showForm, setShowForm] = useState(false);
+const [formData, setFormData] = useState({
+```
+
+Добавьте МЕЖДУ ними:
+```
+const [showForm, setShowForm] = useState(false);
+const [todayTotal, setTodayTotal] = useState(0);  // ← ДОБАВИТЬ
+const [formData, setFormData] = useState({
+```
+
+═══════════════════════════════════════════════════════════
+
+ИЗМЕНЕНИЕ 2: Добавьте useEffect
+
+Найдите функцию loadEntries (строка ~55-66):
+```typescript
+const loadEntries = async (userId: string) => {
+  try {
+    const res = await fetch(`/api/entries/list?userId=${userId}&period=today`);
+    const data = await res.json();
+    if (res.ok) {
+      setEntries(data.entries);
+    }
+  } catch (error) {
+    console.error('Failed to load entries:', error);
+  }
+};
+```
+
+СРАЗУ ПОСЛЕ НЕЁ добавьте:
+```typescript
+// Update todayTotal whenever entries change
+useEffect(() => {
+  if (!user) return;
+  
+  const todayTotalUSD = entries.reduce((sum, e) => sum + (e.usdAmount || 0), 0);
+  const converted = convertCurrency(todayTotalUSD, user.currency || 'USD');
+  setTodayTotal(converted);
+  
+  console.log(`Today's total updated: ${todayTotalUSD} USD = ${converted.toFixed(0)} ${user.currency}`);
+}, [entries, user?.currency]);
+```
+
+═══════════════════════════════════════════════════════════
+
+ИЗМЕНЕНИЕ 3: Удалите расчет todayTotal
+
+Найдите (строка ~120-125):
+```typescript
+if (!user) return null;
+
+// Calculate total in USD, then convert to user's currency
+const todayTotalUSD = entries.reduce((sum, e) => sum + (e.usdAmount || 0), 0);
+const todayTotal = convertCurrency(todayTotalUSD, user.currency || 'USD');
+
+console.log(`Today's total: ${todayTotalUSD} USD = ${todayTotal} ${user.currency}`);
+
+return (
+```
+
+ЗАМЕНИТЕ НА:
+```typescript
+if (!user) return null;
+
+return (
+```
+
+(Просто удалите 4 строки с расчетом!)
+
+═══════════════════════════════════════════════════════════
+
+СОХРАНИТЕ и в PowerShell:
+npm run dev
+
+────────────────────────────────────────────────────────────
+
+ВАРИАНТ 3: ПРОЩЕ ВСЕГО - Я СОЗДАМ ВСЁ ЗАНОВО
+
+Скажите: "Создай весь проект заново"
+
+И я создам ВСЕ файлы с исправлениями!
+
+════════════════════════════════════════════════════════════
+
+ЧТО ВЫБИРАЕТЕ?
+
+1. Скопировать CALENDAR_PAGE_FIXED.tsx
+2. Ручное исправление (3 изменения)
+3. Я создам весь проект заново
+
+════════════════════════════════════════════════════════════
