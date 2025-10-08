@@ -58,7 +58,7 @@ export default function CalendarPage() {
       const data = await res.json();
       if (res.ok) {
         setEntries(data.entries);
-        console.log(`Loaded ${data.entries.length} entries for today`);
+        console.log(`Loaded ${data.entries.length} entries for today, Total USD: ${data.totalUSD}`);
       }
     } catch (error) {
       console.error('Failed to load entries:', error);
@@ -123,8 +123,10 @@ export default function CalendarPage() {
   if (!user) return null;
 
   // Calculate total in USD, then convert to user's currency
-  const todayTotalUSD = entries.reduce((sum, e) => sum + e.usdAmount, 0);
+  const todayTotalUSD = entries.reduce((sum, e) => sum + (e.usdAmount || 0), 0);
   const todayTotal = convertCurrency(todayTotalUSD, user.currency || 'USD');
+  
+  console.log(`Today's total: ${todayTotalUSD} USD = ${todayTotal} ${user.currency}`);
 
   return (
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto">
