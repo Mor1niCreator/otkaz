@@ -109,18 +109,19 @@ export default function CalendarPage() {
       const data = await res.json();
 
       if (res.ok) {
+        console.log(`[Calendar] Entry created successfully, reloading entries...`);
+        
         toast.success(`+${data.pointsEarned.toFixed(1)} ${t('pointsEarned')} 🎉`);
         
         const updatedUser = { ...user, points: (Number(user.points) || 0) + data.pointsEarned };
         localStorage.setItem('user', JSON.stringify(updatedUser));
         setUser(updatedUser);
         
+        // Force reload entries
         await loadEntries(user.id);
         
         setShowForm(false);
         setFormData({ name: '', pricePerUnit: '', quantity: '1', category: 'other', note: '' });
-        
-        console.log(`[Calendar] Entry created successfully`);
       } else {
         toast.error(data.error || 'Failed to create entry');
       }
