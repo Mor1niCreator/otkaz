@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .comic-panel {
+    @apply bg-white rounded-2xl border-4 border-black p-6 shadow-comic;
+  }
+
+  .comic-button {
+    @apply bg-comic-yellow border-4 border-black rounded-xl px-6 py-3 font-bold shadow-comic hover:shadow-comic-lg transition-all hover:-translate-y-1;
+  }
+
+  .comic-button-secondary {
+    @apply bg-gray-200 border-4 border-black rounded-xl px-6 py-3 font-bold shadow-comic hover:shadow-comic-lg transition-all hover:-translate-y-1;
+  }
+
+  .speech-bubble {
+    @apply bg-white border-4 border-black rounded-2xl p-4 relative shadow-comic;
+  }
+
+  .speech-bubble::before {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 30px;
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent;
+    border-right: 0px solid transparent;
+    border-top: 20px solid #000;
+  }
+
+  .speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -14px;
+    left: 32px;
+    width: 0;
+    height: 0;
+    border-left: 16px solid transparent;
+    border-right: 0px solid transparent;
+    border-top: 16px solid #fff;
+  }
+
+  .progress-bar {
+    @apply w-full bg-gray-200 rounded-full h-4 border-4 border-black overflow-hidden;
+  }
+
+  .progress-fill {
+    @apply h-full bg-gradient-to-r from-comic-lime to-comic-cyan transition-all duration-500;
+  }
+}
+
+* {
+  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', cursive;
+}

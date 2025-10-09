@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  password      String
+  name          String
+  currency      String   @default("USD")
+  language      String   @default("en")
+  timezone      String   @default("UTC")
+  referralCode  String   @unique
+  referredBy    String?
+  points        Float    @default(0)
+  rank          String   @default("Novice Saver")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  entries       Entry[]
+  goals         Goal[]
+  achievements  UserAchievement[]
+  referrals     Referral[]        @relation("Referrer")
+  referredUsers Referral[]        @relation("Referred")
+}
+
+model Entry {
+  id           String   @id @default(cuid())
+  userId       String
+  name         String
+  pricePerUnit Float
+  quantity     Float    @default(1)
+  category     String
+  note         String?
+  currency     String   @default("USD")
+  usdRate      Float    @default(1)
+  usdAmount    Float
+  date         DateTime @default(now())
+  createdAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([date])
+}
+
+model Goal {
+  id           String   @id @default(cuid())
+  userId       String
+  name         String
+  targetAmount Float
+  currency     String   @default("USD")
+  usdTarget    Float
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Achievement {
+  id            String   @id @default(cuid())
+  code          String   @unique
+  nameEn        String
+  nameRu        String
+  descriptionEn String
+  descriptionRu String
+  icon          String
+  createdAt     DateTime @default(now())
+
+  users UserAchievement[]
+}
+
+model UserAchievement {
+  id            String   @id @default(cuid())
+  userId        String
+  achievementId String
+  unlockedAt    DateTime @default(now())
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+  @@index([userId])
+}
+
+model Referral {
+  id         String   @id @default(cuid())
+  referrerId String
+  referredId String
+  createdAt  DateTime @default(now())
+
+  referrer User @relation("Referrer", fields: [referrerId], references: [id], onDelete: Cascade)
+  referred User @relation("Referred", fields: [referredId], references: [id], onDelete: Cascade)
+
+  @@index([referrerId])
+  @@index([referredId])
+}

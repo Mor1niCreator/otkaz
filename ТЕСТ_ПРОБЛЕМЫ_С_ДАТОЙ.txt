@@ -1,0 +1,71 @@
+════════════════════════════════════════════════════════════
+           🔍 ДИАГНОСТИКА ПРОБЛЕМЫ С КАЛЕНДАРЁМ 🔍
+════════════════════════════════════════════════════════════
+
+✅ ДОБАВЛЕНО ДЕТАЛЬНОЕ ЛОГИРОВАНИЕ!
+
+────────────────────────────────────────────────────────────
+
+⚡ В PowerShell (C:\otkaznik):
+
+   Ctrl + C
+   
+   git pull
+   
+   Remove-Item -Recurse -Force .next
+   
+   npm run dev
+
+────────────────────────────────────────────────────────────
+
+🧪 ТЕСТИРУЙТЕ:
+
+   1. http://localhost:3000
+   
+   2. Login
+   
+   3. Calendar → + Custom: Test 100000 VND → Save
+   
+   4. СМОТРИТЕ PowerShell - ДОЛЖНЫ УВИДЕТЬ:
+   
+      [Currency] Converting 100000 VND to USD: ...
+      [API] Entry: Test - 100000 VND = ... USD
+      [API] Entry created with ID: ..., Date: 2025-10-07T...
+      [API] Points earned: ...
+      
+      [Calendar] Entry created successfully, reloading...
+      [Calendar] Loading entries for user ...
+      [API List] User ..., Period: today, Date filter: { ... }
+      [API List] Found X entries, Total USD: ...
+      [API List] Sample entry dates: [ { name: 'Test', date: ... } ]
+      
+      [Calendar] Loaded X entries, Total USD: ...
+      [Calendar] Entries: [ { name: 'Test', ... } ]
+      [Calendar] Today total: ... USD = ₫...
+
+────────────────────────────────────────────────────────────
+
+📊 АНАЛИЗИРУЙТЕ ЛОГИ:
+
+   1. Если "[API] Entry created with ID" есть
+      → Запись создана ✅
+   
+   2. Если "[API List] Found X entries" показывает СТАРОЕ число
+      → Проблема с датами! ❌
+   
+   3. Если "[Calendar] Loaded X entries" НЕ включает новую
+      → Дата записи НЕ попадает в "today" фильтр ❌
+   
+   4. Сравните даты:
+      - [API] Entry created ... Date: 2025-10-07T10:00:00Z
+      - [API List] Date filter: { gte: ..., lte: ... }
+      
+      Если Date НЕ между gte и lte → НАШЛИ ПРОБЛЕМУ!
+
+────────────────────────────────────────────────────────────
+
+📝 СКОПИРУЙТЕ ВСЕ ЛОГИ И ОТПРАВЬТЕ МНЕ!
+
+Я увижу где именно проблема с датами.
+
+════════════════════════════════════════════════════════════
