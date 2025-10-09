@@ -55,14 +55,26 @@ export default function CalendarPage() {
 
   const loadEntries = async (userId: string) => {
     try {
+      console.log(`[Calendar] Loading entries for user ${userId}...`);
       const res = await fetch(`/api/entries/list?userId=${userId}&period=today`);
       const data = await res.json();
       if (res.ok) {
-        setEntries(data.entries);
         console.log(`[Calendar] Loaded ${data.entries.length} entries, Total USD: ${data.totalUSD}`);
+        if (data.entries.length > 0) {
+          console.log(`[Calendar] Entries:`, data.entries.map((e: Entry) => ({ 
+            name: e.name, 
+            amount: e.pricePerUnit * e.quantity, 
+            currency: e.currency,
+            usdAmount: e.usdAmount,
+            date: e.date
+          })));
+        }
+        setEntries(data.entries);
+      } else {
+        console.error(`[Calendar] Failed to load entries:`, data);
       }
     } catch (error) {
-      console.error('Failed to load entries:', error);
+      console.error('[Calendar] Failed to load entries:', error);
     }
   };
 

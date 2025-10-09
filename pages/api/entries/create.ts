@@ -34,6 +34,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         usdAmount,
       },
     });
+    
+    console.log(`[API] Entry created with ID: ${entry.id}, Date: ${entry.date.toISOString()}`);
 
     // Calculate and add points
     const points = await calculatePoints(usdAmount, category, userId);

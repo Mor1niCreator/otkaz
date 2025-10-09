@@ -41,6 +41,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         break;
     }
 
+    console.log(`[API List] User ${userId}, Period: ${period || 'all'}, Date filter:`, dateFilter);
+
     const entries = await prisma.entry.findMany({
       where: {
         userId: userId as string,
@@ -48,6 +50,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
       orderBy: { date: 'desc' },
     });
+
+    console.log(`[API List] Found ${entries.length} entries, Total USD: ${entries.reduce((sum, e) => sum + e.usdAmount, 0).toFixed(2)}`);
+    if (entries.length > 0) {
+      console.log(`[API List] Sample entry dates:`, entries.slice(0, 3).map(e => ({ name: e.name, date: e.date })));
+    }
 
     const totalUSD = entries.reduce((sum, entry) => sum + entry.usdAmount, 0);
 
