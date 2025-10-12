@@ -50,8 +50,8 @@ export default function ProfilePage() {
         setEditMode(false);
         toast.success(t('settingsSaved') + ' ✅');
         
-        // Reload page to apply changes
-        setTimeout(() => window.location.reload(), 500);
+        // Trigger storage event to notify other components
+        window.dispatchEvent(new Event('storage'));
       } else {
         toast.error(data.error || 'Failed to save settings');
       }

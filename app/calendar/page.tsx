@@ -53,6 +53,19 @@ export default function CalendarPage() {
     loadEntries(parsedUser.id);
   }, [router]);
 
+  // Listen for storage changes to update user data
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const parsedUser = getUserFromStorage();
+      if (parsedUser) {
+        setUser(parsedUser);
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
   const loadEntries = async (userId: string) => {
     try {
       console.log(`[Calendar] Loading entries for user ${userId}...`);

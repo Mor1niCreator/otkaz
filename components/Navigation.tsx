@@ -16,6 +16,20 @@ export default function Navigation() {
       setLang(user.language || 'en');
     }
   }, []);
+
+  // Listen for storage changes to update language
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const userData = localStorage.getItem('user');
+      if (userData) {
+        const user = JSON.parse(userData);
+        setLang(user.language || 'en');
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
   
   const { t } = useTranslation(lang);
   
