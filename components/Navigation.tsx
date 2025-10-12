@@ -56,7 +56,7 @@ export default function Navigation() {
                   : 'hover:bg-gray-100'
               }`}
             >
-              <span className="text-2xl mb-1">{item.icon}</span>
+              <span className="comic-icon-small text-2xl mb-1">{item.icon}</span>
               <span className={`text-xs font-bold ${isActive ? 'text-black' : 'text-gray-600'}`}>
                 {item.label}
               </span>

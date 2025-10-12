@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
+import AchievementAnimation from '@/components/AchievementAnimation';
 import { motion } from 'framer-motion';
 import { useTranslation } from '@/lib/i18n';
 import { getUserFromStorage } from '@/lib/user-sync';
@@ -28,6 +29,8 @@ export default function AchievementsPage() {
   const [user, setUser] = useState<any>(null);
   const [unlocked, setUnlocked] = useState<UserAchievement[]>([]);
   const [all, setAll] = useState<Achievement[]>([]);
+  const [showAchievement, setShowAchievement] = useState(false);
+  const [currentAchievement, setCurrentAchievement] = useState<Achievement | null>(null);
   
   const { t } = useTranslation(user?.language || 'en');
 
@@ -54,6 +57,11 @@ export default function AchievementsPage() {
     }
   };
 
+  const showAchievementAnimation = (achievement: Achievement) => {
+    setCurrentAchievement(achievement);
+    setShowAchievement(true);
+  };
+
   if (!user) return null;
 
   const unlockedIds = new Set(unlocked.map(u => u.achievement.id));
@@ -61,8 +69,14 @@ export default function AchievementsPage() {
 
   return (
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto">
+      <AchievementAnimation 
+        show={showAchievement} 
+        onComplete={() => setShowAchievement(false)}
+        achievement={currentAchievement || { icon: '🏅', name: 'Achievement', description: 'Description' }}
+      />
+      
       <div className="comic-panel mb-6">
-        <h1 className="text-4xl font-bold mb-4">🏅 {t('achievementsTitle')}</h1>
+        <h1 className="text-4xl font-bold mb-4 comic-text-shadow">🏅 {t('achievementsTitle')}</h1>
         
         <div className="bg-comic-yellow rounded-xl border-4 border-black p-4 mb-4">
           <div className="flex justify-between items-center mb-2">
@@ -91,13 +105,14 @@ export default function AchievementsPage() {
                   ? 'bg-gradient-to-r from-comic-orange to-comic-yellow'
                   : 'bg-gray-200 opacity-60'
               }`}
+              onClick={() => isUnlocked && showAchievementAnimation(achievement)}
             >
               <div className="flex items-center gap-4">
-                <div className={`text-6xl ${!isUnlocked && 'grayscale'}`}>
+                <div className={`comic-icon text-6xl ${!isUnlocked && 'grayscale'}`}>
                   {achievement.icon}
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-xl font-bold">
+                  <h3 className="text-xl font-bold comic-text-shadow">
                     {user.language === 'ru' ? achievement.nameRu : achievement.nameEn}
                   </h3>
                   <p className="text-sm text-gray-700">
@@ -110,6 +125,9 @@ export default function AchievementsPage() {
                   )}
                   {!isUnlocked && (
                     <p className="text-xs text-gray-500 mt-1">{t('locked')}</p>
+                  )}
+                  {isUnlocked && (
+                    <p className="text-xs text-gray-600 mt-1">Click to celebrate! 🎉</p>
                   )}
                 </div>
               </div>

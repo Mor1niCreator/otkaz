@@ -52,7 +52,7 @@ export default function HomePage() {
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="comic-panel max-w-md w-full">
         <div className="text-center mb-8">
-          <h1 className="text-5xl font-bold mb-2">💰 Отказник</h1>
+          <h1 className="text-5xl font-bold mb-2 comic-text-shadow">💰 Отказник</h1>
           <p className="text-xl text-gray-700">Gamified Savings Tracker</p>
         </div>
 
@@ -61,21 +61,21 @@ export default function HomePage() {
             onClick={() => setIsLogin(true)}
             className={`flex-1 py-3 rounded-xl font-bold border-4 border-black transition-all ${
               isLogin
-                ? 'bg-comic-orange shadow-comic'
+                ? 'comic-button-orange'
                 : 'bg-gray-200 hover:bg-gray-300'
             }`}
           >
-            Login
+            🚀 Login
           </button>
           <button
             onClick={() => setIsLogin(false)}
             className={`flex-1 py-3 rounded-xl font-bold border-4 border-black transition-all ${
               !isLogin
-                ? 'bg-comic-orange shadow-comic'
+                ? 'comic-button-orange'
                 : 'bg-gray-200 hover:bg-gray-300'
             }`}
           >
-            Register
+            ✨ Register
           </button>
         </div>
 
@@ -118,7 +118,7 @@ export default function HomePage() {
             />
           )}
 
-          <button type="submit" className="w-full comic-button text-xl">
+          <button type="submit" className="w-full comic-button-lime text-xl">
             {isLogin ? '🚀 Let\'s Go!' : '✨ Create Account'}
           </button>
         </form>

@@ -83,7 +83,7 @@ export default function ProfilePage() {
   return (
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto">
       <div className="comic-panel mb-6">
-        <h1 className="text-4xl font-bold mb-2">👤 {t('profile')}</h1>
+        <h1 className="text-4xl font-bold mb-2 comic-text-shadow">👤 {t('profile')}</h1>
         <div className="bg-gradient-to-r from-comic-purple to-comic-pink rounded-2xl border-4 border-black p-6 mt-4 text-white">
           <p className="text-2xl font-bold mb-1">{user.name || user.email}</p>
           <p className="text-sm opacity-90">{user.email}</p>
@@ -148,9 +148,9 @@ export default function ProfilePage() {
           {!editMode && (
             <button
               onClick={() => setEditMode(true)}
-              className="bg-comic-lime border-4 border-black rounded-full px-4 py-2 font-bold shadow-comic"
+              className="comic-button-lime rounded-full px-4 py-2"
             >
-              {t('edit')}
+              ✏️ {t('edit')}
             </button>
           )}
         </div>
@@ -187,14 +187,14 @@ export default function ProfilePage() {
 
           {editMode && (
             <div className="flex gap-2">
-              <button onClick={handleSave} className="flex-1 comic-button">
-                {t('save')}
+              <button onClick={handleSave} className="flex-1 comic-button-lime">
+                💾 {t('save')}
               </button>
               <button
                 onClick={() => setEditMode(false)}
                 className="flex-1 comic-button-secondary"
               >
-                {t('cancel')}
+                ❌ {t('cancel')}
               </button>
             </div>
           )}
@@ -203,7 +203,7 @@ export default function ProfilePage() {
 
       <button
         onClick={handleLogout}
-        className="w-full bg-red-500 text-white font-bold py-3 px-6 rounded-full border-4 border-black shadow-comic hover:shadow-comic-lg transition-all"
+        className="w-full bg-red-500 text-white font-bold py-3 px-6 rounded-full border-4 border-black shadow-comic hover:shadow-comic-lg transition-all hover:-translate-y-1 active:translate-y-0"
       >
         🚪 {t('logout')}
       </button>
