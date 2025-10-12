@@ -63,9 +63,9 @@ export default function GoalsPage() {
         console.log(`Goals loaded: ${data.goals.length} goals, Total savings: ${data.totalSavings} USD`);
         
         // Create default goals if none exist (only once!)
-        if (data.goals.length === 0 && !localStorage.getItem('defaultGoalsCreated')) {
+        if (data.goals.length === 0 && !localStorage.getItem(`defaultGoalsCreated_${userId}`)) {
           await createDefaultGoals(userId);
-          localStorage.setItem('defaultGoalsCreated', 'true');
+          localStorage.setItem(`defaultGoalsCreated_${userId}`, 'true');
         }
       }
     } catch (error) {
@@ -75,6 +75,19 @@ export default function GoalsPage() {
 
   const createDefaultGoals = async (userId: string) => {
     console.log('Creating default goals...');
+    
+    // Check if goals already exist to prevent duplicates
+    try {
+      const checkRes = await fetch(`/api/goals/check-exists?userId=${userId}`);
+      const checkData = await checkRes.json();
+      
+      if (checkData.exists) {
+        console.log('Goals already exist, skipping creation');
+        return;
+      }
+    } catch (error) {
+      console.error('Failed to check existing goals:', error);
+    }
     
     const createdGoals = [];
     for (const goal of DEFAULT_GOALS) {
@@ -100,8 +113,8 @@ export default function GoalsPage() {
     
     console.log(`Created ${createdGoals.length} default goals`);
     
-    // Update state directly instead of reloading
-    setGoals(createdGoals);
+    // Reload goals from database to get the complete data
+    await loadGoals(userId);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
