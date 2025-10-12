@@ -52,7 +52,7 @@ export default function HomePage() {
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="comic-panel max-w-md w-full">
         <div className="text-center mb-8">
-          <h1 className="text-5xl font-bold mb-2 comic-text-shadow">💰 Отказник</h1>
+          <h1 className="text-5xl font-bold mb-2">💰 Отказник</h1>
           <p className="text-xl text-gray-700">Gamified Savings Tracker</p>
         </div>
 

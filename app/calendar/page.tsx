@@ -172,11 +172,11 @@ export default function CalendarPage() {
       />
       
       <div className="comic-panel mb-6">
-        <h1 className="text-4xl font-bold mb-2 comic-text-shadow">📅 {t('todaysRefusals')}</h1>
+        <h1 className="text-4xl font-bold mb-2">📅 {t('todaysRefusals')}</h1>
         <p className="text-xl text-gray-700">{format(new Date(), 'MMMM d, yyyy')}</p>
         <div className="mt-4 bg-comic-yellow rounded-xl border-4 border-black p-4 text-center">
           <p className="text-sm text-gray-700">{t('savedToday')}</p>
-          <p className="text-4xl font-bold comic-text-shadow">{formatCurrency(todayTotal, user?.currency || 'USD')}</p>
+          <p className="text-4xl font-bold">{formatCurrency(todayTotal, user?.currency || 'USD')}</p>
         </div>
       </div>
 

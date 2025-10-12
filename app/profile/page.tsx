@@ -186,11 +186,11 @@ export default function ProfilePage() {
   return (
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto">
       <div className="comic-panel mb-6">
-        <h1 className="text-4xl font-bold mb-2 comic-text-shadow">👤 {t('profile')}</h1>
+        <h1 className="text-4xl font-bold mb-2">👤 {t('profile')}</h1>
         <div className="bg-gradient-to-r from-comic-purple to-comic-pink rounded-2xl border-4 border-black p-6 mt-4 text-white">
-          <p className="text-2xl font-bold mb-1 comic-text-shadow">{user.name || user.email}</p>
+          <p className="text-2xl font-bold mb-1">{user.name || user.email}</p>
           {user.username && (
-            <p className="text-lg font-bold mb-1 comic-text-shadow">@{user.username}</p>
+            <p className="text-lg font-bold mb-1">@{user.username}</p>
           )}
           <p className="text-sm opacity-90">{user.email}</p>
         </div>
@@ -263,7 +263,7 @@ export default function ProfilePage() {
 
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-bold mb-2 comic-text-shadow">Display Name</label>
+            <label className="block text-sm font-bold mb-2">Display Name</label>
             <input
               type="text"
               value={name}
@@ -275,7 +275,7 @@ export default function ProfilePage() {
           </div>
 
           <div>
-            <label className="block text-sm font-bold mb-2 comic-text-shadow">Username</label>
+            <label className="block text-sm font-bold mb-2">Username</label>
             <div className="relative">
               <input
                 type="text"
@@ -309,7 +309,7 @@ export default function ProfilePage() {
           </div>
 
           <div>
-            <label className="block text-sm font-bold mb-2 comic-text-shadow">{t('currency')}</label>
+            <label className="block text-sm font-bold mb-2">{t('currency')}</label>
             <select
               value={currency}
               onChange={(e) => setCurrency(e.target.value)}
@@ -325,7 +325,7 @@ export default function ProfilePage() {
           </div>
 
           <div>
-            <label className="block text-sm font-bold mb-2 comic-text-shadow">{t('language')}</label>
+            <label className="block text-sm font-bold mb-2">{t('language')}</label>
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
@@ -350,10 +350,10 @@ export default function ProfilePage() {
 
           {showPasswordForm && (
             <div className="space-y-4 p-4 bg-gray-100 rounded-xl border-4 border-black">
-              <h3 className="text-lg font-bold comic-text-shadow">Change Password</h3>
+              <h3 className="text-lg font-bold">Change Password</h3>
               
               <div>
-                <label className="block text-sm font-bold mb-2 comic-text-shadow">Current Password</label>
+                <label className="block text-sm font-bold mb-2">Current Password</label>
                 <input
                   type="password"
                   value={currentPassword}
@@ -364,7 +364,7 @@ export default function ProfilePage() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold mb-2 comic-text-shadow">New Password</label>
+                <label className="block text-sm font-bold mb-2">New Password</label>
                 <input
                   type="password"
                   value={newPassword}
@@ -408,7 +408,7 @@ export default function ProfilePage() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold mb-2 comic-text-shadow">Confirm New Password</label>
+                <label className="block text-sm font-bold mb-2">Confirm New Password</label>
                 <input
                   type="password"
                   value={confirmPassword}

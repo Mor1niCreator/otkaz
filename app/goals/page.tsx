@@ -165,7 +165,7 @@ export default function GoalsPage() {
   return (
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto">
       <div className="comic-panel mb-6">
-        <h1 className="text-4xl font-bold mb-2 comic-text-shadow">🎯 {t('yourGoals')}</h1>
+        <h1 className="text-4xl font-bold mb-2">🎯 {t('yourGoals')}</h1>
         <div className="bg-comic-yellow rounded-xl border-4 border-black p-4 mt-4">
           <p className="text-sm text-gray-700">{t('totalSavings')}</p>
           <p className="text-3xl font-bold">{formatCurrency(convertCurrency(totalSavings, user.currency), user.currency)}</p>

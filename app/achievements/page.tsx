@@ -76,7 +76,7 @@ export default function AchievementsPage() {
       />
       
       <div className="comic-panel mb-6">
-        <h1 className="text-4xl font-bold mb-4 comic-text-shadow">🏅 {t('achievementsTitle')}</h1>
+        <h1 className="text-4xl font-bold mb-4">🏅 {t('achievementsTitle')}</h1>
         
         <div className="bg-comic-yellow rounded-xl border-4 border-black p-4 mb-4">
           <div className="flex justify-between items-center mb-2">
@@ -112,7 +112,7 @@ export default function AchievementsPage() {
                   {achievement.icon}
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-xl font-bold comic-text-shadow">
+                  <h3 className="text-xl font-bold">
                     {user.language === 'ru' ? achievement.nameRu : achievement.nameEn}
                   </h3>
                   <p className="text-sm text-gray-700">

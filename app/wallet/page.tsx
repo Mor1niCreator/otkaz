@@ -93,7 +93,7 @@ export default function WalletPage() {
   return (
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto">
       <div className="comic-panel mb-6">
-        <h1 className="text-4xl font-bold mb-4 comic-text-shadow">💰 {t('yourWallet')}</h1>
+        <h1 className="text-4xl font-bold mb-4">💰 {t('yourWallet')}</h1>
         
         <div className="bg-gradient-to-r from-comic-orange to-comic-pink rounded-2xl border-4 border-black p-6 mb-6 shadow-comic-lg">
           <div className="text-center">
