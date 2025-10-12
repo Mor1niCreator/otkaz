@@ -49,10 +49,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           },
         });
 
-        // Grant bonus points to new user
+        // Grant bonus points to both users
         await prisma.user.update({
           where: { id: user.id },
-          data: { points: { increment: 20 } },
+          data: { points: { increment: 20 } }, // New user gets 20 points
+        });
+
+        await prisma.user.update({
+          where: { id: referrer.id },
+          data: { points: { increment: 50 } }, // Referrer gets 50 points
         });
       }
     }

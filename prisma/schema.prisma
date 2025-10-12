@@ -31,6 +31,8 @@ model User {
   achievements  UserAchievement[]
   referrals     Referral[]        @relation("Referrer")
   referredUsers Referral[]        @relation("Referred")
+  dailyTasks    UserDailyTask[]
+  leaderboard   Leaderboard[]
 }
 
 model Entry {
@@ -105,4 +107,50 @@ model Referral {
 
   @@index([referrerId])
   @@index([referredId])
+}
+
+model DailyTask {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  nameEn      String
+  nameRu      String
+  descriptionEn String
+  descriptionRu String
+  points      Int      @default(10)
+  type        String   // 'daily', 'referral', 'streak', 'amount', 'category'
+  target      Int?     // target value for the task
+  category    String?  // for category-specific tasks
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  completions UserDailyTask[]
+}
+
+model UserDailyTask {
+  id        String    @id @default(cuid())
+  userId    String
+  taskId    String
+  completedAt DateTime @default(now())
+  pointsEarned Int
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  task DailyTask @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, taskId, completedAt])
+  @@index([userId])
+  @@index([completedAt])
+}
+
+model Leaderboard {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  totalPoints Float
+  rank      Int
+  period    String   // 'daily', 'weekly', 'monthly', 'alltime'
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([rank])
+  @@index([period])
 }

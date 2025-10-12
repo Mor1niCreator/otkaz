@@ -37,6 +37,7 @@ export default function Navigation() {
     { href: '/calendar', label: t('calendar'), icon: '📅' },
     { href: '/wallet', label: t('wallet'), icon: '💰' },
     { href: '/goals', label: t('goals'), icon: '🎯' },
+    { href: '/leaderboard', label: t('leaderboard'), icon: '🏆' },
     { href: '/achievements', label: t('achievements'), icon: '🏅' },
     { href: '/profile', label: t('profile'), icon: '👤' },
   ];
