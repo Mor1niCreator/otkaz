@@ -33,10 +33,10 @@ export default function BoomAnimation({
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
       <div className="boom-animation text-center">
-        <div className="text-8xl mb-2 comic-text-shadow">
+        <div className="text-8xl mb-2 comic-text-large">
           {emoji}
         </div>
-        <div className="text-6xl font-bold comic-text-outline">
+        <div className="text-6xl font-bold comic-text-large">
           {text}
         </div>
         <div className="text-2xl mt-2 comic-text-shadow">

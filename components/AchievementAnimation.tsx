@@ -39,7 +39,7 @@ export default function AchievementAnimation({
           <div className="text-8xl mb-4 comic-icon bounce-comic">
             {achievement.icon}
           </div>
-          <div className="text-4xl font-bold comic-text-shadow mb-2">
+          <div className="text-4xl font-bold comic-text-large mb-2">
             🏆 ACHIEVEMENT UNLOCKED! 🏆
           </div>
           <div className="text-2xl font-bold comic-text-outline mb-2">
@@ -48,7 +48,7 @@ export default function AchievementAnimation({
           <div className="text-lg comic-text-shadow">
             {achievement.description}
           </div>
-          <div className="mt-4 text-2xl pulse-comic">
+          <div className="mt-4 text-2xl pulse-comic comic-text-shadow">
             ⭐ CONGRATULATIONS! ⭐
           </div>
         </div>

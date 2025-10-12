@@ -12,6 +12,7 @@ model User {
   email         String   @unique
   password      String
   name          String
+  username      String?  @unique
   currency      String   @default("USD")
   language      String   @default("en")
   timezone      String   @default("UTC")
@@ -19,6 +20,9 @@ model User {
   referredBy    String?
   points        Float    @default(0)
   rank          String   @default("Novice Saver")
+  lastPasswordChange DateTime @default(now())
+  failedLoginAttempts Int @default(0)
+  lockedUntil   DateTime?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
