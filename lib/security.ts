@@ -75,8 +75,8 @@ export function detectSuspiciousActivity(userAgent: string, ip: string): boolean
     /crawler/i,
     /spider/i,
     /scraper/i,
-    /curl/i,
-    /wget/i,
+    // /curl/i,  // Разрешаем curl для тестирования
+    // /wget/i,  // Разрешаем wget для тестирования
     /python/i,
     /java/i,
     /php/i
