@@ -35,6 +35,7 @@ export default function GoalsPage() {
   const [showCrypto, setShowCrypto] = useState(false);
   const [cryptoData, setCryptoData] = useState<CryptoData[]>([]);
   const [loadingCrypto, setLoadingCrypto] = useState(false);
+  const [isLoadingGoals, setIsLoadingGoals] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     targetAmount: '',
@@ -49,10 +50,15 @@ export default function GoalsPage() {
       return;
     }
     setUser(parsedUser);
-    loadGoals(parsedUser.id);
-  }, [router]);
+    if (!isLoadingGoals) {
+      loadGoals(parsedUser.id);
+    }
+  }, [router, isLoadingGoals]);
 
   const loadGoals = async (userId: string) => {
+    if (isLoadingGoals) return; // Prevent multiple simultaneous calls
+    
+    setIsLoadingGoals(true);
     try {
       const res = await fetch(`/api/goals/list?userId=${userId}`);
       const data = await res.json();
@@ -70,6 +76,8 @@ export default function GoalsPage() {
       }
     } catch (error) {
       console.error('Failed to load goals:', error);
+    } finally {
+      setIsLoadingGoals(false);
     }
   };
 
@@ -87,6 +95,7 @@ export default function GoalsPage() {
       }
     } catch (error) {
       console.error('Failed to check existing goals:', error);
+      return; // Don't create goals if we can't check
     }
     
     const createdGoals = [];
@@ -113,8 +122,8 @@ export default function GoalsPage() {
     
     console.log(`Created ${createdGoals.length} default goals`);
     
-    // Reload goals from database to get the complete data
-    await loadGoals(userId);
+    // Update state directly with created goals to avoid reload
+    setGoals(createdGoals);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
