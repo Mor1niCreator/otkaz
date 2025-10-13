@@ -4,11 +4,13 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
 import BoomAnimation from '@/components/BoomAnimation';
+import PresetsEditor from '@/components/PresetsEditor';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 import { useTranslation } from '@/lib/i18n';
 import { formatCurrency, getCurrencySymbol, convertCurrency } from '@/lib/currency-utils';
 import { getUserFromStorage } from '@/lib/user-sync';
+import { getUserPresets, UserPreset } from '@/lib/user-presets';
 
 interface Entry {
   id: string;
@@ -21,18 +23,13 @@ interface Entry {
   date: string;
 }
 
-const getPresets = (t: any) => [
-  { name: t('coffee'), icon: '☕', price: 3, category: 'drinks' },
-  { name: t('cigarettes'), icon: '🚬', price: 8, category: 'habits' },
-  { name: t('soda'), icon: '🥤', price: 2, category: 'drinks' },
-  { name: t('fastFood'), icon: '🍔', price: 12, category: 'food' },
-];
-
 export default function CalendarPage() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [entries, setEntries] = useState<Entry[]>([]);
+  const [presets, setPresets] = useState<UserPreset[]>([]);
   const [showForm, setShowForm] = useState(false);
+  const [showPresetsEditor, setShowPresetsEditor] = useState(false);
   const [todayTotal, setTodayTotal] = useState(0);
   const [showBoom, setShowBoom] = useState(false);
   const [formData, setFormData] = useState({
@@ -52,6 +49,7 @@ export default function CalendarPage() {
       return;
     }
     setUser(parsedUser);
+    setPresets(getUserPresets(parsedUser.id));
     loadEntries(parsedUser.id);
   }, [router]);
 
@@ -104,9 +102,7 @@ export default function CalendarPage() {
     console.log(`[Calendar] Today total: ${todayTotalUSD.toFixed(2)} USD = ${formatCurrency(converted, user.currency)}`);
   }, [entries, user?.currency]);
 
-  const PRESETS = getPresets(t);
-  
-  const handlePreset = (preset: typeof PRESETS[0]) => {
+  const handlePreset = (preset: UserPreset) => {
     setFormData({
       name: preset.name,
       pricePerUnit: preset.price.toString(),
@@ -181,11 +177,19 @@ export default function CalendarPage() {
       </div>
 
       <div className="comic-panel mb-6">
-        <h2 className="text-2xl font-bold mb-4">⚡ {t('quickAdd')}</h2>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold">⚡ {t('quickAdd')}</h2>
+          <button
+            onClick={() => setShowPresetsEditor(true)}
+            className="comic-button-secondary px-3 py-2 text-sm"
+          >
+            ⚙️ {t('customize')}
+          </button>
+        </div>
         <div className="grid grid-cols-2 gap-3">
-          {PRESETS.map((preset) => (
+          {presets.map((preset) => (
             <button
-              key={preset.name}
+              key={preset.id}
               onClick={() => handlePreset(preset)}
               className="comic-button-cyan p-4"
             >
@@ -202,6 +206,17 @@ export default function CalendarPage() {
           {t('customEntry')}
         </button>
       </div>
+
+      {showPresetsEditor && (
+        <PresetsEditor
+          userId={user.id}
+          presets={presets}
+          currency={user.currency || 'USD'}
+          onPresetsUpdated={(updatedPresets) => setPresets(updatedPresets)}
+          onClose={() => setShowPresetsEditor(false)}
+          t={t}
+        />
+      )}
 
       {showForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">

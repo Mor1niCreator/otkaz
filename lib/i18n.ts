@@ -137,6 +137,15 @@ export const translations = {
     averagePerDay: 'Average per day',
     total: 'Total',
     yourSavings: 'Your Savings',
+    customize: 'Customize',
+    customizePresets: 'Customize Presets',
+    customizePresetsDescription: 'Personalize your quick-add buttons with your own categories, icons, and prices',
+    presetName: 'Preset name',
+    presetUpdated: 'Preset updated!',
+    presetsReset: 'Presets reset to defaults!',
+    confirmResetPresets: 'Reset all presets to default values?',
+    resetToDefaults: 'Reset to Defaults',
+    done: 'Done',
     
     // Messages
     pointsEarned: 'points!',
@@ -281,6 +290,15 @@ export const translations = {
     averagePerDay: 'В среднем за день',
     total: 'Итого',
     yourSavings: 'Твои сбережения',
+    customize: 'Настроить',
+    customizePresets: 'Настройка кнопок',
+    customizePresetsDescription: 'Персонализируй кнопки быстрого добавления с своими категориями, иконками и ценами',
+    presetName: 'Название',
+    presetUpdated: 'Кнопка обновлена!',
+    presetsReset: 'Кнопки сброшены!',
+    confirmResetPresets: 'Сбросить все кнопки к значениям по умолчанию?',
+    resetToDefaults: 'Сбросить',
+    done: 'Готово',
     
     // Messages
     pointsEarned: 'поинтов!',

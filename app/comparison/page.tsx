@@ -3,11 +3,13 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
+import PresetsEditor from '@/components/PresetsEditor';
 import toast from 'react-hot-toast';
 import { useTranslation } from '@/lib/i18n';
 import { formatCurrency, convertCurrency } from '@/lib/currency-utils';
 import { getUserFromStorage } from '@/lib/user-sync';
 import { convertToUSD } from '@/lib/currency-service';
+import { getUserPresets, UserPreset } from '@/lib/user-presets';
 
 interface SpendingEntry {
   id: string;
@@ -48,23 +50,14 @@ interface ComparisonData {
 
 const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as const;
 
-const PRESET_CATEGORIES = [
-  { name: 'Coffee', icon: '☕', defaultAmount: 5 },
-  { name: 'Cigarettes', icon: '🚬', defaultAmount: 10 },
-  { name: 'Fast Food', icon: '🍔', defaultAmount: 15 },
-  { name: 'Alcohol', icon: '🍺', defaultAmount: 20 },
-  { name: 'Snacks', icon: '🍿', defaultAmount: 8 },
-  { name: 'Taxi/Uber', icon: '🚕', defaultAmount: 25 },
-  { name: 'Online Shopping', icon: '🛍️', defaultAmount: 50 },
-  { name: 'Subscriptions', icon: '📺', defaultAmount: 15 },
-];
-
 export default function ComparisonPage() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
+  const [presets, setPresets] = useState<UserPreset[]>([]);
   const [step, setStep] = useState<'input' | 'results'>('input');
   const [selectedDay, setSelectedDay] = useState<keyof WeeklySpending | null>(null);
   const [showAddEntry, setShowAddEntry] = useState(false);
+  const [showPresetsEditor, setShowPresetsEditor] = useState(false);
   const [customEntry, setCustomEntry] = useState({ name: '', amount: '' });
   
   const [weeklySpending, setWeeklySpending] = useState<WeeklySpending>({
@@ -89,6 +82,7 @@ export default function ComparisonPage() {
       return;
     }
     setUser(parsedUser);
+    setPresets(getUserPresets(parsedUser.id));
     
     // Load saved weekly spending from localStorage
     const saved = localStorage.getItem(`weeklySpending_${parsedUser.id}`);
@@ -101,12 +95,12 @@ export default function ComparisonPage() {
     }
   }, [router]);
 
-  const addPresetEntry = (day: keyof WeeklySpending, preset: typeof PRESET_CATEGORIES[0]) => {
+  const addPresetEntry = (day: keyof WeeklySpending, preset: UserPreset) => {
     const newEntry: SpendingEntry = {
       id: Date.now().toString() + Math.random(),
       name: preset.name,
-      amount: preset.defaultAmount,
-      category: preset.name,
+      amount: preset.price,
+      category: preset.category,
     };
     
     const updatedEntries = [...weeklySpending[day].entries, newEntry];
@@ -208,8 +202,8 @@ export default function ComparisonPage() {
     return icons[day] || '📅';
   };
 
-  const getCategoryIcon = (category?: string) => {
-    const preset = PRESET_CATEGORIES.find(p => p.name === category);
+  const getCategoryIcon = (categoryOrName?: string) => {
+    const preset = presets.find(p => p.name === categoryOrName || p.category === categoryOrName);
     return preset?.icon || '💰';
   };
 
@@ -284,17 +278,25 @@ export default function ComparisonPage() {
                     </button>
                   ) : (
                     <div className="space-y-3">
+                      {/* Quick settings button */}
+                      <button
+                        onClick={() => setShowPresetsEditor(true)}
+                        className="w-full comic-button-secondary py-2 text-xs"
+                      >
+                        ⚙️ {t('customizePresets')}
+                      </button>
+                      
                       {/* Preset categories */}
                       <div className="grid grid-cols-2 gap-2">
-                        {PRESET_CATEGORIES.map((preset) => (
+                        {presets.map((preset) => (
                           <button
-                            key={preset.name}
+                            key={preset.id}
                             onClick={() => addPresetEntry(day, preset)}
                             className="bg-comic-lime hover:bg-green-300 border-2 border-black rounded-lg p-2 text-xs font-bold transition-all"
                           >
                             {preset.icon} {preset.name}
                             <div className="text-[10px] text-gray-600">
-                              {formatCurrency(preset.defaultAmount, user.currency)}
+                              {formatCurrency(preset.price, user.currency)}
                             </div>
                           </button>
                         ))}
@@ -498,6 +500,17 @@ export default function ComparisonPage() {
             </div>
           </div>
         </>
+      )}
+
+      {showPresetsEditor && (
+        <PresetsEditor
+          userId={user.id}
+          presets={presets}
+          currency={user.currency || 'USD'}
+          onPresetsUpdated={(updatedPresets) => setPresets(updatedPresets)}
+          onClose={() => setShowPresetsEditor(false)}
+          t={t}
+        />
       )}
 
       <Navigation />
