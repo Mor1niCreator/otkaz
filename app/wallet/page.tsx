@@ -77,10 +77,10 @@ export default function WalletPage() {
 
   // Convert USD amounts to user's currency
   const convertedStats = {
-    today: convertCurrency(stats.today, user.currency),
-    week: convertCurrency(stats.week, user.currency),
-    month: convertCurrency(stats.month, user.currency),
-    allTime: convertCurrency(stats.allTime, user.currency),
+    today: convertCurrency(stats.today || 0, user.currency),
+    week: convertCurrency(stats.week || 0, user.currency),
+    month: convertCurrency(stats.month || 0, user.currency),
+    allTime: convertCurrency(stats.allTime || 0, user.currency),
   };
 
   const chartData = [
@@ -102,7 +102,7 @@ export default function WalletPage() {
               {formatCurrency(convertedStats.allTime, user.currency)}
             </p>
             <p className="text-white text-sm">
-              {userPoints.toFixed(0)} {t('points')} • {user.rank}
+              {(userPoints || 0).toFixed(0)} {t('points')} • {user.rank || 'Novice Saver'}
             </p>
           </div>
         </div>

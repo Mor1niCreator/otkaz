@@ -77,13 +77,13 @@ export default function ProfilePage() {
   const nextRankIndex = RANKS.findIndex(r => r.name === currentRank.name) + 1;
   const nextRank = nextRankIndex < RANKS.length ? RANKS[nextRankIndex] : null;
   const progressToNext = nextRank
-    ? ((user.points - currentRank.minPoints) / (nextRank.minPoints - currentRank.minPoints)) * 100
+    ? Math.min(Math.max(((user.points - currentRank.minPoints) / (nextRank.minPoints - currentRank.minPoints)) * 100, 0), 100)
     : 100;
 
   return (
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto">
       <div className="comic-panel mb-6">
-        <h1 className="text-4xl font-bold mb-2">👤 {t('profile')}</h1>
+        <h1 className="text-4xl font-bold mb-2">👤 {t('yourProfile')}</h1>
         <div className="bg-gradient-to-r from-comic-purple to-comic-pink rounded-2xl border-4 border-black p-6 mt-4 text-white">
           <p className="text-2xl font-bold mb-1">{user.name || user.email}</p>
           <p className="text-sm opacity-90">{user.email}</p>
@@ -102,7 +102,7 @@ export default function ProfilePage() {
             </div>
             <div className="text-right">
               <p className="text-sm text-gray-700">{t('points')}</p>
-              <p className="text-3xl font-bold">{user.points.toFixed(0)}</p>
+              <p className="text-3xl font-bold">{(user.points || 0).toFixed(0)}</p>
             </div>
           </div>
         </div>
@@ -119,7 +119,7 @@ export default function ProfilePage() {
               <div className="progress-fill" style={{ width: `${progressToNext}%` }} />
             </div>
             <p className="text-xs text-center text-gray-600 mt-2">
-              {(nextRank.minPoints - user.points).toFixed(0)} {t('pointsToGo')}
+              {(nextRank.minPoints - (user.points || 0)).toFixed(0)} {t('pointsToGo')}
             </p>
           </div>
         )}

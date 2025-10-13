@@ -84,7 +84,7 @@ export default function CalendarPage() {
     
     const todayTotalUSD = entries.reduce((sum, e) => sum + (e.usdAmount || 0), 0);
     const converted = convertCurrency(todayTotalUSD, user.currency || 'USD');
-    setTodayTotal(converted);
+    setTodayTotal(converted || 0);
     
     console.log(`[Calendar] Today total: ${todayTotalUSD.toFixed(2)} USD = ${formatCurrency(converted, user.currency)}`);
   }, [entries, user?.currency]);
@@ -123,7 +123,7 @@ export default function CalendarPage() {
       if (res.ok) {
         console.log(`[Calendar] Entry created successfully, reloading entries...`);
         
-        toast.success(`+${data.pointsEarned.toFixed(1)} ${t('pointsEarned')} 🎉`);
+        toast.success(`+${(data.pointsEarned || 0).toFixed(1)} ${t('pointsEarned')} 🎉`);
         
         const updatedUser = { ...user, points: (Number(user.points) || 0) + data.pointsEarned };
         localStorage.setItem('user', JSON.stringify(updatedUser));

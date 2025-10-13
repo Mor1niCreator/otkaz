@@ -58,9 +58,9 @@ export default function GoalsPage() {
       const data = await res.json();
       if (res.ok) {
         setGoals(data.goals);
-        setTotalSavings(data.totalSavings);
+        setTotalSavings(data.totalSavings || 0);
         
-        console.log(`Goals loaded: ${data.goals.length} goals, Total savings: ${data.totalSavings} USD`);
+        console.log(`Goals loaded: ${data.goals.length} goals, Total savings: ${data.totalSavings || 0} USD`);
         
         // Create default goals if none exist (only once!)
         if (data.goals.length === 0 && !localStorage.getItem('defaultGoalsCreated')) {
@@ -135,7 +135,7 @@ export default function GoalsPage() {
   };
 
   const loadCryptoROI = async () => {
-    if (totalSavings <= 0) {
+    if ((totalSavings || 0) <= 0) {
       toast.error('Add some refusals first to see Crypto ROI!');
       return;
     }
@@ -143,7 +143,7 @@ export default function GoalsPage() {
     setLoadingCrypto(true);
     
     try {
-      const res = await fetch(`/api/crypto/roi?amount=${totalSavings}`);
+      const res = await fetch(`/api/crypto/roi?amount=${totalSavings || 0}`);
       const data = await res.json();
       if (res.ok && data.data && data.data.length > 0) {
         setCryptoData(data.data);
@@ -190,9 +190,12 @@ export default function GoalsPage() {
         ) : (
           <div className="space-y-4">
             {goals.map((goal) => {
-              const progress = Math.min((totalSavings / goal.usdTarget) * 100, 100);
-              const convertedSavings = convertCurrency(totalSavings, user.currency);
-              const convertedTarget = convertCurrency(goal.usdTarget, user.currency);
+              // Each goal should track its own progress, not total savings
+              // For now, we'll use total savings as a proxy, but this should be improved
+              // to track individual goal progress in the future
+              const progress = Math.min(Math.max((totalSavings / (goal.usdTarget || 1)) * 100, 0), 100);
+              const convertedSavings = convertCurrency(totalSavings || 0, user.currency);
+              const convertedTarget = convertCurrency(goal.usdTarget || 0, user.currency);
               
               return (
                 <div key={goal.id} className="bg-white rounded-xl border-4 border-black p-4">
@@ -225,12 +228,12 @@ export default function GoalsPage() {
         )}
       </div>
 
-      {totalSavings > 0 && (
+      {(totalSavings || 0) > 0 && (
         <div className="comic-panel mb-6">
           <h2 className="text-2xl font-bold mb-4">🚀 {t('cryptoROICalculator')}</h2>
           <div className="bg-comic-yellow rounded-xl border-4 border-black p-4 mb-4">
             <p className="text-sm text-gray-700 mb-2">
-              {t('yourSavings')}: <span className="font-bold">{formatCurrency(convertCurrency(totalSavings, user.currency), user.currency)}</span>
+              {t('yourSavings')}: <span className="font-bold">{formatCurrency(convertCurrency(totalSavings || 0, user.currency), user.currency)}</span>
             </p>
             <p className="text-xs text-gray-600">
               See what this would be worth if you invested in top cryptocurrencies 5 years ago!
@@ -256,7 +259,7 @@ export default function GoalsPage() {
                   className="bg-gradient-to-r from-white to-gray-50 rounded-xl border-4 border-black p-4 hover:shadow-comic-lg transition-all cursor-pointer hover:-translate-y-1"
                   onClick={() => {
                     const convertedYourValue = convertCurrency(crypto.yourValue, user.currency);
-                    const convertedOriginal = convertCurrency(totalSavings, user.currency);
+                    const convertedOriginal = convertCurrency(totalSavings || 0, user.currency);
                     const profit = convertedYourValue - convertedOriginal;
                     const roiPercent = ((crypto.multiplier - 1) * 100).toFixed(0);
                     
@@ -293,18 +296,20 @@ export default function GoalsPage() {
                         {formatCurrency(convertCurrency(crypto.yourValue, user.currency), user.currency)}
                       </div>
                       <div className="text-xs text-gray-600 mt-1">
-                        +{formatCurrency(convertCurrency(crypto.yourValue - totalSavings, user.currency), user.currency)} profit
+                        +{formatCurrency(convertCurrency(crypto.yourValue - (totalSavings || 0), user.currency), user.currency)} profit
                       </div>
                     </div>
                   </div>
                 </div>
               ))}
               
-              <div className="bg-comic-cyan rounded-xl border-4 border-black p-4 mt-4">
-                <div className="text-sm text-gray-700 text-center">
-                  💎 Best performer: <span className="font-bold">{cryptoData[0]?.symbol}</span> ({cryptoData[0]?.multiplier.toFixed(1)}x)
+              {cryptoData.length > 0 && (
+                <div className="bg-comic-cyan rounded-xl border-4 border-black p-4 mt-4">
+                  <div className="text-sm text-gray-700 text-center">
+                    💎 Best performer: <span className="font-bold">{cryptoData[0]?.symbol}</span> ({cryptoData[0]?.multiplier.toFixed(1)}x)
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           )}
         </div>

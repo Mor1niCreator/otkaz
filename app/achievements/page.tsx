@@ -57,7 +57,7 @@ export default function AchievementsPage() {
   if (!user) return null;
 
   const unlockedIds = new Set(unlocked.map(u => u.achievement.id));
-  const progress = all.length > 0 ? (unlocked.length / all.length) * 100 : 0;
+  const progress = all.length > 0 ? Math.min(Math.max((unlocked.length / all.length) * 100, 0), 100) : 0;
 
   return (
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto">

@@ -30,17 +30,24 @@ export async function getUserStreak(userId: string): Promise<number> {
 
   if (entries.length === 0) return 0;
 
-  let streak = 1;
   const today = startOfDay(new Date());
+  const firstEntryDate = startOfDay(entries[0].date);
+  
+  // If the most recent entry is not today, streak is 0
+  if (differenceInDays(today, firstEntryDate) > 0) {
+    return 0;
+  }
 
-  for (let i = 0; i < entries.length - 1; i++) {
-    const currentDay = startOfDay(entries[i].date);
-    const nextDay = startOfDay(entries[i + 1].date);
-    const diff = differenceInDays(currentDay, nextDay);
+  let streak = 1;
+  const targetDate = startOfDay(entries[0].date);
 
-    if (diff === 1) {
+  for (let i = 1; i < entries.length; i++) {
+    const currentEntryDate = startOfDay(entries[i].date);
+    const expectedDate = startOfDay(new Date(targetDate.getTime() - (i * 24 * 60 * 60 * 1000)));
+    
+    if (differenceInDays(currentEntryDate, expectedDate) === 0) {
       streak++;
-    } else if (diff > 1) {
+    } else {
       break;
     }
   }
