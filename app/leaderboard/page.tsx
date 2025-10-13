@@ -145,7 +145,7 @@ export default function LeaderboardPage() {
             />
           </div>
           <p className="text-xs text-center text-gray-600 mt-2">
-            {progressPercentage.toFixed(0)}% complete • {100 - (completedTasks * 100 / totalTasks)} points remaining
+            {progressPercentage.toFixed(0)}% complete • {dailyTasks.filter(t => !t.isCompleted).reduce((sum, t) => sum + t.points, 0)} points remaining
           </p>
         </div>
 

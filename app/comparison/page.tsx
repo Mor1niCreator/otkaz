@@ -509,18 +509,18 @@ export default function ComparisonPage() {
             </p>
             {comparison.walletStats.hasData && (
               <div className="bg-blue-50 rounded-lg border-2 border-blue-300 p-2 mb-4 text-xs text-gray-700">
-                💡 {t('projectionsFormula')}: {formatCurrency(convertCurrency(comparison.walletStats.dailyAverage, user.currency), user.currency)}/день × 7 = {formatCurrency(convertCurrency(comparison.weeklySavings, user.currency), user.currency)}/неделю
+                💡 {t('projectionsFormula')}: {formatCurrency(convertCurrency(comparison.walletStats.dailyAverage, user.currency), user.currency)}/{t('perDay')} × 7 = {formatCurrency(convertCurrency(comparison.weeklySavings, user.currency), user.currency)}/{t('perWeek')}
               </div>
             )}
 
             <div className="space-y-3">
-              {[
+              {              [
                 { key: 'week', label: t('oneWeek'), icon: '📅', multiplier: 1 },
-                { key: 'month', label: t('oneMonth'), icon: '📆', multiplier: 4.33 },
-                { key: 'sixMonths', label: t('sixMonths'), icon: '📊', multiplier: 26 },
-                { key: 'year', label: t('oneYear'), icon: '🎯', multiplier: 52 },
-                { key: 'threeYears', label: t('threeYears'), icon: '🚀', multiplier: 156 },
-                { key: 'fiveYears', label: t('fiveYears'), icon: '💎', multiplier: 260 },
+                { key: 'month', label: t('oneMonth'), icon: '📆', multiplier: 4.348 },
+                { key: 'sixMonths', label: t('sixMonths'), icon: '📊', multiplier: 26.09 },
+                { key: 'year', label: t('oneYear'), icon: '🎯', multiplier: 52.18 },
+                { key: 'threeYears', label: t('threeYears'), icon: '🚀', multiplier: 156.54 },
+                { key: 'fiveYears', label: t('fiveYears'), icon: '💎', multiplier: 260.89 },
               ].map((period) => (
                 <div
                   key={period.key}
