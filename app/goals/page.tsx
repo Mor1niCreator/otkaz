@@ -35,6 +35,7 @@ export default function GoalsPage() {
   const [showCrypto, setShowCrypto] = useState(false);
   const [cryptoData, setCryptoData] = useState<CryptoData[]>([]);
   const [loadingCrypto, setLoadingCrypto] = useState(false);
+  const [isLoadingGoals, setIsLoadingGoals] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     targetAmount: '',
@@ -49,10 +50,15 @@ export default function GoalsPage() {
       return;
     }
     setUser(parsedUser);
-    loadGoals(parsedUser.id);
-  }, [router]);
+    if (!isLoadingGoals) {
+      loadGoals(parsedUser.id);
+    }
+  }, [router, isLoadingGoals]);
 
   const loadGoals = async (userId: string) => {
+    if (isLoadingGoals) return; // Prevent multiple simultaneous calls
+    
+    setIsLoadingGoals(true);
     try {
       const res = await fetch(`/api/goals/list?userId=${userId}`);
       const data = await res.json();
@@ -63,18 +69,41 @@ export default function GoalsPage() {
         console.log(`Goals loaded: ${data.goals.length} goals, Total savings: ${data.totalSavings} USD`);
         
         // Create default goals if none exist (only once!)
-        if (data.goals.length === 0 && !localStorage.getItem('defaultGoalsCreated')) {
+        if (data.goals.length === 0 && !localStorage.getItem(`defaultGoalsCreated_${userId}`)) {
           await createDefaultGoals(userId);
-          localStorage.setItem('defaultGoalsCreated', 'true');
+          localStorage.setItem(`defaultGoalsCreated_${userId}`, 'true');
         }
       }
     } catch (error) {
       console.error('Failed to load goals:', error);
+    } finally {
+      setIsLoadingGoals(false);
     }
   };
 
   const createDefaultGoals = async (userId: string) => {
     console.log('Creating default goals...');
+    
+    // Double check localStorage to prevent multiple calls
+    if (localStorage.getItem(`defaultGoalsCreated_${userId}`)) {
+      console.log('Default goals already created for this user');
+      return;
+    }
+    
+    // Check if goals already exist to prevent duplicates
+    try {
+      const checkRes = await fetch(`/api/goals/check-exists?userId=${userId}`);
+      const checkData = await checkRes.json();
+      
+      if (checkData.exists) {
+        console.log('Goals already exist, skipping creation');
+        localStorage.setItem(`defaultGoalsCreated_${userId}`, 'true');
+        return;
+      }
+    } catch (error) {
+      console.error('Failed to check existing goals:', error);
+      return; // Don't create goals if we can't check
+    }
     
     const createdGoals = [];
     for (const goal of DEFAULT_GOALS) {
@@ -89,9 +118,15 @@ export default function GoalsPage() {
             currency: 'USD',
           }),
         });
+        
         if (res.ok) {
           const data = await res.json();
           createdGoals.push(data.goal);
+        } else if (res.status === 409) {
+          // Goal already exists, skip
+          console.log(`Goal ${goal.name} already exists, skipping`);
+        } else {
+          console.error(`Failed to create goal ${goal.name}:`, res.status);
         }
       } catch (error) {
         console.error('Failed to create default goal:', error);
@@ -100,7 +135,7 @@ export default function GoalsPage() {
     
     console.log(`Created ${createdGoals.length} default goals`);
     
-    // Update state directly instead of reloading
+    // Update state directly with created goals to avoid reload
     setGoals(createdGoals);
   };
 
@@ -177,9 +212,9 @@ export default function GoalsPage() {
           <h2 className="text-2xl font-bold">Active Goals</h2>
           <button
             onClick={() => setShowForm(true)}
-            className="bg-comic-lime border-4 border-black rounded-full px-4 py-2 font-bold shadow-comic"
+            className="comic-button-lime rounded-full px-4 py-2"
           >
-            + New
+            ➕ New
           </button>
         </div>
 
@@ -241,7 +276,7 @@ export default function GoalsPage() {
             <button
               onClick={loadCryptoROI}
               disabled={loadingCrypto}
-              className="comic-button bg-comic-orange w-full py-4 text-lg"
+              className="comic-button-orange w-full py-4 text-lg"
             >
               {loadingCrypto ? '⏳ Calculating...' : '🚀 Calculate Crypto ROI'}
             </button>

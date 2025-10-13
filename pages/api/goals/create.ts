@@ -14,6 +14,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
+    // Check if goal with same name already exists for this user
+    const existingGoal = await prisma.goal.findFirst({
+      where: {
+        userId,
+        name,
+        isActive: true,
+      },
+    });
+
+    if (existingGoal) {
+      return res.status(409).json({ 
+        error: 'Goal with this name already exists',
+        goal: existingGoal 
+      });
+    }
+
     const usdTarget = await convertToUSD(targetAmount, currency);
 
     const goal = await prisma.goal.create({

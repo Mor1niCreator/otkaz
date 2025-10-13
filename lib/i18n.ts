@@ -15,6 +15,7 @@ export const translations = {
     calendar: 'Calendar',
     wallet: 'Wallet',
     goals: 'Goals',
+    leaderboard: 'Leaderboard',
     achievements: 'Achievements',
     profile: 'Profile',
     
@@ -109,6 +110,7 @@ export const translations = {
     calendar: 'Календарь',
     wallet: 'Кошелёк',
     goals: 'Цели',
+    leaderboard: 'Лидерборд',
     achievements: 'Достижения',
     profile: 'Профиль',
     

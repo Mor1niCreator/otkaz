@@ -16,6 +16,20 @@ export default function Navigation() {
       setLang(user.language || 'en');
     }
   }, []);
+
+  // Listen for storage changes to update language
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const userData = localStorage.getItem('user');
+      if (userData) {
+        const user = JSON.parse(userData);
+        setLang(user.language || 'en');
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
   
   const { t } = useTranslation(lang);
   
@@ -23,6 +37,7 @@ export default function Navigation() {
     { href: '/calendar', label: t('calendar'), icon: '📅' },
     { href: '/wallet', label: t('wallet'), icon: '💰' },
     { href: '/goals', label: t('goals'), icon: '🎯' },
+    { href: '/leaderboard', label: t('leaderboard'), icon: '🏆' },
     { href: '/achievements', label: t('achievements'), icon: '🏅' },
     { href: '/profile', label: t('profile'), icon: '👤' },
   ];
@@ -42,7 +57,7 @@ export default function Navigation() {
                   : 'hover:bg-gray-100'
               }`}
             >
-              <span className="text-2xl mb-1">{item.icon}</span>
+              <span className="comic-icon-small text-2xl mb-1">{item.icon}</span>
               <span className={`text-xs font-bold ${isActive ? 'text-black' : 'text-gray-600'}`}>
                 {item.label}
               </span>

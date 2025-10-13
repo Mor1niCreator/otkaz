@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
+import BoomAnimation from '@/components/BoomAnimation';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 import { useTranslation } from '@/lib/i18n';
@@ -33,6 +34,7 @@ export default function CalendarPage() {
   const [entries, setEntries] = useState<Entry[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [todayTotal, setTodayTotal] = useState(0);
+  const [showBoom, setShowBoom] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     pricePerUnit: '',
@@ -52,6 +54,19 @@ export default function CalendarPage() {
     setUser(parsedUser);
     loadEntries(parsedUser.id);
   }, [router]);
+
+  // Listen for storage changes to update user data
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const parsedUser = getUserFromStorage();
+      if (parsedUser) {
+        setUser(parsedUser);
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   const loadEntries = async (userId: string) => {
     try {
@@ -123,6 +138,9 @@ export default function CalendarPage() {
       if (res.ok) {
         console.log(`[Calendar] Entry created successfully, reloading entries...`);
         
+        // Show BOOM animation
+        setShowBoom(true);
+        
         toast.success(`+${data.pointsEarned.toFixed(1)} ${t('pointsEarned')} 🎉`);
         
         const updatedUser = { ...user, points: (Number(user.points) || 0) + data.pointsEarned };
@@ -146,6 +164,13 @@ export default function CalendarPage() {
 
   return (
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto">
+      <BoomAnimation 
+        show={showBoom} 
+        onComplete={() => setShowBoom(false)}
+        text="SAVED!"
+        emoji="💰"
+      />
+      
       <div className="comic-panel mb-6">
         <h1 className="text-4xl font-bold mb-2">📅 {t('todaysRefusals')}</h1>
         <p className="text-xl text-gray-700">{format(new Date(), 'MMMM d, yyyy')}</p>
@@ -162,9 +187,9 @@ export default function CalendarPage() {
             <button
               key={preset.name}
               onClick={() => handlePreset(preset)}
-              className="bg-comic-cyan border-4 border-black rounded-xl p-4 shadow-comic hover:shadow-comic-lg transition-all hover:-translate-y-1"
+              className="comic-button-cyan p-4"
             >
-              <div className="text-4xl mb-2">{preset.icon}</div>
+              <div className="comic-icon mb-2">{preset.icon}</div>
               <div className="font-bold">{preset.name}</div>
               <div className="text-sm text-gray-700">{getCurrencySymbol(user?.currency || 'USD')}{preset.price}</div>
             </button>
@@ -230,15 +255,15 @@ export default function CalendarPage() {
                 rows={2}
               />
               <div className="flex gap-2">
-                <button type="submit" className="flex-1 comic-button">
-                  {t('save')}
+                <button type="submit" className="flex-1 comic-button-lime">
+                  💾 {t('save')}
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowForm(false)}
                   className="flex-1 comic-button-secondary"
                 >
-                  {t('cancel')}
+                  ❌ {t('cancel')}
                 </button>
               </div>
             </form>

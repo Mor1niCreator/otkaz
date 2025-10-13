@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const { email, password, name, referralCode } = req.body;
+    const { email, password, name, referralCode, currency = 'USD', language = 'en' } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({ error: 'Email and password required' });
@@ -30,6 +30,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         email,
         password: hashedPassword,
         name,
+        currency,
+        language,
         referralCode: userReferralCode,
         referredBy: referralCode || null,
       },
@@ -49,10 +51,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           },
         });
 
-        // Grant bonus points to new user
+        // Grant bonus points to both users
         await prisma.user.update({
           where: { id: user.id },
-          data: { points: { increment: 20 } },
+          data: { points: { increment: 20 } }, // New user gets 20 points
+        });
+
+        await prisma.user.update({
+          where: { id: referrer.id },
+          data: { points: { increment: 50 } }, // Referrer gets 50 points
         });
       }
     }

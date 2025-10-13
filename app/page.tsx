@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { CURRENCIES } from '@/lib/currencies';
 
 export default function HomePage() {
   const router = useRouter();
@@ -11,6 +12,8 @@ export default function HomePage() {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [referralCode, setReferralCode] = useState('');
+  const [currency, setCurrency] = useState('USD');
+  const [language, setLanguage] = useState('en');
 
   useEffect(() => {
     // Check if user is already logged in
@@ -26,7 +29,7 @@ export default function HomePage() {
     const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
     const body = isLogin
       ? { email, password }
-      : { email, password, name, referralCode };
+      : { email, password, name, referralCode, currency, language };
 
     try {
       const res = await fetch(endpoint, {
@@ -61,21 +64,21 @@ export default function HomePage() {
             onClick={() => setIsLogin(true)}
             className={`flex-1 py-3 rounded-xl font-bold border-4 border-black transition-all ${
               isLogin
-                ? 'bg-comic-orange shadow-comic'
+                ? 'comic-button-orange'
                 : 'bg-gray-200 hover:bg-gray-300'
             }`}
           >
-            Login
+            🚀 Login
           </button>
           <button
             onClick={() => setIsLogin(false)}
             className={`flex-1 py-3 rounded-xl font-bold border-4 border-black transition-all ${
               !isLogin
-                ? 'bg-comic-orange shadow-comic'
+                ? 'comic-button-orange'
                 : 'bg-gray-200 hover:bg-gray-300'
             }`}
           >
-            Register
+            ✨ Register
           </button>
         </div>
 
@@ -118,7 +121,37 @@ export default function HomePage() {
             />
           )}
 
-          <button type="submit" className="w-full comic-button text-xl">
+          {!isLogin && (
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-sm font-bold mb-1">Currency</label>
+                <select
+                  value={currency}
+                  onChange={(e) => setCurrency(e.target.value)}
+                  className="w-full px-3 py-3 border-4 border-black rounded-xl text-lg focus:outline-none focus:shadow-comic"
+                >
+                  {Object.entries(CURRENCIES).slice(0, 10).map(([code, data]) => (
+                    <option key={code} value={code}>
+                      {code} - {data.symbol}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-bold mb-1">Language</label>
+                <select
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value)}
+                  className="w-full px-3 py-3 border-4 border-black rounded-xl text-lg focus:outline-none focus:shadow-comic"
+                >
+                  <option value="en">🇬🇧 English</option>
+                  <option value="ru">🇷🇺 Русский</option>
+                </select>
+              </div>
+            </div>
+          )}
+
+          <button type="submit" className="w-full comic-button-lime text-xl">
             {isLogin ? '🚀 Let\'s Go!' : '✨ Create Account'}
           </button>
         </form>

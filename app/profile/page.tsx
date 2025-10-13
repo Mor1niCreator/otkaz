@@ -15,6 +15,15 @@ export default function ProfilePage() {
   const [editMode, setEditMode] = useState(false);
   const [currency, setCurrency] = useState('USD');
   const [language, setLanguage] = useState('en');
+  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordStrength, setPasswordStrength] = useState({ score: 0, feedback: [] });
+  const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null);
+  const [isCheckingUsername, setIsCheckingUsername] = useState(false);
+  const [showPasswordForm, setShowPasswordForm] = useState(false);
   
   const { t } = useTranslation(user?.language || 'en');
 
@@ -27,31 +36,125 @@ export default function ProfilePage() {
     setUser(parsedUser);
     setCurrency(parsedUser.currency || 'USD');
     setLanguage(parsedUser.language || 'en');
+    setUsername(parsedUser.username || '');
+    setName(parsedUser.name || '');
   }, [router]);
+
+  // Функция для проверки доступности никнейма
+  const checkUsernameAvailability = async (username: string) => {
+    if (!username || username === user?.username) {
+      setUsernameAvailable(null);
+      return;
+    }
+
+    setIsCheckingUsername(true);
+    try {
+      const res = await fetch('/api/user/check-username', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, userId: user?.id })
+      });
+      const data = await res.json();
+      setUsernameAvailable(data.available);
+    } catch (error) {
+      console.error('Error checking username:', error);
+      setUsernameAvailable(null);
+    } finally {
+      setIsCheckingUsername(false);
+    }
+  };
+
+  // Функция для проверки силы пароля
+  const checkPasswordStrength = (password: string) => {
+    if (!password) {
+      setPasswordStrength({ score: 0, feedback: [] });
+      return;
+    }
+
+    let score = 0;
+    const feedback: string[] = [];
+
+    if (password.length >= 8) score += 1;
+    else feedback.push('Use at least 8 characters');
+
+    if (password.length >= 12) score += 1;
+    else feedback.push('Use 12+ characters for better security');
+
+    if (/[a-z]/.test(password)) score += 1;
+    else feedback.push('Add lowercase letters');
+
+    if (/[A-Z]/.test(password)) score += 1;
+    else feedback.push('Add uppercase letters');
+
+    if (/\d/.test(password)) score += 1;
+    else feedback.push('Add numbers');
+
+    if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) score += 1;
+    else feedback.push('Add special characters');
+
+    if (password.length >= 16) score += 1;
+
+    setPasswordStrength({ score, feedback });
+  };
 
   const handleSave = async () => {
     try {
-      const res = await fetch('/api/user/update', {
+      // Подготавливаем обновления
+      const updates: any = {
+        currency,
+        language
+      };
+
+      // Добавляем имя и никнейм, если они изменились
+      if (name !== user.name) {
+        updates.name = name;
+      }
+      if (username !== user.username) {
+        updates.username = username;
+      }
+
+      // Добавляем пароль, если он указан
+      if (newPassword) {
+        if (newPassword !== confirmPassword) {
+          toast.error('Passwords do not match');
+          return;
+        }
+        if (passwordStrength.score < 3) {
+          toast.error('Password is too weak');
+          return;
+        }
+        updates.password = newPassword;
+      }
+
+      const res = await fetch('/api/user/update-profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userId: user.id,
-          currency,
-          language,
+          currentPassword: currentPassword || undefined,
+          updates
         }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        const updatedUser = { ...user, currency, language };
+        const updatedUser = { ...user, ...data.user };
         localStorage.setItem('user', JSON.stringify(updatedUser));
         setUser(updatedUser);
         setEditMode(false);
-        toast.success(t('settingsSaved') + ' ✅');
+        setShowPasswordForm(false);
         
-        // Reload page to apply changes
-        setTimeout(() => window.location.reload(), 500);
+        // Очищаем формы
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+        setPasswordStrength({ score: 0, feedback: [] });
+        
+        toast.success('Profile updated successfully! ✅');
+        
+        // Trigger storage event to notify other components
+        window.dispatchEvent(new Event('storage'));
       } else {
         toast.error(data.error || 'Failed to save settings');
       }
@@ -86,6 +189,9 @@ export default function ProfilePage() {
         <h1 className="text-4xl font-bold mb-2">👤 {t('profile')}</h1>
         <div className="bg-gradient-to-r from-comic-purple to-comic-pink rounded-2xl border-4 border-black p-6 mt-4 text-white">
           <p className="text-2xl font-bold mb-1">{user.name || user.email}</p>
+          {user.username && (
+            <p className="text-lg font-bold mb-1">@{user.username}</p>
+          )}
           <p className="text-sm opacity-90">{user.email}</p>
         </div>
       </div>
@@ -148,14 +254,60 @@ export default function ProfilePage() {
           {!editMode && (
             <button
               onClick={() => setEditMode(true)}
-              className="bg-comic-lime border-4 border-black rounded-full px-4 py-2 font-bold shadow-comic"
+              className="comic-button-lime rounded-full px-4 py-2"
             >
-              {t('edit')}
+              ✏️ {t('edit')}
             </button>
           )}
         </div>
 
         <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-bold mb-2">Display Name</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              disabled={!editMode}
+              placeholder="Enter your display name"
+              className="w-full px-4 py-3 border-4 border-black rounded-xl disabled:bg-gray-100"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-bold mb-2">Username</label>
+            <div className="relative">
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                  checkUsernameAvailability(e.target.value);
+                }}
+                disabled={!editMode}
+                placeholder="Enter your username"
+                className="w-full px-4 py-3 border-4 border-black rounded-xl disabled:bg-gray-100 pr-12"
+              />
+              {isCheckingUsername && (
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-black"></div>
+                </div>
+              )}
+              {!isCheckingUsername && username && username !== user?.username && (
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  {usernameAvailable === true && <span className="text-green-600 text-xl">✓</span>}
+                  {usernameAvailable === false && <span className="text-red-600 text-xl">✗</span>}
+                </div>
+              )}
+            </div>
+            {username && username !== user?.username && usernameAvailable === false && (
+              <p className="text-red-600 text-sm mt-1">Username is already taken</p>
+            )}
+            {username && username !== user?.username && usernameAvailable === true && (
+              <p className="text-green-600 text-sm mt-1">Username is available</p>
+            )}
+          </div>
+
           <div>
             <label className="block text-sm font-bold mb-2">{t('currency')}</label>
             <select
@@ -186,15 +338,101 @@ export default function ProfilePage() {
           </div>
 
           {editMode && (
+            <div>
+              <button
+                onClick={() => setShowPasswordForm(!showPasswordForm)}
+                className="comic-button-cyan w-full"
+              >
+                🔒 {showPasswordForm ? 'Hide Password Change' : 'Change Password'}
+              </button>
+            </div>
+          )}
+
+          {showPasswordForm && (
+            <div className="space-y-4 p-4 bg-gray-100 rounded-xl border-4 border-black">
+              <h3 className="text-lg font-bold">Change Password</h3>
+              
+              <div>
+                <label className="block text-sm font-bold mb-2">Current Password</label>
+                <input
+                  type="password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  placeholder="Enter current password"
+                  className="w-full px-4 py-3 border-4 border-black rounded-xl"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold mb-2">New Password</label>
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => {
+                    setNewPassword(e.target.value);
+                    checkPasswordStrength(e.target.value);
+                  }}
+                  placeholder="Enter new password"
+                  className="w-full px-4 py-3 border-4 border-black rounded-xl"
+                />
+                {newPassword && (
+                  <div className="mt-2">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-sm font-bold">Strength:</span>
+                      <div className="flex gap-1">
+                        {[1, 2, 3, 4, 5, 6].map((level) => (
+                          <div
+                            key={level}
+                            className={`w-4 h-2 rounded ${
+                              level <= passwordStrength.score
+                                ? level <= 2
+                                  ? 'bg-red-500'
+                                  : level <= 4
+                                  ? 'bg-yellow-500'
+                                  : 'bg-green-500'
+                                : 'bg-gray-300'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    {passwordStrength.feedback.length > 0 && (
+                      <ul className="text-xs text-gray-600">
+                        {passwordStrength.feedback.map((tip, index) => (
+                          <li key={index}>• {tip}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold mb-2">Confirm New Password</label>
+                <input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Confirm new password"
+                  className="w-full px-4 py-3 border-4 border-black rounded-xl"
+                />
+                {confirmPassword && newPassword !== confirmPassword && (
+                  <p className="text-red-600 text-sm mt-1">Passwords do not match</p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {editMode && (
             <div className="flex gap-2">
-              <button onClick={handleSave} className="flex-1 comic-button">
-                {t('save')}
+              <button onClick={handleSave} className="flex-1 comic-button-lime">
+                💾 {t('save')}
               </button>
               <button
                 onClick={() => setEditMode(false)}
                 className="flex-1 comic-button-secondary"
               >
-                {t('cancel')}
+                ❌ {t('cancel')}
               </button>
             </div>
           )}
@@ -203,7 +441,7 @@ export default function ProfilePage() {
 
       <button
         onClick={handleLogout}
-        className="w-full bg-red-500 text-white font-bold py-3 px-6 rounded-full border-4 border-black shadow-comic hover:shadow-comic-lg transition-all"
+        className="w-full bg-red-500 text-white font-bold py-3 px-6 rounded-full border-4 border-black shadow-comic hover:shadow-comic-lg transition-all hover:-translate-y-1 active:translate-y-0"
       >
         🚪 {t('logout')}
       </button>
