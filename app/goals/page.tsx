@@ -84,6 +84,12 @@ export default function GoalsPage() {
   const createDefaultGoals = async (userId: string) => {
     console.log('Creating default goals...');
     
+    // Double check localStorage to prevent multiple calls
+    if (localStorage.getItem(`defaultGoalsCreated_${userId}`)) {
+      console.log('Default goals already created for this user');
+      return;
+    }
+    
     // Check if goals already exist to prevent duplicates
     try {
       const checkRes = await fetch(`/api/goals/check-exists?userId=${userId}`);
@@ -91,6 +97,7 @@ export default function GoalsPage() {
       
       if (checkData.exists) {
         console.log('Goals already exist, skipping creation');
+        localStorage.setItem(`defaultGoalsCreated_${userId}`, 'true');
         return;
       }
     } catch (error) {
@@ -111,9 +118,15 @@ export default function GoalsPage() {
             currency: 'USD',
           }),
         });
+        
         if (res.ok) {
           const data = await res.json();
           createdGoals.push(data.goal);
+        } else if (res.status === 409) {
+          // Goal already exists, skip
+          console.log(`Goal ${goal.name} already exists, skipping`);
+        } else {
+          console.error(`Failed to create goal ${goal.name}:`, res.status);
         }
       } catch (error) {
         console.error('Failed to create default goal:', error);
