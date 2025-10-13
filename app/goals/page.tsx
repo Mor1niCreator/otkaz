@@ -50,10 +50,8 @@ export default function GoalsPage() {
       return;
     }
     setUser(parsedUser);
-    if (!isLoadingGoals) {
-      loadGoals(parsedUser.id);
-    }
-  }, [router, isLoadingGoals]);
+    loadGoals(parsedUser.id);
+  }, [router]);
 
   const loadGoals = async (userId: string) => {
     if (isLoadingGoals) return; // Prevent multiple simultaneous calls
@@ -84,13 +82,20 @@ export default function GoalsPage() {
   const createDefaultGoals = async (userId: string) => {
     console.log('Creating default goals...');
     
-    // Check if goals already exist to prevent duplicates
+    // Double-check if goals already exist to prevent duplicates
     try {
       const checkRes = await fetch(`/api/goals/check-exists?userId=${userId}`);
       const checkData = await checkRes.json();
       
       if (checkData.exists) {
         console.log('Goals already exist, skipping creation');
+        // Reload goals to get the existing ones
+        const res = await fetch(`/api/goals/list?userId=${userId}`);
+        const data = await res.json();
+        if (res.ok) {
+          setGoals(data.goals);
+          setTotalSavings(data.totalSavings);
+        }
         return;
       }
     } catch (error) {
