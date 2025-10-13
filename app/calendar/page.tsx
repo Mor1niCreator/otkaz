@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
+import PresetManager from '@/components/PresetManager';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 import { useTranslation } from '@/lib/i18n';
@@ -20,11 +21,19 @@ interface Entry {
   date: string;
 }
 
-const getPresets = (t: any) => [
-  { name: t('coffee'), icon: '☕', price: 3, category: 'drinks' },
-  { name: t('cigarettes'), icon: '🚬', price: 8, category: 'habits' },
-  { name: t('soda'), icon: '🥤', price: 2, category: 'drinks' },
-  { name: t('fastFood'), icon: '🍔', price: 12, category: 'food' },
+interface Preset {
+  id: string;
+  name: string;
+  icon: string;
+  price: number;
+  category: string;
+}
+
+const getDefaultPresets = (t: any): Preset[] => [
+  { id: 'coffee', name: t('coffee'), icon: '☕', price: 3, category: 'drinks' },
+  { id: 'cigarettes', name: t('cigarettes'), icon: '🚬', price: 8, category: 'habits' },
+  { id: 'soda', name: t('soda'), icon: '🥤', price: 2, category: 'drinks' },
+  { id: 'fastFood', name: t('fastFood'), icon: '🍔', price: 12, category: 'food' },
 ];
 
 export default function CalendarPage() {
@@ -32,7 +41,9 @@ export default function CalendarPage() {
   const [user, setUser] = useState<any>(null);
   const [entries, setEntries] = useState<Entry[]>([]);
   const [showForm, setShowForm] = useState(false);
+  const [showPresetManager, setShowPresetManager] = useState(false);
   const [todayTotal, setTodayTotal] = useState(0);
+  const [presets, setPresets] = useState<Preset[]>([]);
   const [formData, setFormData] = useState({
     name: '',
     pricePerUnit: '',
@@ -51,7 +62,16 @@ export default function CalendarPage() {
     }
     setUser(parsedUser);
     loadEntries(parsedUser.id);
-  }, [router]);
+    
+    // Load presets from localStorage or use defaults
+    const savedPresets = localStorage.getItem('userPresets');
+    if (savedPresets) {
+      setPresets(JSON.parse(savedPresets));
+    } else {
+      const defaultPresets = getDefaultPresets(t);
+      setPresets(defaultPresets);
+    }
+  }, [router, t]);
 
   const loadEntries = async (userId: string) => {
     try {
@@ -89,9 +109,13 @@ export default function CalendarPage() {
     console.log(`[Calendar] Today total: ${todayTotalUSD.toFixed(2)} USD = ${formatCurrency(converted, user.currency)}`);
   }, [entries, user?.currency]);
 
-  const PRESETS = getPresets(t);
+  const handlePresetSave = (newPresets: Preset[]) => {
+    setPresets(newPresets);
+    localStorage.setItem('userPresets', JSON.stringify(newPresets));
+    toast.success(t('settingsSaved'));
+  };
   
-  const handlePreset = (preset: typeof PRESETS[0]) => {
+  const handlePreset = (preset: Preset) => {
     setFormData({
       name: preset.name,
       pricePerUnit: preset.price.toString(),
@@ -156,11 +180,19 @@ export default function CalendarPage() {
       </div>
 
       <div className="comic-panel mb-6">
-        <h2 className="text-2xl font-bold mb-4">⚡ {t('quickAdd')}</h2>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold">⚡ {t('quickAdd')}</h2>
+          <button
+            onClick={() => setShowPresetManager(true)}
+            className="bg-comic-lime border-4 border-black rounded-full px-4 py-2 font-bold shadow-comic text-sm"
+          >
+            ⚙️ {t('edit')}
+          </button>
+        </div>
         <div className="grid grid-cols-2 gap-3">
-          {PRESETS.map((preset) => (
+          {presets.map((preset) => (
             <button
-              key={preset.name}
+              key={preset.id}
               onClick={() => handlePreset(preset)}
               className="bg-comic-cyan border-4 border-black rounded-xl p-4 shadow-comic hover:shadow-comic-lg transition-all hover:-translate-y-1"
             >
@@ -274,6 +306,13 @@ export default function CalendarPage() {
           </div>
         )}
       </div>
+
+      <PresetManager
+        isOpen={showPresetManager}
+        onClose={() => setShowPresetManager(false)}
+        onSave={handlePresetSave}
+        initialPresets={presets}
+      />
 
       <Navigation />
     </div>

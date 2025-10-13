@@ -3,9 +3,12 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
+import PresetManager from '@/components/PresetManager';
 import { motion } from 'framer-motion';
 import { useTranslation } from '@/lib/i18n';
 import { getUserFromStorage } from '@/lib/user-sync';
+import { formatCurrency, convertCurrency, getCurrencySymbol } from '@/lib/currency-utils';
+import toast from 'react-hot-toast';
 
 interface Achievement {
   id: string;
@@ -23,11 +26,28 @@ interface UserAchievement {
   unlockedAt: string;
 }
 
+interface Preset {
+  id: string;
+  name: string;
+  icon: string;
+  price: number;
+  category: string;
+}
+
+const getDefaultPresets = (t: any): Preset[] => [
+  { id: 'coffee', name: t('coffee'), icon: '☕', price: 3, category: 'drinks' },
+  { id: 'cigarettes', name: t('cigarettes'), icon: '🚬', price: 8, category: 'habits' },
+  { id: 'soda', name: t('soda'), icon: '🥤', price: 2, category: 'drinks' },
+  { id: 'fastFood', name: t('fastFood'), icon: '🍔', price: 12, category: 'food' },
+];
+
 export default function AchievementsPage() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [unlocked, setUnlocked] = useState<UserAchievement[]>([]);
   const [all, setAll] = useState<Achievement[]>([]);
+  const [showPresetManager, setShowPresetManager] = useState(false);
+  const [presets, setPresets] = useState<Preset[]>([]);
   
   const { t } = useTranslation(user?.language || 'en');
 
@@ -39,7 +59,16 @@ export default function AchievementsPage() {
     }
     setUser(parsedUser);
     loadAchievements(parsedUser.id);
-  }, [router]);
+    
+    // Load presets from localStorage or use defaults
+    const savedPresets = localStorage.getItem('userPresets');
+    if (savedPresets) {
+      setPresets(JSON.parse(savedPresets));
+    } else {
+      const defaultPresets = getDefaultPresets(t);
+      setPresets(defaultPresets);
+    }
+  }, [router, t]);
 
   const loadAchievements = async (userId: string) => {
     try {
@@ -51,6 +80,46 @@ export default function AchievementsPage() {
       }
     } catch (error) {
       console.error('Failed to load achievements:', error);
+    }
+  };
+
+  const handlePresetSave = (newPresets: Preset[]) => {
+    setPresets(newPresets);
+    localStorage.setItem('userPresets', JSON.stringify(newPresets));
+    toast.success(t('settingsSaved'));
+  };
+
+  const handlePresetClick = async (preset: Preset) => {
+    try {
+      const res = await fetch('/api/entries/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user.id,
+          name: preset.name,
+          pricePerUnit: preset.price,
+          quantity: 1,
+          category: preset.category,
+          currency: user.currency || 'USD',
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        toast.success(`+${(data.pointsEarned || 0).toFixed(1)} ${t('pointsEarned')} 🎉`);
+        
+        const updatedUser = { ...user, points: (Number(user.points) || 0) + data.pointsEarned };
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        setUser(updatedUser);
+        
+        // Reload achievements to check for new unlocks
+        await loadAchievements(user.id);
+      } else {
+        toast.error(data.error || 'Failed to create entry');
+      }
+    } catch (error) {
+      toast.error('Network error');
     }
   };
 
@@ -118,6 +187,31 @@ export default function AchievementsPage() {
         })}
       </div>
 
+      <div className="comic-panel mb-6">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold">⚡ {t('quickAdd')}</h2>
+          <button
+            onClick={() => setShowPresetManager(true)}
+            className="bg-comic-lime border-4 border-black rounded-full px-4 py-2 font-bold shadow-comic text-sm"
+          >
+            ⚙️ {t('edit')}
+          </button>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          {presets.map((preset) => (
+            <button
+              key={preset.id}
+              onClick={() => handlePresetClick(preset)}
+              className="bg-comic-cyan border-4 border-black rounded-xl p-4 shadow-comic hover:shadow-comic-lg transition-all hover:-translate-y-1"
+            >
+              <div className="text-4xl mb-2">{preset.icon}</div>
+              <div className="font-bold">{preset.name}</div>
+              <div className="text-sm text-gray-700">{getCurrencySymbol(user?.currency || 'USD')}{preset.price}</div>
+            </button>
+          ))}
+        </div>
+      </div>
+
       {unlocked.length === 0 && (
         <div className="speech-bubble text-center mt-6">
           <p className="text-lg">
@@ -125,6 +219,13 @@ export default function AchievementsPage() {
           </p>
         </div>
       )}
+
+      <PresetManager
+        isOpen={showPresetManager}
+        onClose={() => setShowPresetManager(false)}
+        onSave={handlePresetSave}
+        initialPresets={presets}
+      />
 
       <Navigation />
     </div>
