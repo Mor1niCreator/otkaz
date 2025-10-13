@@ -146,6 +146,15 @@ export const translations = {
     confirmResetPresets: 'Reset all presets to default values?',
     resetToDefaults: 'Reset to Defaults',
     done: 'Done',
+    dataFromWallet: 'Data from Your Wallet',
+    totalSavedInWallet: 'Total saved in your wallet',
+    daysTracking: 'Days',
+    refusals: 'Refusals',
+    noWalletData: 'No Wallet Data Yet',
+    noWalletDataDescription: 'Start adding refusals to see your actual savings! Estimates shown below.',
+    calculatedFromWallet: 'Calculated from your actual wallet data',
+    projectionsBasedOnWallet: 'Based on your actual savings rate from wallet:',
+    projectionsFormula: 'Your daily average',
     
     // Messages
     pointsEarned: 'points!',
@@ -299,6 +308,15 @@ export const translations = {
     confirmResetPresets: 'Сбросить все кнопки к значениям по умолчанию?',
     resetToDefaults: 'Сбросить',
     done: 'Готово',
+    dataFromWallet: 'Данные из твоего кошелька',
+    totalSavedInWallet: 'Всего накоплено в кошельке',
+    daysTracking: 'Дней',
+    refusals: 'Отказов',
+    noWalletData: 'Пока нет данных',
+    noWalletDataDescription: 'Начни добавлять отказы, чтобы увидеть реальную статистику! Ниже показаны оценки.',
+    calculatedFromWallet: 'Рассчитано по реальным данным из кошелька',
+    projectionsBasedOnWallet: 'На основе твоей реальной скорости экономии из кошелька:',
+    projectionsFormula: 'Твоя средняя за день',
     
     // Messages
     pointsEarned: 'поинтов!',

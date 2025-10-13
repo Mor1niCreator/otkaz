@@ -46,6 +46,13 @@ interface ComparisonData {
     threeYears: number;
     fiveYears: number;
   };
+  walletStats: {
+    totalSaved: number;
+    daysTracking: number;
+    dailyAverage: number;
+    entriesCount: number;
+    hasData: boolean;
+  };
 }
 
 const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as const;
@@ -406,6 +413,49 @@ export default function ComparisonPage() {
             
             <h2 className="text-2xl font-bold mb-4">📈 {t('yourResults')}</h2>
 
+            {/* Wallet Statistics Banner */}
+            {comparison.walletStats.hasData && (
+              <div className="bg-gradient-to-r from-blue-100 to-purple-100 rounded-xl border-4 border-black p-4 mb-6">
+                <div className="text-center mb-3">
+                  <div className="text-sm font-bold text-gray-700 mb-2">
+                    💰 {t('dataFromWallet')}
+                  </div>
+                  <div className="text-3xl font-bold text-purple-700">
+                    {formatCurrency(convertCurrency(comparison.walletStats.totalSaved, user.currency), user.currency)}
+                  </div>
+                  <div className="text-xs text-gray-600 mt-1">
+                    {t('totalSavedInWallet')}
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                  <div className="bg-white rounded-lg border-2 border-black p-2">
+                    <div className="font-bold text-lg">{comparison.walletStats.daysTracking}</div>
+                    <div className="text-gray-600">{t('daysTracking')}</div>
+                  </div>
+                  <div className="bg-white rounded-lg border-2 border-black p-2">
+                    <div className="font-bold text-lg">{comparison.walletStats.entriesCount}</div>
+                    <div className="text-gray-600">{t('refusals')}</div>
+                  </div>
+                  <div className="bg-white rounded-lg border-2 border-black p-2">
+                    <div className="font-bold text-lg">
+                      {formatCurrency(convertCurrency(comparison.walletStats.dailyAverage, user.currency), user.currency)}
+                    </div>
+                    <div className="text-gray-600">{t('perDay')}</div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {!comparison.walletStats.hasData && (
+              <div className="bg-yellow-100 rounded-xl border-4 border-black p-4 mb-6 text-center">
+                <div className="text-2xl mb-2">⚠️</div>
+                <div className="font-bold mb-1">{t('noWalletData')}</div>
+                <div className="text-sm text-gray-700">
+                  {t('noWalletDataDescription')}
+                </div>
+              </div>
+            )}
+
             {/* Weekly Comparison */}
             <div className="grid grid-cols-2 gap-4 mb-6">
               <div className="bg-red-100 rounded-xl border-4 border-black p-4">
@@ -439,15 +489,29 @@ export default function ComparisonPage() {
               <div className="text-sm text-gray-700 mt-2">
                 {comparison.savingsPercentage.toFixed(1)}% {t('reduction')}!
               </div>
+              {comparison.walletStats.hasData && (
+                <div className="mt-3 pt-3 border-t-2 border-green-500">
+                  <div className="text-xs text-gray-600">
+                    📊 {t('calculatedFromWallet')}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
           {/* Projections */}
           <div className="comic-panel mb-6">
             <h2 className="text-2xl font-bold mb-4">🚀 {t('savingsProjections')}</h2>
-            <p className="text-sm text-gray-600 mb-4">
-              {t('continueSaving')}
+            <p className="text-sm text-gray-600 mb-2">
+              {comparison.walletStats.hasData 
+                ? t('projectionsBasedOnWallet')
+                : t('continueSaving')}
             </p>
+            {comparison.walletStats.hasData && (
+              <div className="bg-blue-50 rounded-lg border-2 border-blue-300 p-2 mb-4 text-xs text-gray-700">
+                💡 {t('projectionsFormula')}: {formatCurrency(convertCurrency(comparison.walletStats.dailyAverage, user.currency), user.currency)}/день × 7 = {formatCurrency(convertCurrency(comparison.weeklySavings, user.currency), user.currency)}/неделю
+              </div>
+            )}
 
             <div className="space-y-3">
               {[
