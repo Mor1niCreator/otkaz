@@ -92,6 +92,10 @@ export const translations = {
     pointsEarned: 'points!',
     settingsSaved: 'Settings saved!',
     referralLinkCopied: 'Referral link copied!',
+    
+    // Preset Manager
+    editQuickButtons: 'Edit Quick Buttons',
+    changes: 'Changes',
   },
   ru: {
     // Common
@@ -186,6 +190,10 @@ export const translations = {
     pointsEarned: 'поинтов!',
     settingsSaved: 'Настройки сохранены!',
     referralLinkCopied: 'Реферальная ссылка скопирована!',
+    
+    // Preset Manager
+    editQuickButtons: 'Редактировать Быстрые Кнопки',
+    changes: 'Изменения',
   },
 };
 

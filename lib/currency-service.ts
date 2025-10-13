@@ -1,5 +1,6 @@
 // Currency exchange rates: 1 USD = X currency
-const MOCK_RATES: Record<string, number> = {
+// This is the single source of truth for exchange rates
+export const EXCHANGE_RATES: Record<string, number> = {
   USD: 1,
   EUR: 0.92,
   GBP: 0.79,
@@ -39,7 +40,7 @@ const MOCK_RATES: Record<string, number> = {
 export async function convertToUSD(amount: number, currency: string): Promise<number> {
   if (currency === 'USD') return amount;
 
-  const rate = MOCK_RATES[currency] || 1;
+  const rate = EXCHANGE_RATES[currency] || 1;
   
   // Convert TO USD by dividing
   // Example: 50,000 VND / 24,500 = 2.04 USD
@@ -53,6 +54,6 @@ export async function convertToUSD(amount: number, currency: string): Promise<nu
 export async function convertFromUSD(usdAmount: number, currency: string): Promise<number> {
   if (currency === 'USD') return usdAmount;
   
-  const rate = MOCK_RATES[currency] || 1;
+  const rate = EXCHANGE_RATES[currency] || 1;
   return usdAmount * rate;
 }

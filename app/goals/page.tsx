@@ -3,9 +3,10 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
+import PresetManager from '@/components/PresetManager';
 import toast from 'react-hot-toast';
 import { useTranslation } from '@/lib/i18n';
-import { formatCurrency, convertCurrency } from '@/lib/currency-utils';
+import { formatCurrency, convertCurrency, getCurrencySymbol } from '@/lib/currency-utils';
 import { DEFAULT_GOALS } from '@/lib/default-goals';
 import { getUserFromStorage } from '@/lib/user-sync';
 
@@ -26,6 +27,21 @@ interface CryptoData {
   yourValue: number;
 }
 
+interface Preset {
+  id: string;
+  name: string;
+  icon: string;
+  price: number;
+  category: string;
+}
+
+const getDefaultPresets = (t: any): Preset[] => [
+  { id: 'coffee', name: t('coffee'), icon: '☕', price: 3, category: 'drinks' },
+  { id: 'cigarettes', name: t('cigarettes'), icon: '🚬', price: 8, category: 'habits' },
+  { id: 'soda', name: t('soda'), icon: '🥤', price: 2, category: 'drinks' },
+  { id: 'fastFood', name: t('fastFood'), icon: '🍔', price: 12, category: 'food' },
+];
+
 export default function GoalsPage() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
@@ -33,8 +49,10 @@ export default function GoalsPage() {
   const [totalSavings, setTotalSavings] = useState(0);
   const [showForm, setShowForm] = useState(false);
   const [showCrypto, setShowCrypto] = useState(false);
+  const [showPresetManager, setShowPresetManager] = useState(false);
   const [cryptoData, setCryptoData] = useState<CryptoData[]>([]);
   const [loadingCrypto, setLoadingCrypto] = useState(false);
+  const [presets, setPresets] = useState<Preset[]>([]);
   const [formData, setFormData] = useState({
     name: '',
     targetAmount: '',
@@ -50,7 +68,16 @@ export default function GoalsPage() {
     }
     setUser(parsedUser);
     loadGoals(parsedUser.id);
-  }, [router]);
+    
+    // Load presets from localStorage or use defaults
+    const savedPresets = localStorage.getItem('userPresets');
+    if (savedPresets) {
+      setPresets(JSON.parse(savedPresets));
+    } else {
+      const defaultPresets = getDefaultPresets(t);
+      setPresets(defaultPresets);
+    }
+  }, [router, t]);
 
   const loadGoals = async (userId: string) => {
     try {
@@ -58,9 +85,9 @@ export default function GoalsPage() {
       const data = await res.json();
       if (res.ok) {
         setGoals(data.goals);
-        setTotalSavings(data.totalSavings);
+        setTotalSavings(data.totalSavings || 0);
         
-        console.log(`Goals loaded: ${data.goals.length} goals, Total savings: ${data.totalSavings} USD`);
+        console.log(`Goals loaded: ${data.goals.length} goals, Total savings: ${data.totalSavings || 0} USD`);
         
         // Create default goals if none exist (only once!)
         if (data.goals.length === 0 && !localStorage.getItem('defaultGoalsCreated')) {
@@ -135,7 +162,7 @@ export default function GoalsPage() {
   };
 
   const loadCryptoROI = async () => {
-    if (totalSavings <= 0) {
+    if ((totalSavings || 0) <= 0) {
       toast.error('Add some refusals first to see Crypto ROI!');
       return;
     }
@@ -143,7 +170,7 @@ export default function GoalsPage() {
     setLoadingCrypto(true);
     
     try {
-      const res = await fetch(`/api/crypto/roi?amount=${totalSavings}`);
+      const res = await fetch(`/api/crypto/roi?amount=${totalSavings || 0}`);
       const data = await res.json();
       if (res.ok && data.data && data.data.length > 0) {
         setCryptoData(data.data);
@@ -157,6 +184,46 @@ export default function GoalsPage() {
       toast.error('Network error');
     } finally {
       setLoadingCrypto(false);
+    }
+  };
+
+  const handlePresetSave = (newPresets: Preset[]) => {
+    setPresets(newPresets);
+    localStorage.setItem('userPresets', JSON.stringify(newPresets));
+    toast.success(t('settingsSaved'));
+  };
+
+  const handlePresetClick = async (preset: Preset) => {
+    try {
+      const res = await fetch('/api/entries/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user.id,
+          name: preset.name,
+          pricePerUnit: preset.price,
+          quantity: 1,
+          category: preset.category,
+          currency: user.currency || 'USD',
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        toast.success(`+${(data.pointsEarned || 0).toFixed(1)} ${t('pointsEarned')} 🎉`);
+        
+        const updatedUser = { ...user, points: (Number(user.points) || 0) + data.pointsEarned };
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        setUser(updatedUser);
+        
+        // Reload goals to update total savings
+        await loadGoals(user.id);
+      } else {
+        toast.error(data.error || 'Failed to create entry');
+      }
+    } catch (error) {
+      toast.error('Network error');
     }
   };
 
@@ -190,9 +257,12 @@ export default function GoalsPage() {
         ) : (
           <div className="space-y-4">
             {goals.map((goal) => {
-              const progress = Math.min((totalSavings / goal.usdTarget) * 100, 100);
-              const convertedSavings = convertCurrency(totalSavings, user.currency);
-              const convertedTarget = convertCurrency(goal.usdTarget, user.currency);
+              // Each goal should track its own progress, not total savings
+              // For now, we'll use total savings as a proxy, but this should be improved
+              // to track individual goal progress in the future
+              const progress = Math.min(Math.max((totalSavings / (goal.usdTarget || 1)) * 100, 0), 100);
+              const convertedSavings = convertCurrency(totalSavings || 0, user.currency);
+              const convertedTarget = convertCurrency(goal.usdTarget || 0, user.currency);
               
               return (
                 <div key={goal.id} className="bg-white rounded-xl border-4 border-black p-4">
@@ -225,12 +295,12 @@ export default function GoalsPage() {
         )}
       </div>
 
-      {totalSavings > 0 && (
+      {(totalSavings || 0) > 0 && (
         <div className="comic-panel mb-6">
           <h2 className="text-2xl font-bold mb-4">🚀 {t('cryptoROICalculator')}</h2>
           <div className="bg-comic-yellow rounded-xl border-4 border-black p-4 mb-4">
             <p className="text-sm text-gray-700 mb-2">
-              {t('yourSavings')}: <span className="font-bold">{formatCurrency(convertCurrency(totalSavings, user.currency), user.currency)}</span>
+              {t('yourSavings')}: <span className="font-bold">{formatCurrency(convertCurrency(totalSavings || 0, user.currency), user.currency)}</span>
             </p>
             <p className="text-xs text-gray-600">
               See what this would be worth if you invested in top cryptocurrencies 5 years ago!
@@ -256,7 +326,7 @@ export default function GoalsPage() {
                   className="bg-gradient-to-r from-white to-gray-50 rounded-xl border-4 border-black p-4 hover:shadow-comic-lg transition-all cursor-pointer hover:-translate-y-1"
                   onClick={() => {
                     const convertedYourValue = convertCurrency(crypto.yourValue, user.currency);
-                    const convertedOriginal = convertCurrency(totalSavings, user.currency);
+                    const convertedOriginal = convertCurrency(totalSavings || 0, user.currency);
                     const profit = convertedYourValue - convertedOriginal;
                     const roiPercent = ((crypto.multiplier - 1) * 100).toFixed(0);
                     
@@ -293,22 +363,49 @@ export default function GoalsPage() {
                         {formatCurrency(convertCurrency(crypto.yourValue, user.currency), user.currency)}
                       </div>
                       <div className="text-xs text-gray-600 mt-1">
-                        +{formatCurrency(convertCurrency(crypto.yourValue - totalSavings, user.currency), user.currency)} profit
+                        +{formatCurrency(convertCurrency(crypto.yourValue - (totalSavings || 0), user.currency), user.currency)} profit
                       </div>
                     </div>
                   </div>
                 </div>
               ))}
               
-              <div className="bg-comic-cyan rounded-xl border-4 border-black p-4 mt-4">
-                <div className="text-sm text-gray-700 text-center">
-                  💎 Best performer: <span className="font-bold">{cryptoData[0]?.symbol}</span> ({cryptoData[0]?.multiplier.toFixed(1)}x)
+              {cryptoData.length > 0 && (
+                <div className="bg-comic-cyan rounded-xl border-4 border-black p-4 mt-4">
+                  <div className="text-sm text-gray-700 text-center">
+                    💎 Best performer: <span className="font-bold">{cryptoData[0]?.symbol}</span> ({cryptoData[0]?.multiplier.toFixed(1)}x)
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           )}
         </div>
       )}
+
+      <div className="comic-panel mb-6">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold">⚡ {t('quickAdd')}</h2>
+          <button
+            onClick={() => setShowPresetManager(true)}
+            className="bg-comic-lime border-4 border-black rounded-full px-4 py-2 font-bold shadow-comic text-sm"
+          >
+            ⚙️ {t('edit')}
+          </button>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          {presets.map((preset) => (
+            <button
+              key={preset.id}
+              onClick={() => handlePresetClick(preset)}
+              className="bg-comic-cyan border-4 border-black rounded-xl p-4 shadow-comic hover:shadow-comic-lg transition-all hover:-translate-y-1"
+            >
+              <div className="text-4xl mb-2">{preset.icon}</div>
+              <div className="font-bold">{preset.name}</div>
+              <div className="text-sm text-gray-700">{getCurrencySymbol(user?.currency || 'USD')}{preset.price}</div>
+            </button>
+          ))}
+        </div>
+      </div>
 
       {showForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -348,6 +445,13 @@ export default function GoalsPage() {
           </div>
         </div>
       )}
+
+      <PresetManager
+        isOpen={showPresetManager}
+        onClose={() => setShowPresetManager(false)}
+        onSave={handlePresetSave}
+        initialPresets={presets}
+      />
 
       <Navigation />
     </div>
