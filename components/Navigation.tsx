@@ -37,6 +37,7 @@ export default function Navigation() {
     { href: '/calendar', label: t('calendar'), icon: '📅' },
     { href: '/wallet', label: t('wallet'), icon: '💰' },
     { href: '/goals', label: t('goals'), icon: '🎯' },
+    { href: '/comparison', label: t('comparison'), icon: '📊' },
     { href: '/leaderboard', label: t('leaderboard'), icon: '🏆' },
     { href: '/achievements', label: t('achievements'), icon: '🏅' },
     { href: '/profile', label: t('profile'), icon: '👤' },
@@ -44,21 +45,21 @@ export default function Navigation() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-white border-t-4 border-black shadow-comic-lg z-50">
-      <div className="flex justify-around items-center max-w-screen-lg mx-auto">
+      <div className="flex justify-around items-center max-w-screen-lg mx-auto overflow-x-auto">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center py-3 px-4 transition-all ${
+              className={`flex flex-col items-center py-2 px-2 sm:px-3 transition-all min-w-[60px] sm:min-w-[70px] ${
                 isActive
                   ? 'bg-comic-orange border-t-4 border-black -mt-1'
                   : 'hover:bg-gray-100'
               }`}
             >
-              <span className="comic-icon-small text-2xl mb-1">{item.icon}</span>
-              <span className={`text-xs font-bold ${isActive ? 'text-black' : 'text-gray-600'}`}>
+              <span className="text-xl sm:text-2xl mb-0.5">{item.icon}</span>
+              <span className={`text-[10px] sm:text-xs font-bold ${isActive ? 'text-black' : 'text-gray-600'}`}>
                 {item.label}
               </span>
             </Link>
