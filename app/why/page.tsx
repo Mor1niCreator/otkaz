@@ -214,7 +214,7 @@ export default function WhyPage() {
                   {t('noTagsYet')}
                 </div>
               )}
-            </div>
+            </motion.div>
           );
         })}
       </div>
