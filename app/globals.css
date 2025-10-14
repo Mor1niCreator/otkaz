@@ -4,13 +4,89 @@
 
 @layer base {
   * {
-    font-family: 'Comic Sans MS', 'Bangers', 'Komika Axis', 'Comic Neue', cursive, sans-serif;
+    font-family: 'Ubuntu', 'Comfortaa', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   
   body {
     background: linear-gradient(135deg, #FFFEF7 0%, #FFE030 100%);
     background-attachment: fixed;
     position: relative;
+  }
+
+  /* FONT HIERARCHY - Professional Comic Style */
+  
+  /* Hero Titles - MEGA IMPACT */
+  h1, .text-hero {
+    font-family: 'Passion One', 'Russo One', 'Archivo Black', sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  /* Section Headers - BOLD & CLEAR */
+  h2, .text-header {
+    font-family: 'Exo 2', 'Russo One', sans-serif;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+  }
+
+  /* Subheaders */
+  h3, .text-subheader {
+    font-family: 'Fredoka', 'Ubuntu', sans-serif;
+    font-weight: 700;
+  }
+
+  /* Buttons & Action Text - POWER */
+  button, .btn-text {
+    font-family: 'Exo 2', 'Bebas Neue', sans-serif;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* Body Text - READABLE */
+  p, span, div, .body-text {
+    font-family: 'Ubuntu', 'Comfortaa', sans-serif;
+    font-weight: 500;
+  }
+
+  /* Special Comic Effects Text */
+  .text-comic-pow {
+    font-family: 'Bungee', 'Passion One', sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .text-comic-boom {
+    font-family: 'Righteous', 'Russo One', sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .text-comic-zap {
+    font-family: 'Bebas Neue', 'Archivo Black', sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  /* Tags & Badges */
+  .text-badge {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* Numbers & Stats - BOLD */
+  .text-number {
+    font-family: 'Russo One', 'Poppins', sans-serif;
+    font-weight: 900;
+    font-variant-numeric: tabular-nums;
   }
   
   /* Comic Book Halftone Dots Background */
@@ -72,7 +148,11 @@
 
   /* MODERN COMIC BUTTONS - 3D Effect */
   .comic-button {
-    @apply rounded-2xl px-8 py-4 font-black text-lg relative overflow-hidden;
+    @apply rounded-2xl px-8 py-4 text-lg relative overflow-hidden;
+    font-family: 'Exo 2', 'Bebas Neue', sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     background: linear-gradient(135deg, #FFE030 0%, #FFD54F 100%);
     border: 5px solid #000;
     box-shadow: 
@@ -150,6 +230,8 @@
   /* SPEECH BUBBLE - Enhanced 2026 */
   .speech-bubble {
     @apply bg-white rounded-3xl p-6 relative;
+    font-family: 'Ubuntu', 'Comfortaa', sans-serif;
+    font-weight: 600;
     border: 5px solid #000;
     box-shadow: 8px 8px 0px #000;
     background: 
@@ -312,6 +394,7 @@
 
   /* POW/BOOM TEXT EFFECTS */
   .text-pow {
+    font-family: 'Bungee', 'Passion One', sans-serif;
     font-weight: 900;
     font-size: 4rem;
     color: #FFE030;
@@ -319,10 +402,12 @@
       4px 4px 0px #000,
       8px 8px 0px rgba(255, 107, 53, 0.5);
     transform: rotate(-5deg);
-    letter-spacing: 0.1em;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
   }
 
   .text-boom {
+    font-family: 'Righteous', 'Russo One', sans-serif;
     font-weight: 900;
     font-size: 3.5rem;
     background: linear-gradient(135deg, #FF006E 0%, #FF6B35 100%);
@@ -332,6 +417,20 @@
     text-shadow: none;
     filter: drop-shadow(3px 3px 0px #000);
     letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .text-zap {
+    font-family: 'Bebas Neue', 'Archivo Black', sans-serif;
+    font-weight: 900;
+    font-size: 3.5rem;
+    color: #06FFF0;
+    text-shadow:
+      4px 4px 0px #000,
+      0 0 20px rgba(6, 255, 240, 0.8);
+    -webkit-text-stroke: 2px #000;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
 
   /* COMIC BORDERS - Enhanced */
@@ -413,7 +512,11 @@
 
   /* COMIC BADGE - 2026 Style */
   .comic-badge {
-    @apply px-4 py-2 rounded-full font-black relative;
+    @apply px-4 py-2 rounded-full relative;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     border: 4px solid #000;
     box-shadow: 4px 4px 0px #000;
     background: linear-gradient(135deg, #FFE030 0%, #FF6B35 100%);
@@ -882,12 +985,31 @@
 
   /* GRADIENT TEXT - Hero Style */
   .text-gradient-comic {
+    font-family: 'Passion One', 'Russo One', sans-serif;
     background: linear-gradient(135deg, #FF006E 0%, #FF6B35 50%, #FFE030 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     font-weight: 900;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
     filter: drop-shadow(3px 3px 0px rgba(0,0,0,0.3));
+  }
+
+  /* STAT NUMBERS - Bold Display */
+  .text-stat {
+    font-family: 'Russo One', 'Poppins', sans-serif;
+    font-weight: 900;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+  }
+
+  /* LABEL TEXT - Clear & Bold */
+  .text-label {
+    font-family: 'Exo 2', 'Ubuntu', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
   /* SPEED LINES - Action Background */
@@ -962,7 +1084,11 @@
 
   /* RIBBON BADGE */
   .comic-ribbon {
-    @apply relative px-6 py-2 font-black;
+    @apply relative px-6 py-2;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     background: linear-gradient(135deg, #FF006E 0%, #8338EC 100%);
     color: white;
     text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
@@ -1098,26 +1224,67 @@
   }
 }
 
+/* UTILITY CLASSES FOR TYPOGRAPHY */
+.font-hero {
+  font-family: 'Passion One', 'Russo One', sans-serif !important;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.font-header {
+  font-family: 'Exo 2', 'Russo One', sans-serif !important;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.font-button {
+  font-family: 'Exo 2', 'Bebas Neue', sans-serif !important;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.font-number {
+  font-family: 'Russo One', 'Poppins', sans-serif !important;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.font-tag {
+  font-family: 'Exo 2', sans-serif !important;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.font-body {
+  font-family: 'Ubuntu', 'Comfortaa', sans-serif !important;
+  font-weight: 500;
+}
+
 /* CUSTOM SCROLLBAR - Comic Style */
 ::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
 }
 
 ::-webkit-scrollbar-track {
   background: #E0E0E0;
-  border: 2px solid #000;
-  border-radius: 10px;
+  border: 3px solid #000;
+  border-radius: 12px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #FFE030 0%, #FF6B35 100%);
-  border: 2px solid #000;
-  border-radius: 10px;
+  background: linear-gradient(135deg, #FFE030 0%, #FF6B35 50%, #FF006E 100%);
+  border: 3px solid #000;
+  border-radius: 12px;
+  box-shadow: inset 0 2px 4px rgba(255,255,255,0.5);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #FF6B35 0%, #FF006E 100%);
+  background: linear-gradient(135deg, #FF006E 0%, #8338EC 50%, #3A86FF 100%);
+  transform: scale(1.1);
 }
 
 /* SELECTION - Comic Highlight */

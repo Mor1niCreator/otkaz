@@ -17,16 +17,21 @@ export default function ComicText({
 }: ComicTextProps) {
   const variants = {
     pow: {
-      className: 'text-4xl md:text-6xl font-black text-comic-yellow uppercase',
+      className: 'text-4xl md:text-6xl text-comic-yellow uppercase',
       style: {
+        fontFamily: "'Bungee', 'Passion One', sans-serif",
+        fontWeight: 900,
         textShadow: '5px 5px 0px #000, 10px 10px 0px rgba(255, 107, 53, 0.5)',
         WebkitTextStroke: '2px #000',
         transform: 'rotate(-5deg)',
+        letterSpacing: '0.15em',
       },
     },
     boom: {
-      className: 'text-5xl md:text-7xl font-black uppercase',
+      className: 'text-5xl md:text-7xl uppercase',
       style: {
+        fontFamily: "'Righteous', 'Russo One', sans-serif",
+        fontWeight: 900,
         background: 'linear-gradient(135deg, #FF006E 0%, #FF6B35 50%, #FFE030 100%)',
         WebkitBackgroundClip: 'text',
         WebkitTextFillColor: 'transparent',
@@ -35,16 +40,20 @@ export default function ComicText({
       },
     },
     zap: {
-      className: 'text-4xl md:text-6xl font-black text-comic-cyan uppercase',
+      className: 'text-4xl md:text-6xl text-comic-cyan uppercase',
       style: {
+        fontFamily: "'Bebas Neue', 'Archivo Black', sans-serif",
+        fontWeight: 900,
         textShadow: '4px 4px 0px #000, 0 0 20px rgba(6, 255, 240, 0.8)',
         WebkitTextStroke: '2px #000',
-        letterSpacing: '0.1em',
+        letterSpacing: '0.12em',
       },
     },
     hero: {
-      className: 'text-3xl md:text-5xl font-black uppercase',
+      className: 'text-3xl md:text-5xl uppercase',
       style: {
+        fontFamily: "'Passion One', 'Russo One', sans-serif",
+        fontWeight: 900,
         background: 'linear-gradient(135deg, #8338EC 0%, #FF006E 50%, #FF6B35 100%)',
         WebkitBackgroundClip: 'text',
         WebkitTextFillColor: 'transparent',
@@ -54,7 +63,10 @@ export default function ComicText({
     },
     normal: {
       className: 'font-bold',
-      style: {},
+      style: {
+        fontFamily: "'Ubuntu', 'Comfortaa', sans-serif",
+        fontWeight: 700,
+      },
     },
   };
 

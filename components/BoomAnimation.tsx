@@ -94,8 +94,10 @@ export default function BoomAnimation({
               </motion.div>
               
               <motion.div 
-                className="text-7xl font-black uppercase"
+                className="text-7xl uppercase"
                 style={{ 
+                  fontFamily: "'Righteous', 'Russo One', sans-serif",
+                  fontWeight: 900,
                   background: 'linear-gradient(135deg, #FFE030 0%, #FF6B35 50%, #FF006E 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',

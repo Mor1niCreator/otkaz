@@ -27,10 +27,30 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
+        
+        {/* Professional Comic Fonts with Cyrillic Support */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Exo+2:wght@700;800;900&family=Ubuntu:wght@400;500;700&family=Comfortaa:wght@600;700&family=Archivo+Black&family=Bebas+Neue&family=Passion+One:wght@700;900&family=Fredoka:wght@600;700&family=Righteous&family=Bungee&family=Poppins:wght@700;800;900&display=swap" rel="stylesheet" />
       </head>
       <body className="bg-comic-bg min-h-screen">
         {children}
-        <Toaster position="top-center" />
+        <Toaster 
+          position="top-center"
+          toastOptions={{
+            className: 'comic-toast',
+            style: {
+              background: 'linear-gradient(135deg, #FFE030 0%, #FF6B35 100%)',
+              color: '#000',
+              fontWeight: '900',
+              border: '4px solid #000',
+              borderRadius: '1rem',
+              padding: '1rem 1.5rem',
+              fontSize: '1rem',
+              boxShadow: '6px 6px 0px #000',
+            },
+          }}
+        />
         <script dangerouslySetInnerHTML={{
           __html: `
             if ('serviceWorker' in navigator) {
