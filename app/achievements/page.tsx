@@ -90,44 +90,103 @@ export default function AchievementsPage() {
       </div>
 
       <div className="space-y-4">
-        {all.map((achievement) => {
+        {all.map((achievement, index) => {
           const isUnlocked = unlockedIds.has(achievement.id);
           const userAchievement = unlocked.find(u => u.achievement.id === achievement.id);
           
           return (
             <motion.div
               key={achievement.id}
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              whileHover={isUnlocked ? { scale: 1.02 } : {}}
-              className={`comic-panel ${
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05, type: 'spring', stiffness: 200 }}
+              whileHover={isUnlocked ? { scale: 1.05, rotate: 2, y: -5 } : {}}
+              whileTap={isUnlocked ? { scale: 0.95 } : {}}
+              className={`comic-panel relative overflow-hidden cursor-pointer ${
                 isUnlocked
-                  ? 'bg-gradient-to-r from-comic-orange to-comic-yellow'
+                  ? 'bg-gradient-to-br from-comic-orange via-comic-yellow to-comic-lime'
                   : 'bg-gray-200 opacity-60'
               }`}
               onClick={() => isUnlocked && showAchievementAnimation(achievement)}
             >
-              <div className="flex items-center gap-4">
-                <div className={`comic-icon text-6xl ${!isUnlocked && 'grayscale'}`}>
+              {/* Shine effect for unlocked achievements */}
+              {isUnlocked && (
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-20 animate-[shine_3s_ease-in-out_infinite]" />
+              )}
+              
+              {/* Glow effect */}
+              {isUnlocked && (
+                <motion.div
+                  className="absolute inset-0 bg-yellow-300 opacity-20"
+                  animate={{
+                    scale: [1, 1.05, 1],
+                    opacity: [0.1, 0.3, 0.1]
+                  }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                />
+              )}
+
+              <div className="flex items-center gap-4 relative z-10">
+                <motion.div 
+                  className={`comic-icon text-6xl ${!isUnlocked && 'grayscale'}`}
+                  animate={isUnlocked ? {
+                    rotate: [0, -10, 10, -10, 0],
+                    scale: [1, 1.1, 1]
+                  } : {}}
+                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                >
                   {achievement.icon}
-                </div>
+                  {isUnlocked && (
+                    <motion.span
+                      className="absolute -top-2 -right-2 text-3xl"
+                      animate={{
+                        scale: [1, 1.3, 1],
+                        rotate: [0, 180, 360]
+                      }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    >
+                      ⭐
+                    </motion.span>
+                  )}
+                </motion.div>
                 <div className="flex-1">
-                  <h3 className="text-xl font-bold">
+                  <h3 className="text-xl font-bold flex items-center gap-2">
                     {user.language === 'ru' ? achievement.nameRu : achievement.nameEn}
+                    {isUnlocked && (
+                      <motion.span
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        className="text-2xl"
+                      >
+                        ✨
+                      </motion.span>
+                    )}
                   </h3>
                   <p className="text-sm text-gray-700">
                     {user.language === 'ru' ? achievement.descriptionRu : achievement.descriptionEn}
                   </p>
                   {isUnlocked && userAchievement && (
-                    <p className="text-xs text-gray-600 mt-1">
-                      Unlocked: {new Date(userAchievement.unlockedAt).toLocaleDateString()}
-                    </p>
+                    <motion.p 
+                      className="text-xs text-gray-600 mt-1 flex items-center gap-1"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                    >
+                      🎉 Unlocked: {new Date(userAchievement.unlockedAt).toLocaleDateString()}
+                    </motion.p>
                   )}
                   {!isUnlocked && (
-                    <p className="text-xs text-gray-500 mt-1">{t('locked')}</p>
+                    <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                      🔒 {t('locked')}
+                    </p>
                   )}
                   {isUnlocked && (
-                    <p className="text-xs text-gray-600 mt-1">Click to celebrate! 🎉</p>
+                    <motion.p 
+                      className="text-xs text-purple-600 mt-1 font-bold"
+                      animate={{ opacity: [0.5, 1, 0.5] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    >
+                      💫 Click to celebrate!
+                    </motion.p>
                   )}
                 </div>
               </div>

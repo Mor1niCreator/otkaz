@@ -67,8 +67,8 @@ export default function PresetsEditor({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
-      <div className="comic-panel max-w-2xl w-full my-8">
+    <div className="fixed inset-0 comic-modal-overlay flex items-center justify-center p-4 z-50 overflow-y-auto">
+      <div className="comic-modal max-w-2xl w-full my-8">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">⚙️ {t('customizePresets')}</h2>
           <button

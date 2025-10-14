@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
 import Navigation from '@/components/Navigation';
 import PresetsEditor from '@/components/PresetsEditor';
+import MathWallBackground from '@/components/MathWallBackground';
 import toast from 'react-hot-toast';
 import { useTranslation } from '@/lib/i18n';
 import { formatCurrency, convertCurrency } from '@/lib/currency-utils';
@@ -217,16 +219,55 @@ export default function ComparisonPage() {
   if (!user) return null;
 
   return (
-    <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto">
-      <div className="comic-panel mb-6">
-        <h1 className="text-4xl font-bold mb-2">📊 {t('beforeAfter')}</h1>
-        <p className="text-gray-700">{t('compareSpending')}</p>
-      </div>
+    <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto relative">
+      <MathWallBackground />
+      <motion.div 
+        className="comic-panel mb-6 relative overflow-hidden"
+        initial={{ scale: 0.9, opacity: 0, y: -30 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        transition={{ type: 'spring', stiffness: 200 }}
+      >
+        <motion.div
+          className="absolute -top-20 -right-20 w-40 h-40 bg-blue-300 rounded-full opacity-20"
+          animate={{ scale: [1, 1.3, 1], rotate: [0, 180, 360] }}
+          transition={{ duration: 10, repeat: Infinity }}
+        />
+        
+        <motion.h1 
+          className="text-4xl font-bold mb-2 flex items-center gap-3 relative z-10"
+          animate={{ x: [0, 5, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <motion.span animate={{ rotate: [0, 360] }} transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}>
+            📊
+          </motion.span>
+          {t('beforeAfter')}
+        </motion.h1>
+        <p className="text-gray-700 relative z-10">{t('compareSpending')}</p>
+      </motion.div>
 
-      {step === 'input' && (
-        <>
-          <div className="comic-panel mb-6">
-            <h2 className="text-2xl font-bold mb-4">{t('weeklySpendingBefore')}</h2>
+      <AnimatePresence mode="wait">
+        {step === 'input' && (
+          <motion.div
+            key="input"
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 50 }}
+            transition={{ type: 'spring', stiffness: 200 }}
+          >
+            <motion.div 
+              className="comic-panel mb-6"
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              <motion.h2 
+                className="text-2xl font-bold mb-4"
+                animate={{ y: [0, -3, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                {t('weeklySpendingBefore')}
+              </motion.h2>
             <p className="text-sm text-gray-600 mb-4">
               {t('addEntriesByDay')}
             </p>
@@ -383,33 +424,57 @@ export default function ComparisonPage() {
               </div>
             </div>
 
-            <button
+            <motion.button
               onClick={handleAnalyze}
               disabled={loading || calculateWeeklyTotal() <= 0}
               className="w-full mt-6 comic-button-orange py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              whileHover={!loading && calculateWeeklyTotal() > 0 ? { scale: 1.02, y: -3 } : {}}
+              whileTap={!loading && calculateWeeklyTotal() > 0 ? { scale: 0.98 } : {}}
             >
               {loading ? '⏳ ' + t('analyzing') : '🚀 ' + t('analyzeNow')}
-            </button>
-          </div>
+            </motion.button>
+            </motion.div>
 
-          <div className="comic-panel bg-comic-cyan">
-            <h3 className="font-bold mb-2">💡 {t('tip')}</h3>
-            <p className="text-sm text-gray-700">
-              {t('comparisonTip')}
-            </p>
-          </div>
-        </>
-      )}
-
-      {step === 'results' && comparison && (
-        <>
-          <div className="comic-panel mb-6">
-            <button
-              onClick={() => setStep('input')}
-              className="comic-button-secondary mb-4"
+            <motion.div 
+              className="comic-panel bg-comic-cyan"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.3 }}
             >
-              ← {t('back')}
-            </button>
+              <h3 className="font-bold mb-2 flex items-center gap-2">
+                <motion.span animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1.5, repeat: Infinity }}>
+                  💡
+                </motion.span>
+                {t('tip')}
+              </h3>
+              <p className="text-sm text-gray-700">
+                {t('comparisonTip')}
+              </p>
+            </motion.div>
+          </motion.div>
+        )}
+
+        {step === 'results' && comparison && (
+          <motion.div
+            key="results"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            transition={{ type: 'spring', stiffness: 200 }}
+          >
+            <motion.div 
+              className="comic-panel mb-6"
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+            >
+              <motion.button
+                onClick={() => setStep('input')}
+                className="comic-button-secondary mb-4"
+                whileHover={{ scale: 1.02, x: -3 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                ← {t('back')}
+              </motion.button>
             
             <h2 className="text-2xl font-bold mb-4">📈 {t('yourResults')}</h2>
 
@@ -458,50 +523,126 @@ export default function ComparisonPage() {
 
             {/* Weekly Comparison */}
             <div className="grid grid-cols-2 gap-4 mb-6">
-              <div className="bg-red-100 rounded-xl border-4 border-black p-4">
+              <motion.div 
+                className="bg-red-100 rounded-xl border-4 border-black p-4"
+                initial={{ opacity: 0, x: -30, rotate: -5 }}
+                animate={{ opacity: 1, x: 0, rotate: 0 }}
+                transition={{ delay: 0.3, type: 'spring' }}
+                whileHover={{ scale: 1.05, rotate: 2 }}
+              >
                 <div className="text-center">
-                  <div className="text-3xl mb-2">❌</div>
+                  <motion.div 
+                    className="text-3xl mb-2"
+                    animate={{ rotate: [0, -10, 10, 0] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    ❌
+                  </motion.div>
                   <div className="text-sm text-gray-700 mb-1">{t('before')}</div>
-                  <div className="text-2xl font-bold text-red-600">
+                  <motion.div 
+                    className="text-2xl font-bold text-red-600"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.5, type: 'spring' }}
+                  >
                     {formatCurrency(convertCurrency(comparison.weeklyBefore, user.currency), user.currency)}
-                  </div>
+                  </motion.div>
                   <div className="text-xs text-gray-600 mt-1">{t('perWeek')}</div>
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="bg-green-100 rounded-xl border-4 border-black p-4">
+              <motion.div 
+                className="bg-green-100 rounded-xl border-4 border-black p-4"
+                initial={{ opacity: 0, x: 30, rotate: 5 }}
+                animate={{ opacity: 1, x: 0, rotate: 0 }}
+                transition={{ delay: 0.4, type: 'spring' }}
+                whileHover={{ scale: 1.05, rotate: -2 }}
+              >
                 <div className="text-center">
-                  <div className="text-3xl mb-2">✅</div>
+                  <motion.div 
+                    className="text-3xl mb-2"
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  >
+                    ✅
+                  </motion.div>
                   <div className="text-sm text-gray-700 mb-1">{t('after')}</div>
-                  <div className="text-2xl font-bold text-green-600">
+                  <motion.div 
+                    className="text-2xl font-bold text-green-600"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.6, type: 'spring' }}
+                  >
                     {formatCurrency(convertCurrency(comparison.weeklyAfter, user.currency), user.currency)}
-                  </div>
+                  </motion.div>
                   <div className="text-xs text-gray-600 mt-1">{t('perWeek')}</div>
                 </div>
-              </div>
+              </motion.div>
             </div>
 
-            <div className="bg-comic-lime rounded-xl border-4 border-black p-6 mb-6 text-center">
-              <div className="text-lg font-bold mb-2">💰 {t('weeklySavings')}</div>
-              <div className="text-4xl font-bold text-green-700">
+            <motion.div 
+              className="bg-comic-lime rounded-xl border-4 border-black p-6 mb-6 text-center relative overflow-hidden"
+              initial={{ opacity: 0, scale: 0.8, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ delay: 0.7, type: 'spring', stiffness: 300 }}
+              whileHover={{ scale: 1.02 }}
+            >
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-green-300 to-lime-300 opacity-30"
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+              
+              <motion.div 
+                className="text-lg font-bold mb-2 relative z-10"
+                animate={{ y: [0, -3, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              >
+                💰 {t('weeklySavings')}
+              </motion.div>
+              <motion.div 
+                className="text-4xl font-bold text-green-700 relative z-10"
+                initial={{ scale: 0, rotate: -180 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ delay: 0.9, type: 'spring', stiffness: 200 }}
+              >
                 {formatCurrency(convertCurrency(comparison.weeklySavings, user.currency), user.currency)}
-              </div>
-              <div className="text-sm text-gray-700 mt-2">
+              </motion.div>
+              <div className="text-sm text-gray-700 mt-2 relative z-10">
                 {comparison.savingsPercentage.toFixed(1)}% {t('reduction')}!
               </div>
               {comparison.walletStats.hasData && (
-                <div className="mt-3 pt-3 border-t-2 border-green-500">
+                <motion.div 
+                  className="mt-3 pt-3 border-t-2 border-green-500 relative z-10"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 1.1 }}
+                >
                   <div className="text-xs text-gray-600">
                     📊 {t('calculatedFromWallet')}
                   </div>
-                </div>
+                </motion.div>
               )}
-            </div>
-          </div>
+            </motion.div>
+            </motion.div>
 
           {/* Projections */}
-          <div className="comic-panel mb-6">
-            <h2 className="text-2xl font-bold mb-4">🚀 {t('savingsProjections')}</h2>
+          <motion.div 
+            className="comic-panel mb-6"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9 }}
+          >
+            <motion.h2 
+              className="text-2xl font-bold mb-4 flex items-center gap-2"
+              animate={{ x: [0, 5, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              <motion.span animate={{ rotate: [0, 360] }} transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}>
+                🚀
+              </motion.span>
+              {t('savingsProjections')}
+            </motion.h2>
             <p className="text-sm text-gray-600 mb-2">
               {comparison.walletStats.hasData 
                 ? t('projectionsBasedOnWallet')
@@ -509,22 +650,26 @@ export default function ComparisonPage() {
             </p>
             {comparison.walletStats.hasData && (
               <div className="bg-blue-50 rounded-lg border-2 border-blue-300 p-2 mb-4 text-xs text-gray-700">
-                💡 {t('projectionsFormula')}: {formatCurrency(convertCurrency(comparison.walletStats.dailyAverage, user.currency), user.currency)}/день × 7 = {formatCurrency(convertCurrency(comparison.weeklySavings, user.currency), user.currency)}/неделю
+                💡 {t('projectionsFormula')}: {formatCurrency(convertCurrency(comparison.walletStats.dailyAverage, user.currency), user.currency)}/{t('perDay')} × 7 = {formatCurrency(convertCurrency(comparison.weeklySavings, user.currency), user.currency)}/{t('perWeek')}
               </div>
             )}
 
             <div className="space-y-3">
-              {[
+              {              [
                 { key: 'week', label: t('oneWeek'), icon: '📅', multiplier: 1 },
-                { key: 'month', label: t('oneMonth'), icon: '📆', multiplier: 4.33 },
-                { key: 'sixMonths', label: t('sixMonths'), icon: '📊', multiplier: 26 },
-                { key: 'year', label: t('oneYear'), icon: '🎯', multiplier: 52 },
-                { key: 'threeYears', label: t('threeYears'), icon: '🚀', multiplier: 156 },
-                { key: 'fiveYears', label: t('fiveYears'), icon: '💎', multiplier: 260 },
-              ].map((period) => (
-                <div
+                { key: 'month', label: t('oneMonth'), icon: '📆', multiplier: 4.348 },
+                { key: 'sixMonths', label: t('sixMonths'), icon: '📊', multiplier: 26.09 },
+                { key: 'year', label: t('oneYear'), icon: '🎯', multiplier: 52.18 },
+                { key: 'threeYears', label: t('threeYears'), icon: '🚀', multiplier: 156.54 },
+                { key: 'fiveYears', label: t('fiveYears'), icon: '💎', multiplier: 260.89 },
+              ].map((period, index) => (
+                <motion.div
                   key={period.key}
-                  className="bg-gradient-to-r from-white to-gray-50 rounded-xl border-4 border-black p-4 hover:shadow-comic-lg transition-all"
+                  className="bg-gradient-to-r from-white to-gray-50 rounded-xl border-4 border-black p-4"
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 1.1 + index * 0.1, type: 'spring' }}
+                  whileHover={{ scale: 1.02, boxShadow: '8px 8px 0px rgba(0,0,0,0.3)' }}
                 >
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-3">
@@ -548,23 +693,44 @@ export default function ComparisonPage() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Motivational message */}
-          <div className="comic-panel bg-comic-yellow">
-            <div className="text-center">
-              <div className="text-5xl mb-3">🎉</div>
+          <motion.div 
+            className="comic-panel bg-comic-yellow relative overflow-hidden"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 1.7 }}
+            whileHover={{ scale: 1.02 }}
+          >
+            <motion.div
+              className="absolute top-0 right-0 text-8xl opacity-10"
+              animate={{ rotate: [0, 360] }}
+              transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+            >
+              🎉
+            </motion.div>
+            
+            <div className="text-center relative z-10">
+              <motion.div 
+                className="text-5xl mb-3"
+                animate={{ scale: [1, 1.2, 1], rotate: [0, -10, 10, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                🎉
+              </motion.div>
               <h3 className="text-2xl font-bold mb-2">{t('amazingProgress')}</h3>
               <p className="text-gray-700">
                 {t('keepSavingMessage')}
               </p>
             </div>
-          </div>
-        </>
-      )}
+          </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {showPresetsEditor && (
         <PresetsEditor

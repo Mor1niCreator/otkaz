@@ -5,23 +5,53 @@ import { ReactNode } from 'react';
 
 interface ComicPanelProps {
   children: ReactNode;
+  variant?: 'default' | 'action' | 'hero' | 'neon' | 'starburst';
   className?: string;
   animate?: boolean;
+  delay?: number;
 }
 
-export default function ComicPanel({ children, className = '', animate = false }: ComicPanelProps) {
-  const Wrapper = animate ? motion.div : 'div';
-  const animationProps = animate
-    ? {
-        initial: { scale: 0.95, opacity: 0 },
-        animate: { scale: 1, opacity: 1 },
-        transition: { type: 'spring', stiffness: 300, damping: 20 },
-      }
-    : {};
+export default function ComicPanel({
+  children,
+  variant = 'default',
+  className = '',
+  animate = true,
+  delay = 0,
+}: ComicPanelProps) {
+  const variantClasses = {
+    default: 'comic-panel',
+    action: 'comic-panel-action',
+    hero: 'comic-panel bg-comic-hero text-white',
+    neon: 'comic-panel neon-border',
+    starburst: 'comic-panel bg-starburst text-white',
+  };
+
+  if (!animate) {
+    return (
+      <div className={`${variantClasses[variant]} ${className}`}>
+        {children}
+      </div>
+    );
+  }
 
   return (
-    <Wrapper className={`comic-panel ${className}`} {...animationProps}>
+    <motion.div
+      className={`${variantClasses[variant]} ${className}`}
+      initial={{ opacity: 0, scale: 0.9, y: 20 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ 
+        delay,
+        type: 'spring',
+        stiffness: 200,
+        damping: 20
+      }}
+      whileHover={{ 
+        scale: 1.02,
+        y: -3,
+        transition: { duration: 0.2 }
+      }}
+    >
       {children}
-    </Wrapper>
+    </motion.div>
   );
 }

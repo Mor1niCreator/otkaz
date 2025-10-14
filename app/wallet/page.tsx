@@ -7,6 +7,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { useTranslation } from '@/lib/i18n';
 import { formatCurrency, convertCurrency } from '@/lib/currency-utils';
 import { getUserFromStorage } from '@/lib/user-sync';
+import { getUserPresets, WHY_TAGS, getWhyTagName } from '@/lib/user-presets';
 
 export default function WalletPage() {
   const router = useRouter();
@@ -18,6 +19,7 @@ export default function WalletPage() {
     month: 0,
     allTime: 0,
   });
+  const [topTags, setTopTags] = useState<Array<{tagId: string; count: number}>>([]);
   
   const { t } = useTranslation(user?.language || 'en');
 
@@ -30,6 +32,7 @@ export default function WalletPage() {
     setUser(parsedUser);
     setUserPoints(Number(parsedUser.points) || 0);
     loadStats(parsedUser.id);
+    loadTopTags(parsedUser.id);
     
     // Reload stats when page becomes visible
     const handleVisibilityChange = () => {
@@ -70,6 +73,30 @@ export default function WalletPage() {
       }
     } catch (error) {
       console.error('Failed to load stats:', error);
+    }
+  };
+
+  const loadTopTags = (userId: string) => {
+    try {
+      const presets = getUserPresets(userId);
+      const tagCounts: Record<string, number> = {};
+      
+      presets.forEach(preset => {
+        if (preset.tags && preset.tags.length > 0) {
+          preset.tags.forEach(tag => {
+            tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+          });
+        }
+      });
+      
+      const sorted = Object.entries(tagCounts)
+        .map(([tagId, count]) => ({ tagId, count }))
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 5);
+      
+      setTopTags(sorted);
+    } catch (error) {
+      console.error('Failed to load top tags:', error);
     }
   };
 
@@ -135,6 +162,47 @@ export default function WalletPage() {
           </BarChart>
         </ResponsiveContainer>
       </div>
+
+      {topTags.length > 0 && (
+        <div className="comic-panel mb-6 bg-gradient-to-r from-purple-100 to-pink-100">
+          <h2 className="text-2xl font-bold mb-4">🤔 {t('yourTopReasons')}</h2>
+          <p className="text-sm text-gray-700 mb-3">
+            {t('topReasonsDescription')}
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {topTags.map(({ tagId, count }, index) => {
+              const tag = WHY_TAGS.find(t => t.id === tagId);
+              if (!tag) return null;
+              
+              return (
+                <div
+                  key={tagId}
+                  className={`px-4 py-2 rounded-xl border-4 border-black font-black flex items-center gap-2 
+                    ${tag.color} transition-all hover:scale-105 hover:rotate-2 hover:shadow-comic-lg
+                    animate-[popIn_0.5s_ease-out]`}
+                  style={{ 
+                    animationDelay: `${index * 0.1}s`,
+                    transformStyle: 'preserve-3d'
+                  }}
+                >
+                  <span className="text-2xl animate-[wiggle_2s_ease-in-out_infinite]" style={{ animationDelay: `${index * 0.3}s` }}>
+                    {tag.icon}
+                  </span>
+                  <div>
+                    <div className="text-sm">{getWhyTagName(tagId, user.language)}</div>
+                    <div className="text-xs opacity-75">{count} {count === 1 ? t('category') : t('categories')}</div>
+                  </div>
+                  {index < 3 && (
+                    <span className="ml-2 text-2xl">
+                      {index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉'}
+                    </span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       <div className="speech-bubble mb-6">
         <p className="text-center text-lg">

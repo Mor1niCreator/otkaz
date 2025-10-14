@@ -14,11 +14,16 @@ export const translations = {
     // Navigation
     calendar: 'Calendar',
     wallet: 'Wallet',
+    why: 'Why',
     goals: 'Goals',
     comparison: 'Before/After',
     leaderboard: 'Leaderboard',
     achievements: 'Achievements',
     profile: 'Profile',
+    dashboard: 'Dashboard',
+    savingsOverview: 'Savings Overview',
+    yourProgress: 'Your Progress',
+    rank: 'Rank',
     
     // Calendar
     todaysRefusals: "Today's Refusals",
@@ -51,6 +56,8 @@ export const translations = {
     savingsChart: 'Savings Chart',
     keepItUp: 'Keep it up! 🚀',
     everyRefusal: 'Every refusal brings you closer to your goals!',
+    yourTopReasons: 'Your Top Reasons',
+    topReasonsDescription: 'The main reasons why you refuse things:',
     
     // Goals
     yourGoals: 'Your Goals',
@@ -137,6 +144,8 @@ export const translations = {
     averagePerDay: 'Average per day',
     total: 'Total',
     yourSavings: 'Your Savings',
+    perDay: 'per day',
+    perWeek: 'per week',
     customize: 'Customize',
     customizePresets: 'Customize Presets',
     customizePresetsDescription: 'Personalize your quick-add buttons with your own categories, icons, and prices',
@@ -155,6 +164,20 @@ export const translations = {
     calculatedFromWallet: 'Calculated from your actual wallet data',
     projectionsBasedOnWallet: 'Based on your actual savings rate from wallet:',
     projectionsFormula: 'Your daily average',
+    
+    // Why Page
+    whyTitle: 'Why Do You Refuse?',
+    whyDescription: 'Add tags to your categories to track why you refuse certain things',
+    whyTip: 'Understanding WHY you refuse something helps you stay motivated. Add multiple tags to each category!',
+    addTags: 'Add Tags',
+    selectWhyTags: 'Select reasons why you refuse this',
+    noTagsYet: 'No tags added yet. Click "Add Tags" to start!',
+    tagsSaved: 'Tags saved',
+    done: 'Done',
+    yourTopReasons: 'Your Top Reasons',
+    topReasonsDescription: 'These are the most common reasons why you refuse things',
+    category: 'category',
+    categories: 'categories',
     
     // Messages
     pointsEarned: 'points!',
@@ -176,11 +199,16 @@ export const translations = {
     // Navigation
     calendar: 'Календарь',
     wallet: 'Кошелёк',
+    why: 'Почему',
     goals: 'Цели',
     comparison: 'До/После',
     leaderboard: 'Лидерборд',
     achievements: 'Достижения',
     profile: 'Профиль',
+    dashboard: 'Дашборд',
+    savingsOverview: 'Обзор сбережений',
+    yourProgress: 'Твой прогресс',
+    rank: 'Ранг',
     
     // Calendar
     todaysRefusals: 'Отказы сегодня',
@@ -213,6 +241,8 @@ export const translations = {
     savingsChart: 'График сбережений',
     keepItUp: 'Так держать! 🚀',
     everyRefusal: 'Каждый отказ приближает тебя к цели!',
+    yourTopReasons: 'Твои главные причины',
+    topReasonsDescription: 'Основные причины, почему ты отказываешься:',
     
     // Goals
     yourGoals: 'Твои цели',
@@ -299,6 +329,8 @@ export const translations = {
     averagePerDay: 'В среднем за день',
     total: 'Итого',
     yourSavings: 'Твои сбережения',
+    perDay: 'в день',
+    perWeek: 'в неделю',
     customize: 'Настроить',
     customizePresets: 'Настройка кнопок',
     customizePresetsDescription: 'Персонализируй кнопки быстрого добавления с своими категориями, иконками и ценами',
@@ -317,6 +349,20 @@ export const translations = {
     calculatedFromWallet: 'Рассчитано по реальным данным из кошелька',
     projectionsBasedOnWallet: 'На основе твоей реальной скорости экономии из кошелька:',
     projectionsFormula: 'Твоя средняя за день',
+    
+    // Why Page
+    whyTitle: 'Почему ты отказываешься?',
+    whyDescription: 'Добавляй метки к категориям, чтобы отслеживать, почему ты отказываешься от чего-то',
+    whyTip: 'Понимание, ПОЧЕМУ ты отказываешься, помогает оставаться мотивированным. Добавляй несколько меток к каждой категории!',
+    addTags: 'Добавить метки',
+    selectWhyTags: 'Выбери причины, почему ты отказываешься от этого',
+    noTagsYet: 'Меток пока нет. Нажми "Добавить метки" чтобы начать!',
+    tagsSaved: 'Метки сохранены',
+    done: 'Готово',
+    yourTopReasons: 'Твои главные причины',
+    topReasonsDescription: 'Это самые частые причины, почему ты отказываешься от вещей',
+    category: 'категория',
+    categories: 'категорий',
     
     // Messages
     pointsEarned: 'поинтов!',
