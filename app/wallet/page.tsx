@@ -182,7 +182,7 @@ export default function WalletPage() {
                   <span className="text-2xl">{tag.icon}</span>
                   <div>
                     <div className="text-sm">{getWhyTagName(tagId, user.language)}</div>
-                    <div className="text-xs opacity-75">{count} {count === 1 ? 'category' : 'categories'}</div>
+                    <div className="text-xs opacity-75">{count} {count === 1 ? t('category') : t('categories')}</div>
                   </div>
                 </div>
               );

@@ -170,6 +170,10 @@ export const translations = {
     noTagsYet: 'No tags added yet. Click "Add Tags" to start!',
     tagsSaved: 'Tags saved',
     done: 'Done',
+    yourTopReasons: 'Your Top Reasons',
+    topReasonsDescription: 'These are the most common reasons why you refuse things',
+    category: 'category',
+    categories: 'categories',
     
     // Messages
     pointsEarned: 'points!',
@@ -347,6 +351,10 @@ export const translations = {
     noTagsYet: 'Меток пока нет. Нажми "Добавить метки" чтобы начать!',
     tagsSaved: 'Метки сохранены',
     done: 'Готово',
+    yourTopReasons: 'Твои главные причины',
+    topReasonsDescription: 'Это самые частые причины, почему ты отказываешься от вещей',
+    category: 'категория',
+    categories: 'категорий',
     
     // Messages
     pointsEarned: 'поинтов!',
