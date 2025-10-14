@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import Navigation from '@/components/Navigation';
 import BoomAnimation from '@/components/BoomAnimation';
 import PresetsEditor from '@/components/PresetsEditor';
-import MathWallBackground from '@/components/MathWallBackground';
+import TallyMarksBackground from '@/components/TallyMarksBackground';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 import { useTranslation } from '@/lib/i18n';
@@ -162,6 +162,7 @@ export default function CalendarPage() {
 
   return (
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto relative">
+      <TallyMarksBackground />
       <BoomAnimation 
         show={showBoom} 
         onComplete={() => setShowBoom(false)}
