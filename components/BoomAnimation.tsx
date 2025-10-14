@@ -94,21 +94,23 @@ export default function BoomAnimation({
               </motion.div>
               
               <motion.div 
-                className="text-7xl uppercase"
+                className="text-8xl uppercase"
                 style={{ 
-                  fontFamily: "'Righteous', 'Russo One', sans-serif",
-                  fontWeight: 900,
+                  fontFamily: "'Shrikhand', 'Russo One', cursive, sans-serif",
+                  fontWeight: 400,
                   background: 'linear-gradient(135deg, #FFE030 0%, #FF6B35 50%, #FF006E 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
-                  filter: 'drop-shadow(5px 5px 0px #000)',
-                  letterSpacing: '0.15em',
-                  WebkitTextStroke: '2px #000',
+                  filter: 'drop-shadow(6px 6px 0px #000)',
+                  letterSpacing: '0.1em',
+                  WebkitTextStroke: '3px #000',
+                  transform: 'scaleY(1.15) rotate(2deg)',
                 }}
                 animate={{
-                  scale: [1, 1.1, 1],
+                  scale: [1, 1.15, 1],
+                  rotate: [2, -2, 2],
                 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
               >
                 {text}
               </motion.div>

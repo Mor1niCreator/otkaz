@@ -28,10 +28,10 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
         
-        {/* Professional Comic Fonts with Cyrillic Support */}
+        {/* Hand-Drawn Comic Fonts - That's All Folks Style! */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Exo+2:wght@700;800;900&family=Ubuntu:wght@400;500;700&family=Comfortaa:wght@600;700&family=Archivo+Black&family=Bebas+Neue&family=Passion+One:wght@700;900&family=Fredoka:wght@600;700&family=Righteous&family=Bungee&family=Poppins:wght@700;800;900&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Luckiest+Guy&family=Titan+One&family=Carter+One&family=Lilita+One&family=Bungee+Shade&family=Shrikhand&family=Chewy&family=Kavoon&family=Righteous&family=Russo+One&family=Rubik+Mono+One&family=Bungee+Inline&family=Sigmar+One&family=Fontdiner+Swanky&display=swap" rel="stylesheet" />
       </head>
       <body className="bg-comic-bg min-h-screen">
         {children}

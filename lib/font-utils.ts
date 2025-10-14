@@ -1,35 +1,35 @@
-// Professional Comic Font Utility Classes
-// Use these classes to apply consistent typography across the app
+// Comic Book Font Utility Classes - That's All Folks Style!
+// Use these classes to apply hand-drawn typography
 
 export const COMIC_FONTS = {
-  // Hero Titles - Maximum Impact (h1)
-  hero: "font-['Passion_One','Russo_One'] font-black tracking-wide uppercase",
+  // Hero Titles - BIG IMPACT! (h1)
+  hero: "font-['Bangers','Russo_One'] tracking-wide uppercase",
   
-  // Section Headers (h2)
-  header: "font-['Exo_2','Russo_One'] font-extrabold tracking-tight",
+  // Section Headers (h2)  
+  header: "font-['Luckiest_Guy','Russo_One'] tracking-normal",
   
   // Subheaders (h3)
-  subheader: "font-['Fredoka','Ubuntu'] font-bold",
+  subheader: "font-['Carter_One','Russo_One']",
   
-  // Button Text - Action!
-  button: "font-['Exo_2','Bebas_Neue'] font-black tracking-wider uppercase",
+  // Button Text - PUNCHY!
+  button: "font-['Titan_One','Russo_One'] tracking-wide uppercase",
   
-  // Numbers & Stats - Clear & Bold
-  number: "font-['Russo_One','Poppins'] font-black tabular-nums",
+  // Numbers & Stats - CHUNKY
+  number: "font-['Rubik_Mono_One','Russo_One'] tabular-nums",
   
-  // Tags & Badges - Compact Power
-  tag: "font-['Exo_2'] font-black tracking-wider uppercase",
+  // Tags & Badges - STICKERS
+  tag: "font-['Lilita_One','Russo_One'] tracking-wide uppercase",
   
-  // Body Text - Readable
-  body: "font-['Ubuntu','Comfortaa'] font-medium",
+  // Body Text - FRIENDLY
+  body: "font-['Chewy','Russo_One']",
   
-  // Special Effects
-  pow: "font-['Bungee','Passion_One'] font-black tracking-widest uppercase",
-  boom: "font-['Righteous','Russo_One'] font-black tracking-wider uppercase",
-  zap: "font-['Bebas_Neue','Archivo_Black'] font-black tracking-wide uppercase",
+  // Special Effects - ACTION WORDS!
+  pow: "font-['Bungee_Shade','Bangers'] tracking-wider uppercase",
+  boom: "font-['Shrikhand','Russo_One'] tracking-wide uppercase",
+  zap: "font-['Bungee_Inline','Bangers'] tracking-wider uppercase",
   
-  // Labels - Clear Info
-  label: "font-['Exo_2','Ubuntu'] font-bold tracking-wide uppercase text-sm",
+  // Labels
+  label: "font-['Lilita_One','Russo_One'] tracking-wide uppercase text-sm",
 };
 
 // Helper function to get font class
@@ -37,56 +37,60 @@ export function getComicFont(type: keyof typeof COMIC_FONTS): string {
   return COMIC_FONTS[type];
 }
 
-// Style objects for inline styles (when needed)
+// Inline Style Objects - Hand-Drawn Comic Style!
 export const COMIC_FONT_STYLES = {
   hero: {
-    fontFamily: "'Passion One', 'Russo One', sans-serif",
-    fontWeight: 900,
+    fontFamily: "'Bangers', 'Russo One', cursive, sans-serif",
+    fontWeight: 400,
+    letterSpacing: '0.03em',
+    textTransform: 'uppercase' as const,
+    transform: 'scaleY(1.1)',
+  },
+  header: {
+    fontFamily: "'Luckiest Guy', 'Russo One', cursive, sans-serif",
+    fontWeight: 400,
+    letterSpacing: '0.02em',
+  },
+  button: {
+    fontFamily: "'Titan One', 'Russo One', cursive, sans-serif",
+    fontWeight: 400,
     letterSpacing: '0.02em',
     textTransform: 'uppercase' as const,
   },
-  header: {
-    fontFamily: "'Exo 2', 'Russo One', sans-serif",
-    fontWeight: 800,
-    letterSpacing: '0.01em',
-  },
-  button: {
-    fontFamily: "'Exo 2', 'Bebas Neue', sans-serif",
-    fontWeight: 900,
-    letterSpacing: '0.08em',
-    textTransform: 'uppercase' as const,
-  },
   number: {
-    fontFamily: "'Russo One', 'Poppins', sans-serif",
-    fontWeight: 900,
+    fontFamily: "'Rubik Mono One', 'Russo One', cursive, sans-serif",
+    fontWeight: 400,
     fontVariantNumeric: 'tabular-nums' as const,
   },
   tag: {
-    fontFamily: "'Exo 2', sans-serif",
-    fontWeight: 900,
-    letterSpacing: '0.08em',
+    fontFamily: "'Lilita One', 'Russo One', cursive, sans-serif",
+    fontWeight: 400,
+    letterSpacing: '0.03em',
     textTransform: 'uppercase' as const,
   },
   body: {
-    fontFamily: "'Ubuntu', 'Comfortaa', sans-serif",
-    fontWeight: 500,
+    fontFamily: "'Chewy', 'Russo One', cursive, sans-serif",
+    fontWeight: 400,
   },
   pow: {
-    fontFamily: "'Bungee', 'Passion One', sans-serif",
-    fontWeight: 900,
-    letterSpacing: '0.15em',
+    fontFamily: "'Bungee Shade', 'Bangers', cursive, sans-serif",
+    fontWeight: 400,
+    letterSpacing: '0.1em',
     textTransform: 'uppercase' as const,
+    transform: 'rotate(-8deg) scaleY(1.1)',
   },
   boom: {
-    fontFamily: "'Righteous', 'Russo One', sans-serif",
-    fontWeight: 900,
-    letterSpacing: '0.15em',
+    fontFamily: "'Shrikhand', 'Russo One', cursive, sans-serif",
+    fontWeight: 400,
+    letterSpacing: '0.08em',
     textTransform: 'uppercase' as const,
+    transform: 'scaleY(1.15) rotate(3deg)',
   },
   zap: {
-    fontFamily: "'Bebas Neue', 'Archivo Black', sans-serif",
-    fontWeight: 900,
+    fontFamily: "'Bungee Inline', 'Bangers', cursive, sans-serif",
+    fontWeight: 400,
     letterSpacing: '0.12em',
     textTransform: 'uppercase' as const,
+    transform: 'skewX(-5deg)',
   },
 };
