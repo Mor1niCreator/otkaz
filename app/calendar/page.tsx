@@ -160,7 +160,7 @@ export default function CalendarPage() {
   if (!user) return null;
 
   return (
-    <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto">
+    <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto relative">
       <BoomAnimation 
         show={showBoom} 
         onComplete={() => setShowBoom(false)}
@@ -350,8 +350,14 @@ export default function CalendarPage() {
       )}
 
       {showForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="comic-panel max-w-md w-full">
+        <div className="fixed inset-0 comic-modal-overlay flex items-center justify-center p-4 z-50">
+          <motion.div 
+            className="comic-modal max-w-md w-full"
+            initial={{ scale: 0.8, rotate: -10, opacity: 0 }}
+            animate={{ scale: 1, rotate: 0, opacity: 1 }}
+            exit={{ scale: 0.8, rotate: 10, opacity: 0 }}
+            transition={{ type: 'spring', stiffness: 300 }}
+          >
             <h2 className="text-2xl font-bold mb-4">{t('addRefusal')}</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <input

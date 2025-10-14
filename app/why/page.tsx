@@ -88,7 +88,7 @@ export default function WhyPage() {
   if (!user) return null;
 
   return (
-    <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto">
+    <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto relative">
       <motion.div 
         className="comic-panel mb-6 relative overflow-hidden"
         initial={{ scale: 0.8, opacity: 0 }}
@@ -242,8 +242,14 @@ export default function WhyPage() {
 
       {/* Tag Selection Modal */}
       {showTagModal && selectedPreset && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="comic-panel max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+        <div className="fixed inset-0 comic-modal-overlay flex items-center justify-center p-4 z-50">
+          <motion.div 
+            className="comic-modal max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+            initial={{ scale: 0.8, opacity: 0, y: 50 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.8, opacity: 0, y: 50 }}
+            transition={{ type: 'spring', stiffness: 250 }}
+          >
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <span className="text-4xl">{selectedPreset.icon}</span>
@@ -328,7 +334,7 @@ export default function WhyPage() {
                 💾 {t('done')}
               </motion.button>
             </div>
-          </div>
+          </motion.div>
         </div>
       )}
 

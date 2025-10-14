@@ -11,9 +11,10 @@
   
   body {
     background: 
-      radial-gradient(circle at 20% 30%, rgba(255, 224, 48, 0.3) 0%, transparent 50%),
-      radial-gradient(circle at 80% 70%, rgba(255, 107, 53, 0.2) 0%, transparent 50%),
-      linear-gradient(135deg, #FFF9E6 0%, #FFE8A3 100%);
+      radial-gradient(circle at 20% 30%, rgba(255, 224, 48, 0.25) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(255, 107, 53, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(6, 255, 240, 0.1) 0%, transparent 70%),
+      linear-gradient(135deg, #FFF9E6 0%, #FFEFB3 50%, #FFE8A3 100%);
     background-attachment: fixed;
     position: relative;
   }
@@ -109,21 +110,27 @@
 }
 
 @layer components {
-  /* HAND-DRAWN COMIC PANEL - Organic Style! */
+  /* GLASS-MORPHIC COMIC PANEL - Next Decade Style! */
   .comic-panel {
-    @apply bg-white p-6 relative;
+    @apply p-6 relative;
     border: 6px solid #000;
     border-radius: 30px 25px 35px 28px / 28px 35px 25px 32px; /* Неровные края! */
     box-shadow: 
       10px 10px 0px #000,
-      12px 12px 0px rgba(0,0,0,0.2),
-      inset 0 0 0 4px #fff,
-      inset 0 0 0 8px #FFE030;
+      12px 12px 0px rgba(0,0,0,0.15),
+      inset 0 0 0 3px rgba(255,255,255,0.8),
+      inset 0 0 0 6px #FFE030;
     transform-style: preserve-3d;
-    background: 
-      radial-gradient(circle at 15% 20%, rgba(255, 224, 48, 0.15) 0%, transparent 40%),
-      radial-gradient(circle at 85% 80%, rgba(255, 107, 53, 0.12) 0%, transparent 40%),
-      linear-gradient(135deg, #FFFFFF 0%, #FFFEF7 100%);
+    
+    /* Glass-morphism effect */
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
+    
+    /* Subtle gradients */
+    background-image: 
+      radial-gradient(circle at 15% 20%, rgba(255, 224, 48, 0.2) 0%, transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(255, 107, 53, 0.15) 0%, transparent 40%);
     position: relative;
   }
 
@@ -158,15 +165,37 @@
   /* ACTION LINES EFFECT */
   .comic-panel-action {
     @apply comic-panel;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(15px) saturate(180%);
     background-image: 
       repeating-linear-gradient(
         -45deg,
         transparent,
         transparent 10px,
-        rgba(255, 107, 53, 0.05) 10px,
-        rgba(255, 107, 53, 0.05) 20px
+        rgba(255, 107, 53, 0.08) 10px,
+        rgba(255, 107, 53, 0.08) 20px
       ),
-      radial-gradient(circle at 50% 50%, rgba(255, 224, 48, 0.15) 0%, transparent 70%);
+      radial-gradient(circle at 50% 50%, rgba(255, 224, 48, 0.2) 0%, transparent 70%);
+  }
+
+  /* MODAL OVERLAY - Glass Effect */
+  .comic-modal-overlay {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  /* MODAL PANEL - Glass Comic */
+  .comic-modal {
+    @apply comic-panel;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(25px) saturate(200%);
+    -webkit-backdrop-filter: blur(25px) saturate(200%);
+    box-shadow: 
+      0 20px 60px rgba(0, 0, 0, 0.3),
+      12px 12px 0px #000,
+      inset 0 0 0 3px rgba(255,255,255,0.9),
+      inset 0 0 0 7px #FFE030;
   }
 
   /* HAND-DRAWN COMIC BUTTON - Wobbly & Fun! */

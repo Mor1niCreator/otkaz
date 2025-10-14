@@ -251,7 +251,7 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto">
+    <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto relative">
       <AchievementAnimation 
         show={showAchievement} 
         onComplete={() => setShowAchievement(false)}

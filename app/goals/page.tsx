@@ -191,7 +191,7 @@ export default function GoalsPage() {
   if (!user) return null;
 
   return (
-    <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto">
+    <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto relative">
       <motion.div 
         className="comic-panel mb-6 relative overflow-hidden"
         initial={{ scale: 0.9, opacity: 0 }}
