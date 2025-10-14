@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Navigation from '@/components/Navigation';
+import MathWallBackground from '@/components/MathWallBackground';
 import { useTranslation } from '@/lib/i18n';
 import { getUserFromStorage } from '@/lib/user-sync';
 
@@ -124,6 +125,7 @@ export default function LeaderboardPage() {
 
   return (
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto relative">
+      <MathWallBackground />
       <motion.div 
         className="comic-panel mb-6 relative overflow-hidden"
         initial={{ scale: 0.9, opacity: 0, y: -30 }}

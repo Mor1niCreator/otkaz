@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import Navigation from '@/components/Navigation';
 import BoomAnimation from '@/components/BoomAnimation';
 import PresetsEditor from '@/components/PresetsEditor';
+import MathWallBackground from '@/components/MathWallBackground';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 import { useTranslation } from '@/lib/i18n';

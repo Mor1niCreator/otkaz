@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import MathBackground from '@/components/MathBackground';
+import MathWallBackground from '@/components/MathWallBackground';
 import { CURRENCIES } from '@/lib/currencies';
 
 export default function HomePage() {
@@ -57,7 +57,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-      <MathBackground />
+      <MathWallBackground />
       
       {/* Hero Section */}
       <div className="w-full max-w-6xl mx-auto relative z-10">

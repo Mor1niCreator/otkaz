@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navigation from '@/components/Navigation';
+import MathWallBackground from '@/components/MathWallBackground';
 import toast from 'react-hot-toast';
 import { useTranslation } from '@/lib/i18n';
 import { formatCurrency, convertCurrency } from '@/lib/currency-utils';
@@ -192,6 +193,7 @@ export default function GoalsPage() {
 
   return (
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto relative">
+      <MathWallBackground />
       <motion.div 
         className="comic-panel mb-6 relative overflow-hidden"
         initial={{ scale: 0.9, opacity: 0 }}

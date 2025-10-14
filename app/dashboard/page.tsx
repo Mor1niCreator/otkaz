@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navigation from '@/components/Navigation';
+import MathWallBackground from '@/components/MathWallBackground';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useTranslation } from '@/lib/i18n';
 import { formatCurrency, convertCurrency } from '@/lib/currency-utils';
@@ -252,6 +253,7 @@ export default function DashboardPage() {
 
   return (
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto relative">
+      <MathWallBackground />
       <AchievementAnimation 
         show={showAchievement} 
         onComplete={() => setShowAchievement(false)}

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navigation from '@/components/Navigation';
 import ComicTag from '@/components/ComicTag';
+import MathWallBackground from '@/components/MathWallBackground';
 import toast from 'react-hot-toast';
 import { useTranslation } from '@/lib/i18n';
 import { getUserFromStorage } from '@/lib/user-sync';
@@ -89,6 +90,7 @@ export default function WhyPage() {
 
   return (
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto relative">
+      <MathWallBackground />
       <motion.div 
         className="comic-panel mb-6 relative overflow-hidden"
         initial={{ scale: 0.8, opacity: 0 }}
