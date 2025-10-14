@@ -35,13 +35,11 @@ export default function Navigation() {
   
   const navItems = [
     { href: '/calendar', label: t('calendar'), icon: '📅' },
-    { href: '/wallet', label: t('wallet'), icon: '💰' },
+    { href: '/dashboard', label: t('dashboard'), icon: '📊' },
     { href: '/why', label: t('why'), icon: '🤔' },
     { href: '/goals', label: t('goals'), icon: '🎯' },
-    { href: '/comparison', label: t('comparison'), icon: '📊' },
+    { href: '/comparison', label: t('comparison'), icon: '📈' },
     { href: '/leaderboard', label: t('leaderboard'), icon: '🏆' },
-    { href: '/achievements', label: t('achievements'), icon: '🏅' },
-    { href: '/profile', label: t('profile'), icon: '👤' },
   ];
 
   return (

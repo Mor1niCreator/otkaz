@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
 import Navigation from '@/components/Navigation';
 import toast from 'react-hot-toast';
 import { useTranslation } from '@/lib/i18n';
@@ -191,39 +192,104 @@ export default function GoalsPage() {
 
   return (
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto">
-      <div className="comic-panel mb-6">
-        <h1 className="text-4xl font-bold mb-2">🎯 {t('yourGoals')}</h1>
-        <div className="bg-comic-yellow rounded-xl border-4 border-black p-4 mt-4">
+      <motion.div 
+        className="comic-panel mb-6 relative overflow-hidden"
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: 'spring', stiffness: 200 }}
+      >
+        <motion.div
+          className="absolute -top-20 -right-20 w-40 h-40 bg-orange-300 rounded-full opacity-20"
+          animate={{ scale: [1, 1.3, 1], rotate: [0, 180, 360] }}
+          transition={{ duration: 10, repeat: Infinity }}
+        />
+        
+        <motion.h1 
+          className="text-4xl font-bold mb-2 flex items-center gap-3 relative z-10"
+          animate={{ y: [0, -5, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <motion.span animate={{ rotate: [0, -15, 15, 0] }} transition={{ duration: 2, repeat: Infinity }}>
+            🎯
+          </motion.span>
+          {t('yourGoals')}
+        </motion.h1>
+        <motion.div 
+          className="bg-comic-yellow rounded-xl border-4 border-black p-4 mt-4 relative z-10"
+          initial={{ scale: 0.8 }}
+          animate={{ scale: 1 }}
+          transition={{ delay: 0.2, type: 'spring' }}
+          whileHover={{ scale: 1.02, rotate: 1 }}
+        >
           <p className="text-sm text-gray-700">{t('totalSavings')}</p>
-          <p className="text-3xl font-bold">{formatCurrency(convertCurrency(totalSavings, user.currency), user.currency)}</p>
-        </div>
-      </div>
+          <motion.p 
+            className="text-3xl font-bold"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+          >
+            {formatCurrency(convertCurrency(totalSavings, user.currency), user.currency)}
+          </motion.p>
+        </motion.div>
+      </motion.div>
 
-      <div className="comic-panel mb-6">
+      <motion.div 
+        className="comic-panel mb-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+      >
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">Active Goals</h2>
-          <button
+          <motion.h2 
+            className="text-2xl font-bold"
+            animate={{ x: [0, 5, 0] }}
+            transition={{ duration: 3, repeat: Infinity }}
+          >
+            Active Goals
+          </motion.h2>
+          <motion.button
             onClick={() => setShowForm(true)}
             className="comic-button-lime rounded-full px-4 py-2"
+            whileHover={{ scale: 1.05, rotate: 5 }}
+            whileTap={{ scale: 0.95 }}
           >
             ➕ New
-          </button>
+          </motion.button>
         </div>
 
         {goals.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
+          <motion.div 
+            className="text-center py-8 text-gray-500"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
             {t('noGoalsYet')}
-          </div>
+          </motion.div>
         ) : (
           <div className="space-y-4">
-            {goals.map((goal) => {
+            {goals.map((goal, index) => {
               const progress = Math.min((totalSavings / goal.usdTarget) * 100, 100);
               const convertedSavings = convertCurrency(totalSavings, user.currency);
               const convertedTarget = convertCurrency(goal.usdTarget, user.currency);
               
               return (
-                <div key={goal.id} className="bg-white rounded-xl border-4 border-black p-4">
-                  <div className="flex justify-between items-start mb-3">
+                <motion.div 
+                  key={goal.id} 
+                  className="bg-white rounded-xl border-4 border-black p-4 relative overflow-hidden"
+                  initial={{ opacity: 0, x: -50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1, type: 'spring' }}
+                  whileHover={{ scale: 1.02, y: -3, boxShadow: '8px 8px 0px rgba(0,0,0,0.3)' }}
+                >
+                  {progress >= 100 && (
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-green-300 to-lime-300 opacity-20"
+                      animate={{ scale: [1, 1.05, 1] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    />
+                  )}
+                  
+                  <div className="flex justify-between items-start mb-3 relative z-10">
                     <div>
                       <h3 className="font-bold text-lg">{goal.name}</h3>
                       <p className="text-sm text-gray-700">
@@ -231,30 +297,59 @@ export default function GoalsPage() {
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="text-2xl font-bold text-comic-orange">
+                      <motion.p 
+                        className="text-2xl font-bold text-comic-orange"
+                        animate={progress >= 100 ? { scale: [1, 1.2, 1] } : {}}
+                        transition={{ duration: 1, repeat: Infinity }}
+                      >
                         {progress.toFixed(0)}%
-                      </p>
+                        {progress >= 100 && (
+                          <motion.span
+                            className="ml-2 text-3xl"
+                            initial={{ scale: 0, rotate: -180 }}
+                            animate={{ scale: 1, rotate: 0 }}
+                          >
+                            🎉
+                          </motion.span>
+                        )}
+                      </motion.p>
                     </div>
                   </div>
-                  <div className="progress-bar">
-                    <div
+                  <div className="progress-bar relative z-10">
+                    <motion.div
                       className="progress-fill"
-                      style={{ width: `${progress}%` }}
+                      initial={{ width: 0 }}
+                      animate={{ width: `${progress}%` }}
+                      transition={{ duration: 1, delay: 0.2 + index * 0.1 }}
                     />
                   </div>
-                  <p className="text-xs text-gray-600 mt-2 text-center">
+                  <p className="text-xs text-gray-600 mt-2 text-center relative z-10">
                     {formatCurrency(convertedSavings, user.currency)} / {formatCurrency(convertedTarget, user.currency)}
                   </p>
-                </div>
+                </motion.div>
               );
             })}
           </div>
         )}
-      </div>
+      </motion.div>
 
       {totalSavings > 0 && (
-        <div className="comic-panel mb-6">
-          <h2 className="text-2xl font-bold mb-4">🚀 {t('cryptoROICalculator')}</h2>
+        <motion.div 
+          className="comic-panel mb-6"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          <motion.h2 
+            className="text-2xl font-bold mb-4 flex items-center gap-2"
+            animate={{ x: [0, 5, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            <motion.span animate={{ rotate: [0, 360] }} transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}>
+              🚀
+            </motion.span>
+            {t('cryptoROICalculator')}
+          </motion.h2>
           <div className="bg-comic-yellow rounded-xl border-4 border-black p-4 mb-4">
             <p className="text-sm text-gray-700 mb-2">
               {t('yourSavings')}: <span className="font-bold">{formatCurrency(convertCurrency(totalSavings, user.currency), user.currency)}</span>
@@ -265,22 +360,29 @@ export default function GoalsPage() {
           </div>
           
           {!showCrypto ? (
-            <button
+            <motion.button
               onClick={loadCryptoROI}
               disabled={loadingCrypto}
               className="comic-button-orange w-full py-4 text-lg"
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
             >
               {loadingCrypto ? '⏳ Calculating...' : '🚀 Calculate Crypto ROI'}
-            </button>
+            </motion.button>
           ) : (
             <div className="space-y-3">
               <div className="text-sm text-gray-700 mb-3 text-center">
                 💡 Click on any crypto to see detailed breakdown
               </div>
-              {cryptoData.map((crypto) => (
-                <div
+              {cryptoData.map((crypto, index) => (
+                <motion.div
                   key={crypto.symbol}
-                  className="bg-gradient-to-r from-white to-gray-50 rounded-xl border-4 border-black p-4 hover:shadow-comic-lg transition-all cursor-pointer hover:-translate-y-1"
+                  className="bg-gradient-to-r from-white to-gray-50 rounded-xl border-4 border-black p-4 cursor-pointer"
+                  initial={{ opacity: 0, x: -50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1, type: 'spring' }}
+                  whileHover={{ scale: 1.02, y: -5, boxShadow: '8px 8px 0px rgba(0,0,0,0.3)' }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => {
                     const convertedYourValue = convertCurrency(crypto.yourValue, user.currency);
                     const convertedOriginal = convertCurrency(totalSavings, user.currency);
@@ -324,22 +426,39 @@ export default function GoalsPage() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
               
-              <div className="bg-comic-cyan rounded-xl border-4 border-black p-4 mt-4">
+              <motion.div 
+                className="bg-comic-cyan rounded-xl border-4 border-black p-4 mt-4"
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: cryptoData.length * 0.1 + 0.2 }}
+              >
                 <div className="text-sm text-gray-700 text-center">
                   💎 Best performer: <span className="font-bold">{cryptoData[0]?.symbol}</span> ({cryptoData[0]?.multiplier.toFixed(1)}x)
                 </div>
-              </div>
+              </motion.div>
             </div>
           )}
-        </div>
+        </motion.div>
       )}
 
-      {showForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="comic-panel max-w-md w-full">
+      <AnimatePresence>
+        {showForm && (
+          <motion.div 
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div 
+              className="comic-panel max-w-md w-full"
+              initial={{ scale: 0.8, rotate: -10, opacity: 0 }}
+              animate={{ scale: 1, rotate: 0, opacity: 1 }}
+              exit={{ scale: 0.8, rotate: 10, opacity: 0 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+            >
             <h2 className="text-2xl font-bold mb-4">{t('createGoal')}</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
@@ -360,21 +479,29 @@ export default function GoalsPage() {
                 className="w-full px-4 py-3 border-4 border-black rounded-xl"
               />
               <div className="flex gap-2">
-                <button type="submit" className="flex-1 comic-button">
+                <motion.button 
+                  type="submit" 
+                  className="flex-1 comic-button"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
                   {t('save')}
-                </button>
-                <button
+                </motion.button>
+                <motion.button
                   type="button"
                   onClick={() => setShowForm(false)}
                   className="flex-1 comic-button-secondary"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   {t('cancel')}
-                </button>
+                </motion.button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <Navigation />
     </div>

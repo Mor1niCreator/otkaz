@@ -20,6 +20,10 @@ export const translations = {
     leaderboard: 'Leaderboard',
     achievements: 'Achievements',
     profile: 'Profile',
+    dashboard: 'Dashboard',
+    savingsOverview: 'Savings Overview',
+    yourProgress: 'Your Progress',
+    rank: 'Rank',
     
     // Calendar
     todaysRefusals: "Today's Refusals",
@@ -201,6 +205,10 @@ export const translations = {
     leaderboard: 'Лидерборд',
     achievements: 'Достижения',
     profile: 'Профиль',
+    dashboard: 'Дашборд',
+    savingsOverview: 'Обзор сбережений',
+    yourProgress: 'Твой прогресс',
+    rank: 'Ранг',
     
     // Calendar
     todaysRefusals: 'Отказы сегодня',
