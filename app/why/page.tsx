@@ -29,7 +29,7 @@ export default function WhyPage() {
     setPresets(getUserPresets(parsedUser.id));
   }, [router]);
 
-  const toggleTag = (presetId: string, tagId: string) => {
+  const toggleTag = async (presetId: string, tagId: string) => {
     const updatedPresets = presets.map(preset => {
       if (preset.id === presetId) {
         const currentTags = preset.tags || [];
@@ -52,6 +52,27 @@ export default function WhyPage() {
     if (selectedPreset && selectedPreset.id === presetId) {
       const updated = updatedPresets.find(p => p.id === presetId);
       if (updated) setSelectedPreset(updated);
+    }
+    
+    // Check for tag-related achievements
+    try {
+      const res = await fetch('/api/achievements/check-tags', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id }),
+      });
+      
+      const data = await res.json();
+      if (res.ok && data.newAchievements?.length > 0) {
+        data.newAchievements.forEach((achievement: any) => {
+          toast.success(`🏅 Achievement Unlocked: ${user.language === 'ru' ? achievement.nameRu : achievement.nameEn}!`, {
+            duration: 5000,
+            icon: achievement.icon,
+          });
+        });
+      }
+    } catch (error) {
+      console.error('Failed to check achievements:', error);
     }
   };
 
@@ -269,16 +290,43 @@ export default function WhyPage() {
             </div>
 
             <div className="mt-6 flex gap-2">
-              <button
-                onClick={() => {
+              <motion.button
+                onClick={async () => {
                   setShowTagModal(false);
                   setSelectedPreset(null);
                   toast.success(t('tagsSaved') + ' ✅');
+                  
+                  // Check for achievements after closing modal
+                  try {
+                    const res = await fetch('/api/achievements/check-tags', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ userId: user.id }),
+                    });
+                    
+                    const data = await res.json();
+                    if (res.ok && data.newAchievements?.length > 0) {
+                      setTimeout(() => {
+                        data.newAchievements.forEach((achievement: any, index: number) => {
+                          setTimeout(() => {
+                            toast.success(`🏅 ${user.language === 'ru' ? achievement.nameRu : achievement.nameEn}!`, {
+                              duration: 5000,
+                              icon: achievement.icon,
+                            });
+                          }, index * 1000);
+                        });
+                      }, 500);
+                    }
+                  } catch (error) {
+                    console.error('Failed to check achievements:', error);
+                  }
                 }}
                 className="flex-1 comic-button-lime py-3"
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
               >
                 💾 {t('done')}
-              </button>
+              </motion.button>
             </div>
           </div>
         </div>
