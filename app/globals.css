@@ -300,6 +300,222 @@
     color: black;
     font-weight: bold;
   }
+
+  /* POW Effect Animation */
+  @keyframes pow {
+    0% {
+      transform: scale(0) rotate(-45deg);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.5) rotate(5deg);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1) rotate(0deg);
+      opacity: 1;
+    }
+  }
+
+  .pow-effect {
+    animation: pow 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  /* ZAP Effect Animation */
+  @keyframes zap {
+    0%, 100% {
+      transform: scale(1) skew(0deg);
+    }
+    25% {
+      transform: scale(1.1) skew(-5deg);
+    }
+    50% {
+      transform: scale(0.9) skew(5deg);
+    }
+    75% {
+      transform: scale(1.05) skew(-2deg);
+    }
+  }
+
+  .zap-effect {
+    animation: zap 0.5s ease-in-out;
+  }
+
+  /* Wiggle Animation */
+  @keyframes wiggle {
+    0%, 100% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(-5deg);
+    }
+    75% {
+      transform: rotate(5deg);
+    }
+  }
+
+  .wiggle-comic {
+    animation: wiggle 0.3s ease-in-out infinite;
+  }
+
+  /* Float Animation */
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .float-comic {
+    animation: float 2s ease-in-out infinite;
+  }
+
+  /* Spin and Scale */
+  @keyframes spinScale {
+    0% {
+      transform: rotate(0deg) scale(1);
+    }
+    50% {
+      transform: rotate(180deg) scale(1.2);
+    }
+    100% {
+      transform: rotate(360deg) scale(1);
+    }
+  }
+
+  .spin-scale {
+    animation: spinScale 0.8s ease-in-out;
+  }
+
+  /* Comic Tag Hover Effect */
+  .comic-tag {
+    @apply rounded-xl border-4 border-black font-black transition-all duration-200;
+    transform-style: preserve-3d;
+  }
+
+  .comic-tag:hover {
+    transform: scale(1.05) rotate(2deg);
+    box-shadow: 8px 8px 0px rgba(0,0,0,0.3);
+  }
+
+  .comic-tag:active {
+    transform: scale(0.95) rotate(-2deg);
+    box-shadow: 2px 2px 0px rgba(0,0,0,0.3);
+  }
+
+  /* Achievement Badge Glow */
+  @keyframes badgeGlow {
+    0%, 100% {
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 0 40px rgba(255, 215, 0, 0.5);
+    }
+  }
+
+  .achievement-glow {
+    animation: badgeGlow 2s ease-in-out infinite;
+  }
+
+  /* Star Burst Effect */
+  @keyframes starBurst {
+    0% {
+      transform: scale(0) rotate(0deg);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.5) rotate(180deg);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1) rotate(360deg);
+      opacity: 0.8;
+    }
+  }
+
+  .star-burst {
+    animation: starBurst 1s ease-out;
+  }
+
+  /* Shine Effect */
+  @keyframes shine {
+    0% {
+      left: -100%;
+    }
+    50%, 100% {
+      left: 100%;
+    }
+  }
+
+  .comic-shine {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .comic-shine::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+    animation: shine 3s ease-in-out infinite;
+  }
+
+  /* Comic Pop In */
+  @keyframes popIn {
+    0% {
+      transform: scale(0) rotate(-180deg);
+      opacity: 0;
+    }
+    60% {
+      transform: scale(1.2) rotate(10deg);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1) rotate(0deg);
+      opacity: 1;
+    }
+  }
+
+  .pop-in {
+    animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  /* Jello Effect */
+  @keyframes jello {
+    0%, 11.1%, 100% {
+      transform: skewX(0deg) skewY(0deg);
+    }
+    22.2% {
+      transform: skewX(-12.5deg) skewY(-12.5deg);
+    }
+    33.3% {
+      transform: skewX(6.25deg) skewY(6.25deg);
+    }
+    44.4% {
+      transform: skewX(-3.125deg) skewY(-3.125deg);
+    }
+    55.5% {
+      transform: skewX(1.5625deg) skewY(1.5625deg);
+    }
+    66.6% {
+      transform: skewX(-0.78125deg) skewY(-0.78125deg);
+    }
+    77.7% {
+      transform: skewX(0.390625deg) skewY(0.390625deg);
+    }
+    88.8% {
+      transform: skewX(-0.1953125deg) skewY(-0.1953125deg);
+    }
+  }
+
+  .jello-comic {
+    animation: jello 0.9s;
+  }
 }
 
 * {

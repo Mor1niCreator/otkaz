@@ -81,16 +81,76 @@ export interface WhyTag {
 }
 
 export const WHY_TAGS: WhyTag[] = [
-  { id: 'harmful', nameEn: 'Harmful', nameRu: 'Вредно', color: 'bg-red-200 text-red-800 border-red-400', icon: '☠️' },
-  { id: 'expensive', nameEn: 'Expensive', nameRu: 'Дорого', color: 'bg-orange-200 text-orange-800 border-orange-400', icon: '💸' },
-  { id: 'useless', nameEn: 'Useless', nameRu: 'Бесполезно', color: 'bg-gray-200 text-gray-800 border-gray-400', icon: '🗑️' },
-  { id: 'unhealthy', nameEn: 'Unhealthy', nameRu: 'Нездорово', color: 'bg-yellow-200 text-yellow-800 border-yellow-400', icon: '⚠️' },
-  { id: 'addictive', nameEn: 'Addictive', nameRu: 'Вызывает зависимость', color: 'bg-purple-200 text-purple-800 border-purple-400', icon: '🔗' },
-  { id: 'wasteful', nameEn: 'Wasteful', nameRu: 'Расточительно', color: 'bg-pink-200 text-pink-800 border-pink-400', icon: '💰' },
-  { id: 'badHabit', nameEn: 'Bad Habit', nameRu: 'Плохая привычка', color: 'bg-indigo-200 text-indigo-800 border-indigo-400', icon: '🚫' },
-  { id: 'timeWasting', nameEn: 'Time Wasting', nameRu: 'Трата времени', color: 'bg-blue-200 text-blue-800 border-blue-400', icon: '⏰' },
-  { id: 'unnecessary', nameEn: 'Unnecessary', nameRu: 'Не нужно', color: 'bg-green-200 text-green-800 border-green-400', icon: '🚮' },
-  { id: 'impulsive', nameEn: 'Impulsive Buy', nameRu: 'Импульсивная покупка', color: 'bg-rose-200 text-rose-800 border-rose-400', icon: '⚡' },
+  { 
+    id: 'harmful', 
+    nameEn: 'Harmful', 
+    nameRu: 'Вредно', 
+    color: 'bg-gradient-to-br from-red-300 to-red-400 text-red-900 border-red-600', 
+    icon: '☠️' 
+  },
+  { 
+    id: 'expensive', 
+    nameEn: 'Expensive', 
+    nameRu: 'Дорого', 
+    color: 'bg-gradient-to-br from-orange-300 to-orange-400 text-orange-900 border-orange-600', 
+    icon: '💸' 
+  },
+  { 
+    id: 'useless', 
+    nameEn: 'Useless', 
+    nameRu: 'Бесполезно', 
+    color: 'bg-gradient-to-br from-gray-300 to-gray-400 text-gray-900 border-gray-600', 
+    icon: '🗑️' 
+  },
+  { 
+    id: 'unhealthy', 
+    nameEn: 'Unhealthy', 
+    nameRu: 'Нездорово', 
+    color: 'bg-gradient-to-br from-yellow-300 to-yellow-400 text-yellow-900 border-yellow-600', 
+    icon: '⚠️' 
+  },
+  { 
+    id: 'addictive', 
+    nameEn: 'Addictive', 
+    nameRu: 'Вызывает зависимость', 
+    color: 'bg-gradient-to-br from-purple-300 to-purple-400 text-purple-900 border-purple-600', 
+    icon: '🔗' 
+  },
+  { 
+    id: 'wasteful', 
+    nameEn: 'Wasteful', 
+    nameRu: 'Расточительно', 
+    color: 'bg-gradient-to-br from-pink-300 to-pink-400 text-pink-900 border-pink-600', 
+    icon: '💰' 
+  },
+  { 
+    id: 'badHabit', 
+    nameEn: 'Bad Habit', 
+    nameRu: 'Плохая привычка', 
+    color: 'bg-gradient-to-br from-indigo-300 to-indigo-400 text-indigo-900 border-indigo-600', 
+    icon: '🚫' 
+  },
+  { 
+    id: 'timeWasting', 
+    nameEn: 'Time Wasting', 
+    nameRu: 'Трата времени', 
+    color: 'bg-gradient-to-br from-blue-300 to-blue-400 text-blue-900 border-blue-600', 
+    icon: '⏰' 
+  },
+  { 
+    id: 'unnecessary', 
+    nameEn: 'Unnecessary', 
+    nameRu: 'Не нужно', 
+    color: 'bg-gradient-to-br from-green-300 to-green-400 text-green-900 border-green-600', 
+    icon: '🚮' 
+  },
+  { 
+    id: 'impulsive', 
+    nameEn: 'Impulsive Buy', 
+    nameRu: 'Импульсивная покупка', 
+    color: 'bg-gradient-to-br from-rose-300 to-rose-400 text-rose-900 border-rose-600', 
+    icon: '⚡' 
+  },
 ];
 
 export function getWhyTagById(id: string): WhyTag | undefined {

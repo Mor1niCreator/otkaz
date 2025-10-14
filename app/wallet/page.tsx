@@ -170,20 +170,33 @@ export default function WalletPage() {
             {t('topReasonsDescription')}
           </p>
           <div className="flex flex-wrap gap-2">
-            {topTags.map(({ tagId, count }) => {
+            {topTags.map(({ tagId, count }, index) => {
               const tag = WHY_TAGS.find(t => t.id === tagId);
               if (!tag) return null;
               
               return (
                 <div
                   key={tagId}
-                  className={`px-4 py-2 rounded-xl border-3 border-black font-bold flex items-center gap-2 ${tag.color}`}
+                  className={`px-4 py-2 rounded-xl border-4 border-black font-black flex items-center gap-2 
+                    ${tag.color} transition-all hover:scale-105 hover:rotate-2 hover:shadow-comic-lg
+                    animate-[popIn_0.5s_ease-out]`}
+                  style={{ 
+                    animationDelay: `${index * 0.1}s`,
+                    transformStyle: 'preserve-3d'
+                  }}
                 >
-                  <span className="text-2xl">{tag.icon}</span>
+                  <span className="text-2xl animate-[wiggle_2s_ease-in-out_infinite]" style={{ animationDelay: `${index * 0.3}s` }}>
+                    {tag.icon}
+                  </span>
                   <div>
                     <div className="text-sm">{getWhyTagName(tagId, user.language)}</div>
                     <div className="text-xs opacity-75">{count} {count === 1 ? t('category') : t('categories')}</div>
                   </div>
+                  {index < 3 && (
+                    <span className="ml-2 text-2xl">
+                      {index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉'}
+                    </span>
+                  )}
                 </div>
               );
             })}

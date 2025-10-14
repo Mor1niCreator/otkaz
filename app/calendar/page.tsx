@@ -203,14 +203,16 @@ export default function CalendarPage() {
                 {/* Show tags if any */}
                 {presetTags.length > 0 && (
                   <div className="flex flex-wrap gap-1 mt-2 justify-center">
-                    {presetTags.slice(0, 2).map(tagId => {
+                    {presetTags.slice(0, 2).map((tagId, tagIndex) => {
                       const tag = WHY_TAGS.find(t => t.id === tagId);
                       if (!tag) return null;
                       
                       return (
                         <div
                           key={tagId}
-                          className={`px-2 py-0.5 rounded-full border text-[10px] font-bold ${tag.color}`}
+                          className={`px-2 py-0.5 rounded-full border-2 text-[10px] font-black ${tag.color} 
+                            transition-all hover:scale-110 hover:rotate-3 animate-[popIn_0.3s_ease-out]`}
+                          style={{ animationDelay: `${tagIndex * 0.1}s` }}
                           title={getWhyTagName(tagId, user?.language || 'en')}
                         >
                           {tag.icon}
@@ -218,7 +220,10 @@ export default function CalendarPage() {
                       );
                     })}
                     {presetTags.length > 2 && (
-                      <div className="px-2 py-0.5 rounded-full border text-[10px] font-bold bg-gray-200 text-gray-800 border-gray-400">
+                      <div className="px-2 py-0.5 rounded-full border-2 text-[10px] font-black bg-gradient-to-br from-gray-300 to-gray-400 text-gray-900 border-gray-600 
+                        transition-all hover:scale-110 animate-[popIn_0.3s_ease-out]"
+                        style={{ animationDelay: '0.2s' }}
+                      >
                         +{presetTags.length - 2}
                       </div>
                     )}
