@@ -419,7 +419,7 @@ export default function CalendarPage() {
                 </button>
               </div>
             </form>
-          </div>
+          </motion.div>
         </div>
       )}
 
