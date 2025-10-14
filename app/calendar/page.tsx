@@ -10,7 +10,7 @@ import toast from 'react-hot-toast';
 import { useTranslation } from '@/lib/i18n';
 import { formatCurrency, getCurrencySymbol, convertCurrency } from '@/lib/currency-utils';
 import { getUserFromStorage } from '@/lib/user-sync';
-import { getUserPresets, UserPreset } from '@/lib/user-presets';
+import { getUserPresets, UserPreset, WHY_TAGS, getWhyTagName } from '@/lib/user-presets';
 
 interface Entry {
   id: string;
@@ -187,17 +187,46 @@ export default function CalendarPage() {
           </button>
         </div>
         <div className="grid grid-cols-2 gap-3">
-          {presets.map((preset) => (
-            <button
-              key={preset.id}
-              onClick={() => handlePreset(preset)}
-              className="comic-button-cyan p-4"
-            >
-              <div className="comic-icon mb-2">{preset.icon}</div>
-              <div className="font-bold">{preset.name}</div>
-              <div className="text-sm text-gray-700">{getCurrencySymbol(user?.currency || 'USD')}{preset.price}</div>
-            </button>
-          ))}
+          {presets.map((preset) => {
+            const presetTags = preset.tags || [];
+            
+            return (
+              <button
+                key={preset.id}
+                onClick={() => handlePreset(preset)}
+                className="comic-button-cyan p-4 relative"
+              >
+                <div className="comic-icon mb-2">{preset.icon}</div>
+                <div className="font-bold">{preset.name}</div>
+                <div className="text-sm text-gray-700">{getCurrencySymbol(user?.currency || 'USD')}{preset.price}</div>
+                
+                {/* Show tags if any */}
+                {presetTags.length > 0 && (
+                  <div className="flex flex-wrap gap-1 mt-2 justify-center">
+                    {presetTags.slice(0, 2).map(tagId => {
+                      const tag = WHY_TAGS.find(t => t.id === tagId);
+                      if (!tag) return null;
+                      
+                      return (
+                        <div
+                          key={tagId}
+                          className={`px-2 py-0.5 rounded-full border text-[10px] font-bold ${tag.color}`}
+                          title={getWhyTagName(tagId, user?.language || 'en')}
+                        >
+                          {tag.icon}
+                        </div>
+                      );
+                    })}
+                    {presetTags.length > 2 && (
+                      <div className="px-2 py-0.5 rounded-full border text-[10px] font-bold bg-gray-200 text-gray-800 border-gray-400">
+                        +{presetTags.length - 2}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </button>
+            );
+          })}
         </div>
         <button
           onClick={() => setShowForm(true)}

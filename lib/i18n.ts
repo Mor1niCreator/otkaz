@@ -14,6 +14,7 @@ export const translations = {
     // Navigation
     calendar: 'Calendar',
     wallet: 'Wallet',
+    why: 'Why',
     goals: 'Goals',
     comparison: 'Before/After',
     leaderboard: 'Leaderboard',
@@ -51,6 +52,8 @@ export const translations = {
     savingsChart: 'Savings Chart',
     keepItUp: 'Keep it up! 🚀',
     everyRefusal: 'Every refusal brings you closer to your goals!',
+    yourTopReasons: 'Your Top Reasons',
+    topReasonsDescription: 'The main reasons why you refuse things:',
     
     // Goals
     yourGoals: 'Your Goals',
@@ -158,6 +161,16 @@ export const translations = {
     projectionsBasedOnWallet: 'Based on your actual savings rate from wallet:',
     projectionsFormula: 'Your daily average',
     
+    // Why Page
+    whyTitle: 'Why Do You Refuse?',
+    whyDescription: 'Add tags to your categories to track why you refuse certain things',
+    whyTip: 'Understanding WHY you refuse something helps you stay motivated. Add multiple tags to each category!',
+    addTags: 'Add Tags',
+    selectWhyTags: 'Select reasons why you refuse this',
+    noTagsYet: 'No tags added yet. Click "Add Tags" to start!',
+    tagsSaved: 'Tags saved',
+    done: 'Done',
+    
     // Messages
     pointsEarned: 'points!',
     settingsSaved: 'Settings saved!',
@@ -178,6 +191,7 @@ export const translations = {
     // Navigation
     calendar: 'Календарь',
     wallet: 'Кошелёк',
+    why: 'Почему',
     goals: 'Цели',
     comparison: 'До/После',
     leaderboard: 'Лидерборд',
@@ -215,6 +229,8 @@ export const translations = {
     savingsChart: 'График сбережений',
     keepItUp: 'Так держать! 🚀',
     everyRefusal: 'Каждый отказ приближает тебя к цели!',
+    yourTopReasons: 'Твои главные причины',
+    topReasonsDescription: 'Основные причины, почему ты отказываешься:',
     
     // Goals
     yourGoals: 'Твои цели',
@@ -321,6 +337,16 @@ export const translations = {
     calculatedFromWallet: 'Рассчитано по реальным данным из кошелька',
     projectionsBasedOnWallet: 'На основе твоей реальной скорости экономии из кошелька:',
     projectionsFormula: 'Твоя средняя за день',
+    
+    // Why Page
+    whyTitle: 'Почему ты отказываешься?',
+    whyDescription: 'Добавляй метки к категориям, чтобы отслеживать, почему ты отказываешься от чего-то',
+    whyTip: 'Понимание, ПОЧЕМУ ты отказываешься, помогает оставаться мотивированным. Добавляй несколько меток к каждой категории!',
+    addTags: 'Добавить метки',
+    selectWhyTags: 'Выбери причины, почему ты отказываешься от этого',
+    noTagsYet: 'Меток пока нет. Нажми "Добавить метки" чтобы начать!',
+    tagsSaved: 'Метки сохранены',
+    done: 'Готово',
     
     // Messages
     pointsEarned: 'поинтов!',
