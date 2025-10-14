@@ -83,72 +83,72 @@ export interface WhyTag {
 export const WHY_TAGS: WhyTag[] = [
   { 
     id: 'harmful', 
-    nameEn: 'Harmful', 
-    nameRu: 'Вредно', 
-    color: 'bg-gradient-to-br from-red-300 to-red-400 text-red-900 border-red-600', 
+    nameEn: 'HARMFUL', 
+    nameRu: 'ВРЕДНО', 
+    color: 'bg-gradient-to-br from-red-400 via-red-500 to-red-600 text-white border-black', 
     icon: '☠️' 
   },
   { 
     id: 'expensive', 
-    nameEn: 'Expensive', 
-    nameRu: 'Дорого', 
-    color: 'bg-gradient-to-br from-orange-300 to-orange-400 text-orange-900 border-orange-600', 
+    nameEn: 'EXPENSIVE', 
+    nameRu: 'ДОРОГО', 
+    color: 'bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 text-white border-black', 
     icon: '💸' 
   },
   { 
     id: 'useless', 
-    nameEn: 'Useless', 
-    nameRu: 'Бесполезно', 
-    color: 'bg-gradient-to-br from-gray-300 to-gray-400 text-gray-900 border-gray-600', 
+    nameEn: 'USELESS', 
+    nameRu: 'БЕСПОЛЕЗНО', 
+    color: 'bg-gradient-to-br from-gray-400 via-gray-500 to-gray-600 text-white border-black', 
     icon: '🗑️' 
   },
   { 
     id: 'unhealthy', 
-    nameEn: 'Unhealthy', 
-    nameRu: 'Нездорово', 
-    color: 'bg-gradient-to-br from-yellow-300 to-yellow-400 text-yellow-900 border-yellow-600', 
+    nameEn: 'UNHEALTHY', 
+    nameRu: 'НЕЗДОРОВО', 
+    color: 'bg-gradient-to-br from-yellow-400 via-yellow-500 to-amber-600 text-white border-black', 
     icon: '⚠️' 
   },
   { 
     id: 'addictive', 
-    nameEn: 'Addictive', 
-    nameRu: 'Вызывает зависимость', 
-    color: 'bg-gradient-to-br from-purple-300 to-purple-400 text-purple-900 border-purple-600', 
+    nameEn: 'ADDICTIVE', 
+    nameRu: 'ЗАВИСИМОСТЬ', 
+    color: 'bg-gradient-to-br from-purple-500 via-purple-600 to-fuchsia-600 text-white border-black', 
     icon: '🔗' 
   },
   { 
     id: 'wasteful', 
-    nameEn: 'Wasteful', 
-    nameRu: 'Расточительно', 
-    color: 'bg-gradient-to-br from-pink-300 to-pink-400 text-pink-900 border-pink-600', 
+    nameEn: 'WASTEFUL', 
+    nameRu: 'РАСТОЧИТЕЛЬНО', 
+    color: 'bg-gradient-to-br from-pink-500 via-pink-600 to-rose-600 text-white border-black', 
     icon: '💰' 
   },
   { 
     id: 'badHabit', 
-    nameEn: 'Bad Habit', 
-    nameRu: 'Плохая привычка', 
-    color: 'bg-gradient-to-br from-indigo-300 to-indigo-400 text-indigo-900 border-indigo-600', 
+    nameEn: 'BAD HABIT', 
+    nameRu: 'ПЛОХАЯ ПРИВЫЧКА', 
+    color: 'bg-gradient-to-br from-indigo-500 via-indigo-600 to-violet-600 text-white border-black', 
     icon: '🚫' 
   },
   { 
     id: 'timeWasting', 
-    nameEn: 'Time Wasting', 
-    nameRu: 'Трата времени', 
-    color: 'bg-gradient-to-br from-blue-300 to-blue-400 text-blue-900 border-blue-600', 
+    nameEn: 'TIME WASTER', 
+    nameRu: 'ТРАТА ВРЕМЕНИ', 
+    color: 'bg-gradient-to-br from-blue-500 via-blue-600 to-cyan-600 text-white border-black', 
     icon: '⏰' 
   },
   { 
     id: 'unnecessary', 
-    nameEn: 'Unnecessary', 
-    nameRu: 'Не нужно', 
-    color: 'bg-gradient-to-br from-green-300 to-green-400 text-green-900 border-green-600', 
+    nameEn: 'UNNECESSARY', 
+    nameRu: 'НЕ НУЖНО', 
+    color: 'bg-gradient-to-br from-emerald-500 via-green-600 to-teal-600 text-white border-black', 
     icon: '🚮' 
   },
   { 
     id: 'impulsive', 
-    nameEn: 'Impulsive Buy', 
-    nameRu: 'Импульсивная покупка', 
-    color: 'bg-gradient-to-br from-rose-300 to-rose-400 text-rose-900 border-rose-600', 
+    nameEn: 'IMPULSIVE', 
+    nameRu: 'ИМПУЛЬСИВНО', 
+    color: 'bg-gradient-to-br from-rose-500 via-pink-600 to-fuchsia-600 text-white border-black', 
     icon: '⚡' 
   },
 ];
