@@ -398,8 +398,8 @@ export default function GoalsPage() {
           </motion.div>
         )}
       </AnimatePresence>
-
       </div>
+
       <Navigation />
     </div>
   );
