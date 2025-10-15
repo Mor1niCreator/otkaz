@@ -17,7 +17,6 @@ export default function Navigation() {
     }
   }, []);
 
-  // Listen for storage changes to update language
   useEffect(() => {
     const handleStorageChange = () => {
       const userData = localStorage.getItem('user');
@@ -36,58 +35,42 @@ export default function Navigation() {
   const navItems = [
     { href: '/calendar', label: t('calendar'), icon: '📅' },
     { href: '/dashboard', label: t('dashboard'), icon: '📊' },
-    { href: '/why', label: t('why'), icon: '🤔' },
+    { href: '/why', label: t('why'), icon: '💡' },
     { href: '/goals', label: t('goals'), icon: '🎯' },
     { href: '/comparison', label: t('comparison'), icon: '📈' },
     { href: '/leaderboard', label: t('leaderboard'), icon: '🏆' },
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 border-t-6 border-black z-50"
-      style={{
-        background: 'rgba(255, 255, 255, 0.85)',
-        backdropFilter: 'blur(20px) saturate(180%)',
-        WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-        boxShadow: '0 -8px 0px #000, 0 -10px 0px rgba(0,0,0,0.1)',
-      }}
-    >
-      <div className="flex justify-around items-center max-w-screen-lg mx-auto overflow-x-auto">
+    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 shadow-lg">
+      <div className="flex justify-around items-center max-w-screen-lg mx-auto">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center py-3 px-3 sm:px-4 transition-all min-w-[70px] sm:min-w-[80px] relative
-                ${isActive ? '-mt-2' : 'hover:bg-white/40'}`}
+              className={`flex flex-col items-center py-3 px-3 sm:px-4 transition-all min-w-[70px] sm:min-w-[80px] relative group
+                ${isActive ? '' : 'hover:bg-gray-50'}`}
               style={{
-                fontFamily: "'Lilita One', 'Russo One', cursive",
+                fontFamily: "'Inter', -apple-system, sans-serif",
               }}
             >
               {isActive && (
                 <div 
-                  className="absolute inset-0 border-4 border-black"
-                  style={{
-                    background: 'linear-gradient(135deg, #FFE030 0%, #FF6B35 100%)',
-                    borderRadius: '20px 18px 22px 19px / 19px 22px 18px 20px',
-                    boxShadow: 'inset 0 2px 0 rgba(255,255,255,0.5)',
-                  }}
+                  className="absolute top-0 left-1/2 transform -translate-x-1/2 w-12 h-1 rounded-full transition-all"
+                  style={{ background: '#FFC107' }}
                 />
               )}
               <span 
-                className={`text-2xl sm:text-3xl mb-1 relative z-10 ${isActive ? 'animate-bounce-comic' : ''}`}
-                style={{
-                  filter: 'drop-shadow(2px 2px 0px rgba(0,0,0,0.3))',
-                }}
+                className={`text-2xl mb-1 transition-transform ${isActive ? 'scale-110' : 'group-hover:scale-105'}`}
               >
                 {item.icon}
               </span>
               <span 
-                className={`text-[11px] sm:text-xs font-black uppercase relative z-10
-                  ${isActive ? 'text-white' : 'text-gray-700'}`}
-                style={{
-                  textShadow: isActive ? '1px 1px 0px rgba(0,0,0,0.3)' : 'none',
-                }}
+                className={`text-[10px] sm:text-xs font-semibold transition-colors
+                  ${isActive ? 'text-gray-900' : 'text-gray-500 group-hover:text-gray-700'}`}
+                style={{ fontWeight: 600 }}
               >
                 {item.label}
               </span>

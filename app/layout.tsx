@@ -4,7 +4,7 @@ import { Toaster } from 'react-hot-toast';
 
 export const metadata: Metadata = {
   title: 'ENOUGH - Know When to Stop',
-  description: 'Say Enough! Track your savings, build wealth, and reach your goals with comic-style gamification.',
+  description: 'Track your savings, build wealth, and reach your financial goals. Simple. Powerful. Effective.',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
@@ -28,10 +28,17 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
         
-        {/* Clean Minimalist Fonts */}
+        {/* Inter Font - Minimalist & Professional */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            @supports (font-variation-settings: normal) {
+              * { font-family: 'Inter var', sans-serif; }
+            }
+          `
+        }} />
       </head>
       <body className="bg-comic-bg min-h-screen">
         {children}

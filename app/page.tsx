@@ -55,72 +55,75 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-white">
+    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: '#FAFAFA' }}>
       
-      {/* Hero Section */}
       <div className="w-full max-w-md mx-auto">
+        {/* Logo Section */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.5 }}
           className="text-center mb-12"
         >
-          {/* Main Logo/Title */}
-          <motion.h1
-            className="text-7xl font-bold mb-4"
+          <h1
+            className="text-8xl font-black mb-3"
             style={{
               fontFamily: "'Inter', -apple-system, sans-serif",
               fontWeight: 900,
-              color: '#000000',
-              letterSpacing: '-0.04em',
+              color: '#212121',
+              letterSpacing: '-0.05em',
+              lineHeight: 1,
             }}
           >
             ENOUGH
-          </motion.h1>
-
-          {/* Tagline */}
-          <p 
-            className="text-lg text-gray-600"
-            style={{
-              fontFamily: "'Inter', sans-serif",
-              fontWeight: 400,
-            }}
-          >
-            Know When to Stop
-          </p>
+          </h1>
+          
+          <div className="inline-block px-6 py-2 bg-yellow-500 rounded-full">
+            <p 
+              className="text-sm font-bold"
+              style={{
+                fontFamily: "'Inter', sans-serif",
+                fontWeight: 700,
+                color: '#212121',
+                letterSpacing: '0.02em',
+              }}
+            >
+              Know When to Stop
+            </p>
+          </div>
         </motion.div>
 
-        {/* Main Card */}
+        {/* Auth Card */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-          className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8"
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="bg-white rounded-3xl shadow-lg p-8"
         >
-          {/* Toggle Tabs */}
-          <div className="flex gap-2 mb-8 bg-gray-50 rounded-xl p-1">
+          {/* Tabs */}
+          <div className="flex gap-2 mb-8 bg-gray-100 rounded-2xl p-1.5">
             <button
               onClick={() => setIsLogin(true)}
-              className={`flex-1 py-3 rounded-lg font-medium text-sm transition-all ${
+              className={`flex-1 py-3 rounded-xl font-semibold text-sm transition-all ${
                 isLogin 
-                  ? 'bg-white text-black shadow-sm' 
+                  ? 'bg-white shadow-sm text-gray-900' 
                   : 'text-gray-500 hover:text-gray-900'
               }`}
-              style={{ fontFamily: "'Inter', sans-serif" }}
+              style={{ fontFamily: "'Inter', sans-serif", fontWeight: 600 }}
             >
-              Login
+              Sign In
             </button>
 
             <button
               onClick={() => setIsLogin(false)}
-              className={`flex-1 py-3 rounded-lg font-medium text-sm transition-all ${
+              className={`flex-1 py-3 rounded-xl font-semibold text-sm transition-all ${
                 !isLogin 
-                  ? 'bg-white text-black shadow-sm' 
+                  ? 'bg-white shadow-sm text-gray-900' 
                   : 'text-gray-500 hover:text-gray-900'
               }`}
-              style={{ fontFamily: "'Inter', sans-serif" }}
+              style={{ fontFamily: "'Inter', sans-serif", fontWeight: 600 }}
             >
-              Register
+              Sign Up
             </button>
           </div>
 
@@ -130,63 +133,83 @@ export default function HomePage() {
               key={isLogin ? 'login' : 'register'}
               onSubmit={handleSubmit}
               className="space-y-4"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              initial={{ opacity: 0, x: isLogin ? -10 : 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: isLogin ? 10 : -10 }}
               transition={{ duration: 0.2 }}
             >
               {!isLogin && (
-                <input
-                  type="text"
-                  placeholder="Name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-black focus:outline-none transition-colors"
-                  style={{ fontFamily: "'Inter', sans-serif" }}
-                />
+                <div>
+                  <label className="block text-xs font-semibold text-gray-700 mb-2 ml-1">
+                    Full Name
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="John Doe"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full px-4 py-3.5 rounded-xl border-2 border-gray-200 focus:border-yellow-500 focus:outline-none transition-colors text-gray-900"
+                    style={{ fontFamily: "'Inter', sans-serif", fontWeight: 500 }}
+                  />
+                </div>
               )}
               
-              <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-black focus:outline-none transition-colors"
-                style={{ fontFamily: "'Inter', sans-serif" }}
-              />
+              <div>
+                <label className="block text-xs font-semibold text-gray-700 mb-2 ml-1">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  placeholder="hello@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full px-4 py-3.5 rounded-xl border-2 border-gray-200 focus:border-yellow-500 focus:outline-none transition-colors text-gray-900"
+                  style={{ fontFamily: "'Inter', sans-serif", fontWeight: 500 }}
+                />
+              </div>
               
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-black focus:outline-none transition-colors"
-                style={{ fontFamily: "'Inter', sans-serif" }}
-              />
+              <div>
+                <label className="block text-xs font-semibold text-gray-700 mb-2 ml-1">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="w-full px-4 py-3.5 rounded-xl border-2 border-gray-200 focus:border-yellow-500 focus:outline-none transition-colors text-gray-900"
+                  style={{ fontFamily: "'Inter', sans-serif", fontWeight: 500 }}
+                />
+              </div>
 
               {!isLogin && (
                 <>
-                  <input
-                    type="text"
-                    placeholder="Referral Code (optional)"
-                    value={referralCode}
-                    onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-black focus:outline-none transition-colors"
-                    style={{ fontFamily: "'Inter', sans-serif" }}
-                  />
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-700 mb-2 ml-1">
+                      Referral Code <span className="text-gray-400">(optional)</span>
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="FRIEND123"
+                      value={referralCode}
+                      onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
+                      className="w-full px-4 py-3.5 rounded-xl border-2 border-gray-200 focus:border-yellow-500 focus:outline-none transition-colors text-gray-900"
+                      style={{ fontFamily: "'Inter', sans-serif", fontWeight: 500 }}
+                    />
+                  </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-2">
+                      <label className="block text-xs font-semibold text-gray-700 mb-2 ml-1">
                         Currency
                       </label>
                       <select
                         value={currency}
                         onChange={(e) => setCurrency(e.target.value)}
-                        className="w-full px-3 py-3 rounded-lg border border-gray-200 focus:border-black focus:outline-none transition-colors"
-                        style={{ fontFamily: "'Inter', sans-serif" }}
+                        className="w-full px-4 py-3.5 rounded-xl border-2 border-gray-200 focus:border-yellow-500 focus:outline-none transition-colors text-gray-900"
+                        style={{ fontFamily: "'Inter', sans-serif", fontWeight: 500 }}
                       >
                         {Object.entries(CURRENCIES).slice(0, 10).map(([code, data]) => (
                           <option key={code} value={code}>
@@ -196,14 +219,14 @@ export default function HomePage() {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-2">
+                      <label className="block text-xs font-semibold text-gray-700 mb-2 ml-1">
                         Language
                       </label>
                       <select
                         value={language}
                         onChange={(e) => setLanguage(e.target.value)}
-                        className="w-full px-3 py-3 rounded-lg border border-gray-200 focus:border-black focus:outline-none transition-colors"
-                        style={{ fontFamily: "'Inter', sans-serif" }}
+                        className="w-full px-4 py-3.5 rounded-xl border-2 border-gray-200 focus:border-yellow-500 focus:outline-none transition-colors text-gray-900"
+                        style={{ fontFamily: "'Inter', sans-serif", fontWeight: 500 }}
                       >
                         <option value="en">English</option>
                         <option value="ru">Русский</option>
@@ -216,33 +239,41 @@ export default function HomePage() {
               <button 
                 type="submit" 
                 disabled={isLoading}
-                className="w-full py-3 rounded-lg bg-black text-white font-medium hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-6"
-                style={{ fontFamily: "'Inter', sans-serif" }}
+                className="w-full py-4 rounded-xl font-bold text-base transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-6 shadow-lg hover:shadow-xl"
+                style={{ 
+                  fontFamily: "'Inter', sans-serif",
+                  fontWeight: 700,
+                  background: '#FFC107',
+                  color: '#212121',
+                }}
               >
-                {isLoading ? 'Loading...' : isLogin ? 'Continue' : 'Get Started'}
+                {isLoading ? 'Loading...' : isLogin ? 'Sign In' : 'Get Started'}
               </button>
             </motion.form>
           </AnimatePresence>
+        </motion.div>
 
-          {/* Info Pills */}
-          <div className="mt-8 flex flex-wrap gap-2 justify-center">
-            {[
-              { icon: '✋', text: 'Say Enough' },
-              { icon: '💎', text: 'Build Wealth' },
-              { icon: '🎯', text: 'Reach Goals' },
-            ].map((item, i) => (
-              <motion.div
-                key={i}
-                className="px-4 py-2 bg-gray-50 rounded-full text-sm text-gray-700"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.4 + i * 0.1 }}
-                style={{ fontFamily: "'Inter', sans-serif" }}
-              >
-                <span className="mr-1">{item.icon}</span>
-                {item.text}
-              </motion.div>
-            ))}
+        {/* Features */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4, duration: 0.5 }}
+          className="mt-8 text-center"
+        >
+          <p className="text-sm text-gray-500 font-medium mb-4">Trusted by thousands worldwide</p>
+          <div className="flex justify-center gap-8 text-gray-600">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-gray-900">10k+</div>
+              <div className="text-xs text-gray-500">Users</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-gray-900">$2M+</div>
+              <div className="text-xs text-gray-500">Saved</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-gray-900">4.9★</div>
+              <div className="text-xs text-gray-500">Rating</div>
+            </div>
           </div>
         </motion.div>
       </div>
