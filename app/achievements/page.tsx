@@ -128,12 +128,11 @@ export default function AchievementsPage() {
 
               <div className="flex items-center gap-4 relative z-10">
                 <motion.div 
-                  className={`comic-icon text-6xl ${!isUnlocked && 'grayscale'}`}
+                  className={`text-6xl ${!isUnlocked && 'grayscale opacity-40'}`}
                   animate={isUnlocked ? {
-                    rotate: [0, -10, 10, -10, 0],
-                    scale: [1, 1.1, 1]
+                    scale: [1, 1.05, 1]
                   } : {}}
-                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
                 >
                   {achievement.icon}
                   {isUnlocked && (

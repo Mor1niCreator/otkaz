@@ -267,7 +267,7 @@ export default function DashboardPage() {
         <div className="flex items-center gap-3 mb-4">
           <div className="text-4xl">✋</div>
           <div>
-            <h1 className="text-3xl font-semibold  tracking-wide">
+            <h1 className="text-3xl font-semibold  tracking-tight">
               ENOUGH DASHBOARD
             </h1>
             <p className="text-sm font-bold text-gray-700">
@@ -278,19 +278,19 @@ export default function DashboardPage() {
         
         <div className="grid grid-cols-3 gap-3">
           <div className="bg-white p-4 text-center  transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)]" style={{boxShadow: '0 3px 0px #000'}}>
-            <p className="text-xs font-semibold  mb-1 text-gray-700">{t('totalSavings')}</p>
+            <p className="text-xs font-medium mb-1 text-gray-700">{t('totalSavings')}</p>
             <p className="text-2xl font-semibold text-gray-900">
               {formatCurrency(convertedStats.allTime, user.currency)}
             </p>
           </div>
           
           <div className="bg-white p-4 text-center  transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)]" style={{boxShadow: '0 3px 0px #000'}}>
-            <p className="text-xs font-semibold  mb-1 text-gray-700">{t('points')}</p>
+            <p className="text-xs font-medium mb-1 text-gray-700">{t('points')}</p>
             <p className="text-2xl font-semibold text-gray-900">{userPoints.toFixed(0)}</p>
           </div>
           
           <div className="bg-white p-4 text-center  transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)]" style={{boxShadow: '0 3px 0px #000'}}>
-            <p className="text-xs font-semibold  mb-1 text-gray-700">{t('rank')}</p>
+            <p className="text-xs font-medium mb-1 text-gray-700">{t('rank')}</p>
             <p className="text-lg font-semibold text-gray-900">
               {language === 'ru' ? currentRank.nameRu : currentRank.name}
             </p>
@@ -304,7 +304,7 @@ export default function DashboardPage() {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex-1 px-4 py-3 font-semibold  tracking-wide  transition-all text-sm bg-white text-gray-900
+            className={`flex-1 px-4 py-3 font-semibold  tracking-tight  transition-all text-sm bg-white text-gray-900
               ${activeTab === tab.id 
                 ? 'shadow-[0_4px_0px_rgba(0,0,0,0.3)]' 
                 : 'hover:shadow-[0_0_20px_rgba(245,198,26,0.6)] hover:bg-[rgba(245,198,26,0.08)]'
@@ -349,7 +349,7 @@ function WalletTab({ stats, chartData, topTags, user, t }: any) {
           ].map((stat) => (
             <div key={stat.label} className="bg-white  p-4 text-center transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6),0_3px_0px_#000]" style={{boxShadow: '0 2px 0px #000'}}>
               <div className="text-2xl mb-1">{stat.icon}</div>
-              <p className="text-xs font-semibold  mb-1 text-gray-700">{stat.label}</p>
+              <p className="text-xs font-medium mb-1 text-gray-700">{stat.label}</p>
               <p className="text-lg font-semibold text-gray-900">{formatCurrency(stat.value, user.currency)}</p>
             </div>
           ))}
@@ -528,7 +528,7 @@ function ProfileTab({ user, editMode, setEditMode, name, setName, username, setU
             <label className="block text-sm font-semibold  mb-2">Username</label>
             <div className="relative">
               <input type="text" value={username} onChange={(e) => { setUsername(e.target.value); onCheckUsername(e.target.value); }} disabled={!editMode} className="w-full px-4 py-3 pr-12" />
-              {isCheckingUsername && <div className="absolute right-3 top-1/2 transform -translate-y-1/2"><div className="animate-spin border-0 h-4 w-4 border-b-2 border-black"></div></div>}
+              {isCheckingUsername && <div className="absolute right-3 top-1/2 transform -translate-y-1/2"><div className="animate-spin border-0 h-4 w-4 border-b-2 border-gray-200"></div></div>}
               {!isCheckingUsername && username && username !== user?.username && (
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                   {usernameAvailable === true && <span className="text-green-600 text-xl">✓</span>}

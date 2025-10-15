@@ -125,7 +125,7 @@ export default function PresetsEditor({
 
                   {/* Emoji picker grid */}
                   {showEmojiPicker && (
-                    <div className="bg-white border-2 border-black p-2 grid grid-cols-8 gap-1 max-h-40 overflow-y-auto">
+                    <div className="bg-white border-2 border-gray-200 p-2 grid grid-cols-8 gap-1 max-h-40 overflow-y-auto">
                       {PRESET_EMOJI_OPTIONS.map((emoji) => (
                         <button
                           key={emoji}

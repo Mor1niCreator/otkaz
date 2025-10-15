@@ -189,11 +189,11 @@ export default function GoalsPage() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <h1 className="text-3xl font-semibold  tracking-wide mb-2 flex items-center gap-3">
+        <h1 className="text-3xl font-semibold  tracking-tight mb-2 flex items-center gap-3">
           🎯 {t('yourGoals')}
         </h1>
         <div className="bg-white p-4 mt-4  transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)]" style={{boxShadow: '0 3px 0px #000'}}>
-          <p className="text-xs font-semibold  mb-1 text-gray-700">{t('totalSavings')}</p>
+          <p className="text-xs font-medium mb-1 text-gray-700">{t('totalSavings')}</p>
           <p className="text-3xl font-semibold text-gray-900">
             {formatCurrency(convertCurrency(totalSavings, user.currency), user.currency)}
           </p>
@@ -236,7 +236,7 @@ export default function GoalsPage() {
                   
                   <div className="flex justify-between items-start mb-3">
                     <div>
-                      <h3 className="font-semibold text-lg  tracking-wide">{goal.name}</h3>
+                      <h3 className="font-semibold text-lg  tracking-tight">{goal.name}</h3>
                       <p className="text-sm font-bold text-gray-700">
                         {t('target')}: {formatCurrency(convertedTarget, user.currency)}
                       </p>

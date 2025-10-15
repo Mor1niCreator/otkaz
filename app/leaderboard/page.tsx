@@ -193,7 +193,7 @@ export default function LeaderboardPage() {
 
         {loading ? (
           <div className="text-center py-8">
-            <div className="animate-spin border-0 h-8 w-8 border-b-2 border-black mx-auto"></div>
+            <div className="animate-spin border-0 h-8 w-8 border-b-2 border-gray-200 mx-auto"></div>
             <p className="mt-2 text-gray-600">Loading tasks...</p>
           </div>
         ) : (
@@ -308,7 +308,7 @@ export default function LeaderboardPage() {
 
         {userRank && (
           <motion.div 
-            className="bg-white from-enough-yellow via-black to-comic-pink border-0  p-6 mb-4 relative overflow-hidden"
+            className="bg-white from-enough-yellow  border-0  p-6 mb-4 relative overflow-hidden"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.5, type: 'spring' }}
@@ -342,12 +342,12 @@ export default function LeaderboardPage() {
               'bg-white from-orange-400 via-orange-500 to-red-500',
               'bg-white'
             ];
-            const borderColors = index < 3 ? 'border-black' : 'border-gray-400';
+            const borderColors = index < 3 ? 'border-gray-200' : 'border-gray-400';
             
             return (
               <motion.div
                 key={entry.id}
-                className={`flex items-center justify-between p-4 border-0 border-4 ${borderColors} ${
+                className={`flex items-center justify-between p-4 border-0 border-2 ${borderColors} ${
                   index < 3 ? colors[index] : colors[3]
                 } ${index < 3 ? 'enough-shadow-lg' : 'enough-shadow'} relative overflow-hidden`}
                 initial={{ opacity: 0, x: -50 }}

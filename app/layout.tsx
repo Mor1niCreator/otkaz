@@ -33,22 +33,28 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
       </head>
-      <body className="bg-comic-bg min-h-screen">
+      <body className="min-h-screen" style={{ background: '#F5F5F7' }}>
         {children}
         <Toaster 
           position="top-center"
           toastOptions={{
-            className: 'enough-toast',
             style: {
-              background: '#F5C61A',
-              color: '#000',
-              fontWeight: '800',
-              border: '3px solid #000',
-              borderRadius: '0',
+              background: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(20px)',
+              color: '#1D1D1F',
+              fontWeight: '500',
+              border: '1px solid rgba(0, 0, 0, 0.1)',
+              borderRadius: '12px',
               padding: '1rem 1.5rem',
-              fontSize: '1rem',
-              boxShadow: '0 4px 0px #000',
-              fontFamily: 'Inter, sans-serif',
+              fontSize: '0.875rem',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.06)',
+              fontFamily: '-apple-system, BlinkMacSystemFont, Inter, sans-serif',
+            },
+            success: {
+              iconTheme: {
+                primary: '#F5C61A',
+                secondary: '#FFFFFF',
+              },
             },
           }}
         />

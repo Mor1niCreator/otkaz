@@ -155,7 +155,7 @@ export default function CalendarPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
       >
-        <h1 className="text-3xl font-semibold mb-2  tracking-wide">
+        <h1 className="text-3xl font-semibold mb-2  tracking-tight">
           📅 {t('todaysRefusals')}
         </h1>
         <p className="text-lg font-bold text-gray-700">{format(new Date(), 'MMMM d, yyyy')}</p>
@@ -164,7 +164,7 @@ export default function CalendarPage() {
           className="mt-4 bg-white p-6 text-center "
           style={{ boxShadow: '0 4px 0px rgba(0,0,0,0.3)' }}
         >
-          <p className="text-sm font-semibold  tracking-wider mb-1 text-gray-700">
+          <p className="text-sm font-semibold  tracking-normal mb-1 text-gray-700">
             {t('savedToday')}
           </p>
           <p className="text-5xl font-semibold text-gray-900">
@@ -180,7 +180,7 @@ export default function CalendarPage() {
         transition={{ delay: 0.2, duration: 0.4 }}
       >
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-semibold  tracking-wide">
+          <h2 className="text-2xl font-semibold  tracking-tight">
             ⚡ {t('quickAdd')}
           </h2>
           <button
@@ -202,7 +202,7 @@ export default function CalendarPage() {
                 style={{ boxShadow: '0 4px 0px #000' }}
               >
                 <div className="text-4xl mb-2">{preset.icon}</div>
-                <div className="font-semibold text-base  tracking-wide text-gray-900">{preset.name}</div>
+                <div className="font-semibold text-base  tracking-tight text-gray-900">{preset.name}</div>
                 <div className="text-sm font-bold text-gray-700">
                   {getCurrencySymbol(user?.currency || 'USD')}{preset.price}
                 </div>
@@ -354,7 +354,7 @@ export default function CalendarPage() {
                 transition={{ delay: index * 0.05 }}
               >
                 <div>
-                  <div className="font-semibold text-lg  tracking-wide">
+                  <div className="font-semibold text-lg  tracking-tight">
                     {entry.name}
                   </div>
                   <div className="text-sm font-bold text-gray-700">

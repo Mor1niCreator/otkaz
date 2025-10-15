@@ -49,8 +49,8 @@ export default function ComicBadge({
       <div
         className={`
           ${color} ${sizeClasses[size]}
-          rounded-full border-3 border-black
-          font-black shadow-comic
+          rounded-full border border-gray-200
+          font-semibold shadow-comic
           flex items-center gap-1.5
           relative
         `}

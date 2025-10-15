@@ -187,7 +187,7 @@ export default function ProfilePage() {
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto">
       <div className="enough-panel mb-6">
         <h1 className="text-4xl font-bold mb-2">👤 {t('profile')}</h1>
-        <div className="bg-white from-comic-purple to-comic-pink border-0  p-6 mt-4 text-gray-900">
+        <div className="bg-white  border-0  p-6 mt-4 text-gray-900">
           <p className="text-2xl font-bold mb-1">{user.name || user.email}</p>
           {user.username && (
             <p className="text-lg font-bold mb-1">@{user.username}</p>
@@ -290,7 +290,7 @@ export default function ProfilePage() {
               />
               {isCheckingUsername && (
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  <div className="animate-spin border-0 h-4 w-4 border-b-2 border-black"></div>
+                  <div className="animate-spin border-0 h-4 w-4 border-b-2 border-gray-200"></div>
                 </div>
               )}
               {!isCheckingUsername && username && username !== user?.username && (
