@@ -335,7 +335,7 @@ export default function CalendarPage() {
         >
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-[shine_3s_ease-in-out_infinite]" />
           <span className="relative z-10">
-            {t('customEntry')}
+            {t('customEntryButton')}
           </span>
         </motion.button>
       </motion.div>
@@ -347,7 +347,7 @@ export default function CalendarPage() {
           currency={user.currency || 'USD'}
           onPresetsUpdated={(updatedPresets) => setPresets(updatedPresets)}
           onClose={() => setShowPresetsEditor(false)}
-          t={t}
+          t={t as (key: string) => string}
         />
       )}
 

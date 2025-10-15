@@ -251,13 +251,25 @@ export default function DashboardPage() {
     { id: 'profile' as TabType, label: t('profile'), icon: '✋', color: 'from-purple-400 to-pink-500' },
   ];
 
+  const transformAchievement = (ach: Achievement | null) => {
+    if (!ach) {
+      return { icon: '🏅', name: 'Achievement', description: 'Description' };
+    }
+    const lang = user?.language || 'en';
+    return {
+      icon: ach.icon,
+      name: lang === 'ru' ? ach.nameRu : ach.nameEn,
+      description: lang === 'ru' ? ach.descriptionRu : ach.descriptionEn,
+    };
+  };
+
   return (
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto relative">
       <MathWallBackground />
       <AchievementAnimation 
         show={showAchievement} 
         onComplete={() => setShowAchievement(false)}
-        achievement={currentAchievement || { icon: '🏅', name: 'Achievement', description: 'Description' }}
+        achievement={transformAchievement(currentAchievement)}
       />
 
       {/* Animated Header */}

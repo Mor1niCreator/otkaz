@@ -3,18 +3,18 @@ import './globals.css';
 import { Toaster } from 'react-hot-toast';
 
 export const metadata: Metadata = {
-  title: 'Enough - Gamified Savings PWA',
-  description: 'Track your savings, earn achievements, and see crypto ROI',
+  title: 'ENOUGH - Know When to Stop',
+  description: 'Say Enough! Track your savings, build wealth, and reach your goals with comic-style gamification.',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'Enough',
+    title: 'ENOUGH',
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: '#FFB74D',
+  themeColor: '#FFE030',
 };
 
 export default function RootLayout({

@@ -11,7 +11,7 @@
   
   body {
     background: 
-      linear-gradient(135deg, #C4C4C8 0%, #B0B0B8 25%, #A8A8B0 50%, #B0B0B8 75%, #C4C4C8 100%);
+      linear-gradient(135deg, #FFE030 0%, #FF6B35 25%, #FF006E 50%, #8338EC 75%, #3A86FF 100%);
     background-attachment: fixed;
     position: relative;
     overflow-x: hidden;

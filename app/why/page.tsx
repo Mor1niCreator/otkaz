@@ -193,7 +193,7 @@ export default function WhyPage() {
                   </motion.span>
                   <div>
                     <h3 className="font-bold text-xl">{preset.name}</h3>
-                    <p className="text-sm text-gray-600">{t(preset.category)}</p>
+                    <p className="text-sm text-gray-600">{t(preset.category as any)}</p>
                   </div>
                 </div>
                 <motion.button

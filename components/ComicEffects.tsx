@@ -161,7 +161,7 @@ export function ActionLines({ show, direction = 'right' }: { show: boolean; dire
               animate={{ 
                 scaleX: 1,
                 opacity: [0, 0.6, 0],
-                x: dir.x,
+                ...(('x' in dir) ? { x: dir.x } : { y: dir.y }),
               }}
               exit={{ opacity: 0 }}
               transition={{ 

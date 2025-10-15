@@ -739,7 +739,7 @@ export default function ComparisonPage() {
           currency={user.currency || 'USD'}
           onPresetsUpdated={(updatedPresets) => setPresets(updatedPresets)}
           onClose={() => setShowPresetsEditor(false)}
-          t={t}
+          t={t as (key: string) => string}
         />
       )}
 

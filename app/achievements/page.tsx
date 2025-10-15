@@ -67,12 +67,24 @@ export default function AchievementsPage() {
   const unlockedIds = new Set(unlocked.map(u => u.achievement.id));
   const progress = all.length > 0 ? (unlocked.length / all.length) * 100 : 0;
 
+  const transformAchievement = (ach: Achievement | null) => {
+    if (!ach) {
+      return { icon: '🏅', name: 'Achievement', description: 'Description' };
+    }
+    const lang = user?.language || 'en';
+    return {
+      icon: ach.icon,
+      name: lang === 'ru' ? ach.nameRu : ach.nameEn,
+      description: lang === 'ru' ? ach.descriptionRu : ach.descriptionEn,
+    };
+  };
+
   return (
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto">
       <AchievementAnimation 
         show={showAchievement} 
         onComplete={() => setShowAchievement(false)}
-        achievement={currentAchievement || { icon: '🏅', name: 'Achievement', description: 'Description' }}
+        achievement={transformAchievement(currentAchievement)}
       />
       
       <div className="comic-panel mb-6">

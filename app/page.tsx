@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import MathWallBackground from '@/components/MathWallBackground';
 import { CURRENCIES } from '@/lib/currencies';
 
 export default function HomePage() {
@@ -56,8 +55,18 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-      <MathWallBackground />
+    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden" style={{
+      background: 'linear-gradient(135deg, #FFE030 0%, #FF6B35 25%, #FF006E 50%, #8338EC 75%, #3A86FF 100%)',
+    }}>
+      {/* Comic halftone overlay */}
+      <div 
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.1) 1px, transparent 1px)',
+          backgroundSize: '16px 16px',
+          opacity: 0.3,
+        }}
+      />
       
       {/* Hero Section */}
       <div className="w-full max-w-6xl mx-auto relative z-10">
@@ -77,23 +86,24 @@ export default function HomePage() {
           >
             {/* Explosion lines behind */}
             <div className="absolute inset-0 -z-10">
-              {[...Array(16)].map((_, i) => (
+              {[...Array(20)].map((_, i) => (
                 <motion.div
                   key={i}
-                  className="absolute w-2 bg-comic-orange"
+                  className="absolute w-3"
                   style={{
-                    height: '120px',
+                    height: '150px',
                     left: '50%',
                     top: '50%',
                     transformOrigin: 'center center',
-                    rotate: `${i * 22.5}deg`,
-                    opacity: 0.3,
+                    rotate: `${i * 18}deg`,
+                    background: i % 2 === 0 ? 'linear-gradient(180deg, #FFE030 0%, transparent 100%)' : 'linear-gradient(180deg, #FF6B35 0%, transparent 100%)',
+                    opacity: 0.4,
                   }}
                   initial={{ scaleY: 0 }}
                   animate={{ scaleY: [0, 1, 0.9] }}
                   transition={{ 
-                    duration: 1,
-                    delay: i * 0.03,
+                    duration: 1.2,
+                    delay: i * 0.04,
                     repeat: Infinity,
                     repeatDelay: 5,
                   }}
@@ -105,16 +115,16 @@ export default function HomePage() {
               className="text-8xl md:text-9xl font-black relative"
               style={{
                 fontFamily: "'Bangers', 'Russo One', cursive",
-                background: 'linear-gradient(135deg, #FF006E 0%, #FF6B35 30%, #FFE030 60%, #CCFF00 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                filter: 'drop-shadow(6px 6px 0px #000)',
-                letterSpacing: '0.05em',
+                color: '#FFFFFF',
+                WebkitTextStroke: '6px #000',
+                paintOrder: 'stroke fill',
+                filter: 'drop-shadow(8px 8px 0px rgba(0,0,0,0.8))',
+                letterSpacing: '0.08em',
                 textTransform: 'uppercase',
-                transform: 'scaleY(1.15)',
+                transform: 'scaleY(1.2)',
               }}
               animate={{
-                scale: [1, 1.02, 1],
+                scale: [1, 1.03, 1],
               }}
               transition={{ duration: 2, repeat: Infinity }}
             >
@@ -154,11 +164,11 @@ export default function HomePage() {
             className="inline-block"
           >
             <div 
-              className="px-8 py-3 rounded-full border-5 border-black relative overflow-hidden"
+              className="px-8 py-3 rounded-full border-6 border-black relative overflow-hidden"
               style={{
-                background: 'rgba(255, 224, 48, 0.95)',
+                background: 'linear-gradient(135deg, #FFFFFF 0%, #FFE030 100%)',
                 backdropFilter: 'blur(10px)',
-                boxShadow: '6px 6px 0px #000',
+                boxShadow: '8px 8px 0px #000',
                 borderRadius: '30px 35px 32px 38px / 38px 30px 35px 32px',
               }}
             >
@@ -167,7 +177,8 @@ export default function HomePage() {
                 className="text-xl md:text-2xl font-black relative z-10"
                 style={{
                   fontFamily: "'Titan One', 'Russo One', cursive",
-                  textShadow: '2px 2px 0px rgba(0,0,0,0.2)',
+                  textShadow: '3px 3px 0px rgba(0,0,0,0.3)',
+                  color: '#000',
                 }}
               >
                 Know When to Stop • Save Smart • Live Better 🌟
@@ -186,10 +197,10 @@ export default function HomePage() {
           <div 
             className="p-8 border-6 border-black relative"
             style={{
-              background: 'rgba(255, 255, 255, 0.75)',
+              background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 224, 48, 0.15) 100%)',
               backdropFilter: 'blur(20px) saturate(180%)',
               WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-              boxShadow: '12px 12px 0px #000, 0 0 60px rgba(255, 224, 48, 0.4)',
+              boxShadow: '12px 12px 0px #000, 0 0 60px rgba(255, 224, 48, 0.6)',
               borderRadius: '35px 30px 40px 32px / 32px 40px 30px 35px',
             }}
           >
@@ -207,14 +218,15 @@ export default function HomePage() {
             <div className="flex gap-3 mb-8 relative z-10">
               <motion.button
                 onClick={() => setIsLogin(true)}
-                className={`flex-1 py-4 rounded-2xl font-black text-lg border-5 border-black relative overflow-hidden
+                className={`flex-1 py-4 rounded-2xl font-black text-lg border-6 border-black relative overflow-hidden
                   ${isLogin 
-                    ? 'bg-gradient-to-br from-comic-orange via-comic-pink to-comic-purple text-white shadow-comic-lg' 
-                    : 'bg-white/60 text-gray-700 shadow-comic'
+                    ? 'text-white shadow-comic-lg' 
+                    : 'text-gray-700 shadow-comic'
                   }`}
                 style={{
                   fontFamily: "'Titan One', 'Russo One', cursive",
-                  textShadow: isLogin ? '2px 2px 0px rgba(0,0,0,0.5)' : 'none',
+                  background: isLogin ? 'linear-gradient(135deg, #FF6B35 0%, #FF006E 50%, #8338EC 100%)' : 'rgba(255, 255, 255, 0.8)',
+                  textShadow: isLogin ? '3px 3px 0px rgba(0,0,0,0.6)' : 'none',
                   borderRadius: '22px 25px 23px 26px / 26px 22px 25px 23px',
                 }}
                 whileHover={{ scale: 1.05, y: -3 }}
@@ -228,14 +240,15 @@ export default function HomePage() {
 
               <motion.button
                 onClick={() => setIsLogin(false)}
-                className={`flex-1 py-4 rounded-2xl font-black text-lg border-5 border-black relative overflow-hidden
+                className={`flex-1 py-4 rounded-2xl font-black text-lg border-6 border-black relative overflow-hidden
                   ${!isLogin 
-                    ? 'bg-gradient-to-br from-comic-lime via-comic-cyan to-comic-blue text-white shadow-comic-lg' 
-                    : 'bg-white/60 text-gray-700 shadow-comic'
+                    ? 'text-white shadow-comic-lg' 
+                    : 'text-gray-700 shadow-comic'
                   }`}
                 style={{
                   fontFamily: "'Titan One', 'Russo One', cursive",
-                  textShadow: !isLogin ? '2px 2px 0px rgba(0,0,0,0.5)' : 'none',
+                  background: !isLogin ? 'linear-gradient(135deg, #FFE030 0%, #FF6B35 50%, #FF006E 100%)' : 'rgba(255, 255, 255, 0.8)',
+                  textShadow: !isLogin ? '3px 3px 0px rgba(0,0,0,0.6)' : 'none',
                   borderRadius: '25px 22px 26px 23px / 23px 26px 22px 25px',
                 }}
                 whileHover={{ scale: 1.05, y: -3 }}
@@ -265,7 +278,12 @@ export default function HomePage() {
                     placeholder="Your Name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full px-6 py-4 text-lg"
+                    className="w-full px-6 py-4 text-lg border-5 border-black"
+                    style={{
+                      fontFamily: "'Chewy', 'Russo One', cursive",
+                      borderRadius: '20px 22px 21px 23px / 23px 20px 22px 21px',
+                      boxShadow: '4px 4px 0px #000',
+                    }}
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 }}
@@ -278,7 +296,12 @@ export default function HomePage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full px-6 py-4 text-lg"
+                  className="w-full px-6 py-4 text-lg border-5 border-black"
+                  style={{
+                    fontFamily: "'Chewy', 'Russo One', cursive",
+                    borderRadius: '20px 22px 21px 23px / 23px 20px 22px 21px',
+                    boxShadow: '4px 4px 0px #000',
+                  }}
                 />
                 
                 <input
@@ -287,7 +310,12 @@ export default function HomePage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full px-6 py-4 text-lg"
+                  className="w-full px-6 py-4 text-lg border-5 border-black"
+                  style={{
+                    fontFamily: "'Chewy', 'Russo One', cursive",
+                    borderRadius: '20px 22px 21px 23px / 23px 20px 22px 21px',
+                    boxShadow: '4px 4px 0px #000',
+                  }}
                 />
 
                 {!isLogin && (
@@ -297,7 +325,12 @@ export default function HomePage() {
                       placeholder="Referral Code (optional)"
                       value={referralCode}
                       onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
-                      className="w-full px-6 py-4 text-lg"
+                      className="w-full px-6 py-4 text-lg border-5 border-black"
+                      style={{
+                        fontFamily: "'Chewy', 'Russo One', cursive",
+                        borderRadius: '20px 22px 21px 23px / 23px 20px 22px 21px',
+                        boxShadow: '4px 4px 0px #000',
+                      }}
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2 }}
@@ -312,14 +345,22 @@ export default function HomePage() {
                       <div>
                         <label 
                           className="block text-sm font-black mb-2 uppercase"
-                          style={{ fontFamily: "'Lilita One', 'Russo One', cursive" }}
+                          style={{ 
+                            fontFamily: "'Lilita One', 'Russo One', cursive",
+                            textShadow: '2px 2px 0px rgba(0,0,0,0.2)',
+                          }}
                         >
                           💵 Currency
                         </label>
                         <select
                           value={currency}
                           onChange={(e) => setCurrency(e.target.value)}
-                          className="w-full px-4 py-4 text-base"
+                          className="w-full px-4 py-4 text-base border-5 border-black"
+                          style={{
+                            fontFamily: "'Chewy', 'Russo One', cursive",
+                            borderRadius: '18px 20px 19px 21px / 21px 18px 20px 19px',
+                            boxShadow: '4px 4px 0px #000',
+                          }}
                         >
                           {Object.entries(CURRENCIES).slice(0, 10).map(([code, data]) => (
                             <option key={code} value={code}>
@@ -331,14 +372,22 @@ export default function HomePage() {
                       <div>
                         <label 
                           className="block text-sm font-black mb-2 uppercase"
-                          style={{ fontFamily: "'Lilita One', 'Russo One', cursive" }}
+                          style={{ 
+                            fontFamily: "'Lilita One', 'Russo One', cursive",
+                            textShadow: '2px 2px 0px rgba(0,0,0,0.2)',
+                          }}
                         >
                           🌍 Language
                         </label>
                         <select
                           value={language}
                           onChange={(e) => setLanguage(e.target.value)}
-                          className="w-full px-4 py-4 text-base"
+                          className="w-full px-4 py-4 text-base border-5 border-black"
+                          style={{
+                            fontFamily: "'Chewy', 'Russo One', cursive",
+                            borderRadius: '18px 20px 19px 21px / 21px 18px 20px 19px',
+                            boxShadow: '4px 4px 0px #000',
+                          }}
                         >
                           <option value="en">🇬🇧 English</option>
                           <option value="ru">🇷🇺 Русский</option>
@@ -355,16 +404,16 @@ export default function HomePage() {
                     disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{
                     fontFamily: "'Titan One', 'Russo One', cursive",
-                    background: 'linear-gradient(135deg, #FF006E 0%, #FF6B35 50%, #FFE030 100%)',
-                    boxShadow: '8px 8px 0px #000',
-                    textShadow: '3px 3px 0px rgba(0,0,0,0.5)',
+                    background: 'linear-gradient(135deg, #FFE030 0%, #FF6B35 50%, #FF006E 100%)',
+                    boxShadow: '10px 10px 0px #000',
+                    textShadow: '4px 4px 0px rgba(0,0,0,0.6)',
                     color: 'white',
                     borderRadius: '25px 28px 26px 30px / 30px 25px 28px 26px',
                   }}
                   whileHover={!isLoading ? { 
-                    scale: 1.02, 
-                    y: -4,
-                    boxShadow: '12px 12px 0px #000'
+                    scale: 1.03, 
+                    y: -5,
+                    boxShadow: '14px 14px 0px #000'
                   } : {}}
                   whileTap={!isLoading ? { scale: 0.98, y: 2 } : {}}
                 >
@@ -388,18 +437,18 @@ export default function HomePage() {
               transition={{ delay: 0.8 }}
             >
               {[
-                { icon: '✋', text: 'Say Enough', color: 'from-purple-400 to-pink-500' },
-                { icon: '💎', text: 'Build Wealth', color: 'from-yellow-400 to-orange-400' },
-                { icon: '🎯', text: 'Reach Goals', color: 'from-cyan-400 to-blue-500' },
+                { icon: '✋', text: 'Say Enough', color: '#FFE030', gradient: 'linear-gradient(135deg, #FFE030 0%, #FF6B35 100%)' },
+                { icon: '💎', text: 'Build Wealth', color: '#FF006E', gradient: 'linear-gradient(135deg, #FF006E 0%, #8338EC 100%)' },
+                { icon: '🎯', text: 'Reach Goals', color: '#3A86FF', gradient: 'linear-gradient(135deg, #06FFF0 0%, #3A86FF 100%)' },
               ].map((item, i) => (
                 <motion.div
                   key={i}
-                  className="p-4 border-4 border-black relative overflow-hidden"
+                  className="p-4 border-5 border-black relative overflow-hidden"
                   style={{
-                    background: `linear-gradient(135deg, var(--tw-gradient-stops))`,
+                    background: item.gradient,
                     backdropFilter: 'blur(10px)',
                     borderRadius: '20px 22px 21px 23px / 23px 20px 22px 21px',
-                    boxShadow: '5px 5px 0px #000',
+                    boxShadow: '6px 6px 0px #000',
                   }}
                   initial={{ opacity: 0, scale: 0, rotate: -180 }}
                   animate={{ opacity: 1, scale: 1, rotate: 0 }}
@@ -408,8 +457,7 @@ export default function HomePage() {
                     type: 'spring',
                     stiffness: 200
                   }}
-                  whileHover={{ scale: 1.05, y: -5, rotate: 3 }}
-                  className={`bg-gradient-to-br ${item.color}`}
+                  whileHover={{ scale: 1.08, y: -6, rotate: 3 }}
                 >
                   <div className="absolute inset-0 bg-white/20" />
                   <motion.div 
@@ -436,27 +484,33 @@ export default function HomePage() {
         </motion.div>
 
         {/* Floating particles */}
-        {[...Array(8)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-3 h-3 rounded-full bg-comic-yellow border-2 border-black"
-            style={{
-              left: `${10 + Math.random() * 80}%`,
-              top: `${10 + Math.random() * 80}%`,
-            }}
-            animate={{
-              y: [0, -30, 0],
-              x: [0, Math.random() * 20 - 10, 0],
-              opacity: [0, 1, 0],
-              scale: [0, 1.5, 0],
-            }}
-            transition={{
-              duration: 3 + Math.random() * 2,
-              repeat: Infinity,
-              delay: Math.random() * 3,
-            }}
-          />
-        ))}
+        {[...Array(12)].map((_, i) => {
+          const colors = ['#FFE030', '#FF6B35', '#FF006E', '#8338EC', '#06FFF0'];
+          return (
+            <motion.div
+              key={i}
+              className="absolute w-4 h-4 rounded-full border-3 border-black"
+              style={{
+                left: `${5 + Math.random() * 90}%`,
+                top: `${5 + Math.random() * 90}%`,
+                background: colors[i % colors.length],
+                boxShadow: '2px 2px 0px #000',
+              }}
+              animate={{
+                y: [0, -40, 0],
+                x: [0, Math.random() * 30 - 15, 0],
+                opacity: [0, 0.8, 0],
+                scale: [0, 1.5, 0],
+                rotate: [0, 360, 0],
+              }}
+              transition={{
+                duration: 4 + Math.random() * 2,
+                repeat: Infinity,
+                delay: Math.random() * 4,
+              }}
+            />
+          );
+        })}
       </div>
     </div>
   );
