@@ -172,7 +172,7 @@ export default function LeaderboardPage() {
             </motion.span>
             Daily Tasks
           </motion.h2>
-          <div className="text-sm font-bold bg-white px-3 py-1 border-0 border-2 border-black">
+          <div className="text-sm font-bold bg-white px-3 py-1 border-0 ">
             {completedTasks}/{totalTasks}
           </div>
         </div>
@@ -187,7 +187,7 @@ export default function LeaderboardPage() {
             />
           </div>
           <p className="text-xs text-center font-bold text-gray-700 mt-2">
-            {progressPercentage.toFixed(0)}% complete • <span className="text-black">{dailyTasks.filter(t => !t.isCompleted).reduce((sum, t) => sum + t.points, 0)}</span> points remaining
+            {progressPercentage.toFixed(0)}% complete • <span className="text-gray-900">{dailyTasks.filter(t => !t.isCompleted).reduce((sum, t) => sum + t.points, 0)}</span> points remaining
           </p>
         </div>
 
@@ -201,7 +201,7 @@ export default function LeaderboardPage() {
             {dailyTasks.map((task, index) => (
               <motion.div
                 key={task.id}
-                className={`border-0 border-4 border-black p-4 relative overflow-hidden ${
+                className={`border-0  p-4 relative overflow-hidden ${
                   task.isCompleted 
                     ? 'bg-white from-green-300 to-emerald-400' 
                     : 'bg-white'
@@ -239,14 +239,14 @@ export default function LeaderboardPage() {
                   </div>
                   <div className="text-right ml-4 relative z-10">
                     <motion.div 
-                      className="text-2xl font-black text-black"
+                      className="text-2xl font-semibold text-gray-900"
                       style={{ textShadow: '2px 2px 0px rgba(0,0,0,0.3)' }}
                     >
                       +{task.points}
                     </motion.div>
                     {task.isCompleted ? (
                       <motion.div 
-                        className="text-black text-sm font-black"
+                        className="text-gray-900 text-sm font-semibold"
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.5)' }}
@@ -256,7 +256,7 @@ export default function LeaderboardPage() {
                     ) : task.progress >= task.maxProgress ? (
                       <motion.button
                         onClick={() => completeTask(task.id)}
-                        className="px-4 py-2 border-0 font-black text-sm border-4 border-black
+                        className="px-4 py-2 border-0 font-semibold text-sm 
                           bg-white from-enough-yellow to-enough-yellow enough-shadow
                           hover:enough-shadow-lg hover:scale-110"
                         whileHover={{ scale: 1.1, rotate: 5 }}
@@ -296,7 +296,7 @@ export default function LeaderboardPage() {
           <select
             value={selectedPeriod}
             onChange={(e) => setSelectedPeriod(e.target.value)}
-            className="px-4 py-2 border-4 border-black border-0 font-black bg-white enough-shadow
+            className="px-4 py-2  border-0 font-semibold bg-white enough-shadow
               hover:enough-shadow-lg transition-all"
           >
             <option value="daily">📅 Today</option>
@@ -308,7 +308,7 @@ export default function LeaderboardPage() {
 
         {userRank && (
           <motion.div 
-            className="bg-white from-enough-yellow via-black to-comic-pink border-0 border-4 border-black p-6 mb-4 relative overflow-hidden"
+            className="bg-white from-enough-yellow via-black to-comic-pink border-0  p-6 mb-4 relative overflow-hidden"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.5, type: 'spring' }}
@@ -316,18 +316,18 @@ export default function LeaderboardPage() {
           >
             <div className="absolute inset-0 bg-white from-transparent via-white/30 to-transparent animate-[shine_3s_ease-in-out_infinite]" />
             <div className="text-center relative z-10">
-              <p className="text-sm font-black text-black mb-1" style={{ textShadow: '2px 2px 0px rgba(0,0,0,0.5)' }}>
+              <p className="text-sm font-semibold text-gray-900 mb-1" style={{ textShadow: '2px 2px 0px rgba(0,0,0,0.5)' }}>
                 YOUR RANK
               </p>
               <motion.p 
-                className="text-5xl font-black text-black mb-2"
+                className="text-5xl font-semibold text-gray-900 mb-2"
                 style={{ textShadow: '4px 4px 0px rgba(0,0,0,0.5)' }}
                 animate={{ scale: [1, 1.05, 1] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
               >
                 #{userRank}
               </motion.p>
-              <p className="text-xl font-black text-black" style={{ textShadow: '2px 2px 0px rgba(0,0,0,0.5)' }}>
+              <p className="text-xl font-semibold text-gray-900" style={{ textShadow: '2px 2px 0px rgba(0,0,0,0.5)' }}>
                 {user.points.toFixed(0)} POINTS
               </p>
             </div>
@@ -361,7 +361,7 @@ export default function LeaderboardPage() {
                 
               <div className="flex items-center gap-3 relative z-10">
                 <motion.div 
-                  className={`text-4xl font-black ${index < 3 ? 'text-black' : 'text-gray-700'}`}
+                  className={`text-4xl font-semibold ${index < 3 ? 'text-gray-900' : 'text-gray-700'}`}
                   style={index < 3 ? { 
                     filter: 'drop-shadow(3px 3px 0px rgba(0,0,0,0.5))',
                     textShadow: '2px 2px 0px rgba(0,0,0,0.3)' 
@@ -372,23 +372,23 @@ export default function LeaderboardPage() {
                   {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`}
                 </motion.div>
                 <div>
-                  <div className={`font-black text-lg ${index < 3 ? 'text-black' : 'text-black'}`}
+                  <div className={`font-semibold text-lg ${index < 3 ? 'text-gray-900' : 'text-gray-900'}`}
                     style={index < 3 ? { textShadow: '2px 2px 0px rgba(0,0,0,0.3)' } : {}}>
                     {entry.user.username ? `@${entry.user.username}` : entry.user.name}
                   </div>
-                  <div className={`text-sm font-bold ${index < 3 ? 'text-black/80' : 'text-gray-600'}`}>
+                  <div className={`text-sm font-bold ${index < 3 ? 'text-gray-900/80' : 'text-gray-600'}`}>
                     {entry.user.rank}
                   </div>
                 </div>
               </div>
               <div className="text-right relative z-10">
                 <motion.div 
-                  className={`font-black text-2xl ${index < 3 ? 'text-black' : 'text-black'}`}
+                  className={`font-semibold text-2xl ${index < 3 ? 'text-gray-900' : 'text-gray-900'}`}
                   style={index < 3 ? { textShadow: '2px 2px 0px rgba(0,0,0,0.5)' } : {}}
                 >
                   {entry.totalPoints.toFixed(0)}
                 </motion.div>
-                <div className={`text-xs font-bold uppercase ${index < 3 ? 'text-black/80' : 'text-gray-600'}`}>
+                <div className={`text-xs font-bold  ${index < 3 ? 'text-gray-900/80' : 'text-gray-600'}`}>
                   points
                 </div>
               </div>

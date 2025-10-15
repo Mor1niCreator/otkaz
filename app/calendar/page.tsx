@@ -155,19 +155,19 @@ export default function CalendarPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
       >
-        <h1 className="text-3xl font-black mb-2 uppercase tracking-wide">
+        <h1 className="text-3xl font-semibold mb-2  tracking-wide">
           📅 {t('todaysRefusals')}
         </h1>
         <p className="text-lg font-bold text-gray-700">{format(new Date(), 'MMMM d, yyyy')}</p>
         
         <div 
-          className="mt-4 bg-white p-6 text-center border-3 border-black"
+          className="mt-4 bg-white p-6 text-center "
           style={{ boxShadow: '0 4px 0px rgba(0,0,0,0.3)' }}
         >
-          <p className="text-sm font-black uppercase tracking-wider mb-1 text-gray-700">
+          <p className="text-sm font-semibold  tracking-wider mb-1 text-gray-700">
             {t('savedToday')}
           </p>
-          <p className="text-5xl font-black text-black">
+          <p className="text-5xl font-semibold text-gray-900">
             {formatCurrency(todayTotal, user?.currency || 'USD')}
           </p>
         </div>
@@ -180,7 +180,7 @@ export default function CalendarPage() {
         transition={{ delay: 0.2, duration: 0.4 }}
       >
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-black uppercase tracking-wide">
+          <h2 className="text-2xl font-semibold  tracking-wide">
             ⚡ {t('quickAdd')}
           </h2>
           <button
@@ -198,11 +198,11 @@ export default function CalendarPage() {
               <button
                 key={preset.id}
                 onClick={() => handlePreset(preset)}
-                className="p-5 bg-white border-3 border-black font-black transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6),0_6px_0px_#000] hover:bg-[rgba(245,198,26,0.08)] hover:-translate-y-1"
+                className="p-5 bg-white  font-semibold transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6),0_6px_0px_#000] hover:bg-[rgba(245,198,26,0.08)] hover:-translate-y-1"
                 style={{ boxShadow: '0 4px 0px #000' }}
               >
                 <div className="text-4xl mb-2">{preset.icon}</div>
-                <div className="font-black text-base uppercase tracking-wide text-black">{preset.name}</div>
+                <div className="font-semibold text-base  tracking-wide text-gray-900">{preset.name}</div>
                 <div className="text-sm font-bold text-gray-700">
                   {getCurrencySymbol(user?.currency || 'USD')}{preset.price}
                 </div>
@@ -261,7 +261,7 @@ export default function CalendarPage() {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
           >
-            <h2 className="text-2xl font-black uppercase mb-4">{t('addRefusal')}</h2>
+            <h2 className="text-2xl font-semibold  mb-4">{t('addRefusal')}</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 type="text"
@@ -332,7 +332,7 @@ export default function CalendarPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
       >
-        <h2 className="text-2xl font-black uppercase mb-4">
+        <h2 className="text-2xl font-semibold  mb-4">
           {t('todaysEntries')}
         </h2>
         {entries.length === 0 ? (
@@ -347,14 +347,14 @@ export default function CalendarPage() {
             {entries.map((entry, index) => (
               <motion.div
                 key={entry.id}
-                className="bg-white border-3 border-black p-4 flex justify-between items-center"
+                className="bg-white  p-4 flex justify-between items-center"
                 style={{ boxShadow: '0 3px 0px #000' }}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.05 }}
               >
                 <div>
-                  <div className="font-black text-lg uppercase tracking-wide">
+                  <div className="font-semibold text-lg  tracking-wide">
                     {entry.name}
                   </div>
                   <div className="text-sm font-bold text-gray-700">
@@ -362,7 +362,7 @@ export default function CalendarPage() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="font-black text-2xl">
+                  <div className="font-semibold text-2xl">
                     {formatCurrency(entry.pricePerUnit * entry.quantity, entry.currency)}
                   </div>
                   <div className="text-xs font-bold text-gray-600">{format(new Date(entry.date), 'HH:mm')}</div>

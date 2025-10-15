@@ -70,7 +70,7 @@ export default function PresetsEditor({
     <div className="fixed inset-0 enough-modal-overlay flex items-center justify-center p-4 z-50 overflow-y-auto">
       <div className="enough-modal max-w-2xl w-full my-8">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-black uppercase">⚙️ {t('customizePresets')}</h2>
+          <h2 className="text-2xl font-semibold uppercase">⚙️ {t('customizePresets')}</h2>
           <button
             onClick={onClose}
             className="text-3xl hover:text-red-500 font-bold"
@@ -87,7 +87,7 @@ export default function PresetsEditor({
           {presets.map((preset) => (
             <div
               key={preset.id}
-              className="bg-white border-3 border-black p-3"
+              className="bg-white border border-gray-200 p-3"
               style={{ boxShadow: '0 2px 0px #000' }}
             >
               {editingId === preset.id ? (
@@ -97,7 +97,7 @@ export default function PresetsEditor({
                     <button
                       type="button"
                       onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                      className="text-3xl border-3 border-black px-3 py-2 hover:bg-white transition-colors"
+                      className="text-3xl border border-gray-200 px-3 py-2 hover:bg-white transition-colors"
                     >
                       {editForm.icon || '💰'}
                     </button>
@@ -162,7 +162,7 @@ export default function PresetsEditor({
                   <div className="flex items-center gap-3">
                     <span className="text-3xl">{preset.icon}</span>
                     <div>
-                      <div className="font-black uppercase tracking-wide">{preset.name}</div>
+                      <div className="font-semibold uppercase tracking-wide">{preset.name}</div>
                       <div className="text-sm font-bold text-gray-700">
                         {formatCurrency(preset.price, currency)}
                       </div>

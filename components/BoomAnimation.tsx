@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface BoomAnimationProps {
@@ -8,7 +7,7 @@ interface BoomAnimationProps {
   onComplete: () => void;
   text?: string;
   emoji?: string;
-  type?: 'pow' | 'boom' | 'zap';
+  type?: 'boom' | 'pow' | 'success';
 }
 
 export default function BoomAnimation({ 
@@ -16,118 +15,145 @@ export default function BoomAnimation({
   onComplete, 
   text = 'SAVED!', 
   emoji = '💰',
-  type = 'boom'
+  type = 'success'
 }: BoomAnimationProps) {
-  useEffect(() => {
-    if (show) {
-      const timer = setTimeout(() => {
-        onComplete();
-      }, 1500);
-      return () => clearTimeout(timer);
-    }
-  }, [show, onComplete]);
+  
+  if (!show) return null;
 
   return (
     <AnimatePresence>
       {show && (
-        <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 pointer-events-none"
+        <motion.div 
+          className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
+          style={{
+            background: 'rgba(0, 0, 0, 0.4)',
+            backdropFilter: 'blur(8px)',
+          }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
         >
-          <motion.div
-            className="text-center relative"
-            initial={{ scale: 0, y: 50 }}
-            animate={{ 
-              scale: [0, 1.1, 1], 
-              y: [50, -10, 0]
-            }}
-            exit={{ scale: 0, opacity: 0, y: -50 }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-          >
-            {/* Background burst */}
-            <div className="absolute inset-0 -z-10">
-              {[...Array(12)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="absolute bg-white border-2 border-black"
-                  style={{
-                    width: '6px',
-                    height: '60px',
-                    left: '50%',
-                    top: '50%',
-                    transformOrigin: 'top center',
-                    rotate: `${i * 30}deg`,
-                  }}
-                  initial={{ scaleY: 0 }}
-                  animate={{ scaleY: [0, 1.3, 1] }}
-                  transition={{ 
-                    duration: 0.4,
-                    delay: i * 0.02,
-                    ease: 'easeOut'
-                  }}
-                />
-              ))}
-            </div>
-
-            <motion.div 
-              className="text-8xl mb-4"
-              animate={{ 
-                scale: [1, 1.15, 1],
-              }}
-              transition={{ duration: 0.4, repeat: 2 }}
+          {/* Burst particles */}
+          {[...Array(12)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute"
               style={{
-                filter: 'drop-shadow(4px 4px 0px #000)',
+                width: '8px',
+                height: '8px',
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, #F5C61A 0%, #FFD93D 100%)',
+                boxShadow: '0 0 10px rgba(245, 198, 26, 0.6)',
               }}
-            >
-              {emoji}
-            </motion.div>
-            
-            <motion.div 
-              className="bg-white border-4 border-black px-8 py-4"
-              style={{
-                boxShadow: '0 6px 0px #000',
+              initial={{
+                x: 0,
+                y: 0,
+                scale: 0,
+                opacity: 0,
               }}
               animate={{
-                scale: [1, 1.05, 1],
+                x: Math.cos((i / 12) * Math.PI * 2) * 100,
+                y: Math.sin((i / 12) * Math.PI * 2) * 100,
+                scale: [0, 1.5, 0],
+                opacity: [0, 1, 0],
               }}
-              transition={{ duration: 0.4, delay: 0.1 }}
+              transition={{
+                duration: 0.8,
+                ease: [0.4, 0, 0.2, 1],
+              }}
+            />
+          ))}
+
+          {/* Main content */}
+          <motion.div
+            initial={{ scale: 0, rotate: -180, opacity: 0 }}
+            animate={{ scale: 1, rotate: 0, opacity: 1 }}
+            exit={{ scale: 0, rotate: 180, opacity: 0 }}
+            transition={{
+              type: 'spring',
+              stiffness: 400,
+              damping: 20,
+            }}
+            onAnimationComplete={() => {
+              setTimeout(onComplete, 1000);
+            }}
+            className="relative"
+          >
+            {/* Glow background */}
+            <motion.div
+              className="absolute inset-0 -m-8"
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1.2, opacity: 0.4 }}
+              transition={{ duration: 0.4 }}
+              style={{
+                background: 'radial-gradient(circle, rgba(245, 198, 26, 0.6) 0%, transparent 70%)',
+                filter: 'blur(20px)',
+              }}
+            />
+
+            {/* Card */}
+            <div
+              className="relative px-10 py-8 rounded-2xl"
+              style={{
+                background: 'rgba(255, 255, 255, 0.95)',
+                backdropFilter: 'blur(20px)',
+                border: '1px solid rgba(255, 255, 255, 0.8)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12), 0 0 60px rgba(245, 198, 26, 0.3)',
+              }}
             >
+              {/* Emoji */}
+              <motion.div
+                className="text-7xl text-center mb-4"
+                animate={{
+                  scale: [1, 1.2, 1],
+                  rotate: [0, -10, 10, 0],
+                }}
+                transition={{
+                  duration: 0.6,
+                  repeat: 2,
+                }}
+              >
+                {emoji}
+              </motion.div>
+
+              {/* Text */}
               <div
-                className="text-4xl font-black uppercase tracking-wider"
+                className="text-3xl font-semibold text-center"
                 style={{
-                  color: '#000',
+                  background: 'linear-gradient(135deg, #F5C61A 0%, #FFD93D 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
                 }}
               >
                 {text}
               </div>
-            </motion.div>
 
-            {/* Sparkles */}
-            {['✨', '💫', '⭐'].map((sparkle, i) => (
-              <motion.div
-                key={i}
-                className="absolute text-3xl"
-                style={{
-                  left: `${15 + i * 35}%`,
-                  top: `${-10 + (i % 2) * 120}%`,
-                }}
-                initial={{ scale: 0, rotate: 0 }}
-                animate={{ 
-                  scale: [0, 1.3, 1],
-                  rotate: [0, 180, 360],
-                  opacity: [0, 1, 0]
-                }}
-                transition={{ 
-                  duration: 0.8,
-                  delay: 0.2 + i * 0.1,
-                }}
-              >
-                {sparkle}
-              </motion.div>
-            ))}
+              {/* Sparkles */}
+              {[...Array(6)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute text-2xl"
+                  style={{
+                    left: `${20 + i * 15}%`,
+                    top: `${10 + (i % 2) * 70}%`,
+                  }}
+                  animate={{
+                    scale: [0, 1, 0],
+                    rotate: [0, 180, 360],
+                    opacity: [0, 1, 0],
+                  }}
+                  transition={{
+                    duration: 1.2,
+                    delay: i * 0.1,
+                    ease: [0.4, 0, 0.2, 1],
+                  }}
+                >
+                  ✨
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </motion.div>
       )}

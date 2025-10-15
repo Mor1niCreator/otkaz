@@ -2,15 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ==================== APPLE/GOOGLE PREMIUM DESIGN SYSTEM ==================== */
+
 @layer base {
   * {
-    font-family: 'Inter', 'Arial Black', 'Helvetica Neue', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
   
+  /* Premium Background - Apple Gray */
   body {
-    background: #F5C61A;
+    background: #F5F5F7;
     background-attachment: fixed;
     position: relative;
     overflow-x: hidden;
@@ -21,313 +24,250 @@
     z-index: 1;
   }
 
-  /* ENOUGH BRAND FONT HIERARCHY - Professional & Bold */
+  /* TYPOGRAPHY - SF Pro Display / Inter Style */
   h1, .text-hero {
-    font-family: 'Inter', 'Arial Black', sans-serif;
-    font-weight: 900;
-    letter-spacing: -0.02em;
-    text-transform: uppercase;
-    color: #000;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: #1D1D1F;
+    line-height: 1.1;
   }
 
   h2, .text-header {
-    font-family: 'Inter', 'Arial Black', sans-serif;
-    font-weight: 800;
-    letter-spacing: -0.01em;
-    text-transform: uppercase;
-    color: #000;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: #1D1D1F;
+    line-height: 1.2;
   }
 
   h3, .text-subheader {
-    font-family: 'Inter', 'Arial Black', sans-serif;
-    font-weight: 700;
-    letter-spacing: 0em;
-    color: #000;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: #1D1D1F;
+    line-height: 1.3;
   }
 
   button, .btn-text {
-    font-family: 'Inter', 'Arial Black', sans-serif;
-    font-weight: 800;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-    color: #000;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: #1D1D1F;
   }
 
   p, span, div, .body-text {
-    font-family: 'Inter', sans-serif;
-    font-weight: 500;
-    color: #000;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+    font-weight: 400;
+    color: #1D1D1F;
+    line-height: 1.5;
   }
 
   .text-number {
-    font-family: 'Inter', 'Arial Black', sans-serif;
-    font-weight: 900;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+    font-weight: 600;
     font-variant-numeric: tabular-nums;
-    color: #000;
-  }
-  
-  /* Professional grid pattern */
-  body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
-    background-size: 20px 20px;
-    pointer-events: none;
-    z-index: 0;
+    color: #1D1D1F;
   }
 }
 
 @layer components {
-  /* PROFESSIONAL PANEL - White with Black Border & Texture */
+  
+  /* ==================== PREMIUM PANEL - Apple Card Style ==================== */
   .enough-panel {
-    @apply p-6 relative;
+    @apply p-8 relative;
     background: #FFFFFF;
-    border: 3px solid #000;
-    box-shadow: 0 4px 0px #000;
+    border-radius: 16px;
+    box-shadow: 
+      0 1px 3px 0 rgba(0, 0, 0, 0.04),
+      0 4px 8px 0 rgba(0, 0, 0, 0.04),
+      0 8px 16px 0 rgba(0, 0, 0, 0.04);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    transition: all 0.3s ease;
+    overflow: hidden;
   }
 
-  /* Subtle paper texture */
   .enough-panel::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: 
-      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.015) 2px, rgba(0,0,0,0.015) 4px),
-      repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,0.015) 2px, rgba(0,0,0,0.015) 4px);
-    pointer-events: none;
-    opacity: 0.5;
-  }
-
-  .enough-panel::after {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #F5C61A 0%, #FFD700 100%);
+    height: 3px;
+    background: linear-gradient(90deg, #F5C61A 0%, #FFD93D 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
   }
 
-  /* ENOUGH BUTTON - White with Professional Style */
-  .enough-button {
-    @apply px-8 py-4 text-base relative overflow-hidden;
-    font-family: 'Inter', 'Arial Black', sans-serif;
-    font-weight: 800;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    background: #FFFFFF;
-    color: #000;
-    border: 3px solid #000;
-    box-shadow: 0 4px 0px #000;
-    transition: all 0.3s ease;
+  .enough-panel:hover {
+    box-shadow: 
+      0 2px 6px 0 rgba(0, 0, 0, 0.06),
+      0 8px 16px 0 rgba(0, 0, 0, 0.06),
+      0 16px 32px 0 rgba(0, 0, 0, 0.06);
+    transform: translateY(-2px);
+  }
+
+  .enough-panel:hover::before {
+    opacity: 1;
+  }
+
+  /* ==================== PREMIUM BUTTONS ==================== */
+  
+  /* Primary Button - Apple Blue Style with Enough Yellow */
+  .enough-button-primary {
+    @apply px-6 py-3 text-base relative overflow-hidden;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    background: linear-gradient(135deg, #F5C61A 0%, #FFD93D 100%);
+    color: #1D1D1F;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 
+      0 2px 8px rgba(245, 198, 26, 0.25),
+      0 4px 16px rgba(245, 198, 26, 0.15);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
   }
 
-  /* Business texture */
-  .enough-button::before {
+  .enough-button-primary::before {
     content: '';
     position: absolute;
     inset: 0;
-    background-image: 
-      repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.02) 4px);
-    pointer-events: none;
-  }
-
-  .enough-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 
-      0 6px 0px #000,
-      0 0 20px rgba(245, 198, 26, 0.6),
-      inset 0 0 20px rgba(245, 198, 26, 0.2);
-    background: rgba(245, 198, 26, 0.1);
-  }
-
-  .enough-button:active {
-    transform: translateY(2px);
-    box-shadow: 0 2px 0px #000;
-  }
-
-  /* PRIMARY BUTTON - White with Yellow Neon on Hover */
-  .enough-button-primary {
-    @apply enough-button;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
   }
 
   .enough-button-primary:hover {
+    transform: translateY(-2px);
     box-shadow: 
-      0 6px 0px #000,
-      0 0 25px rgba(245, 198, 26, 0.8),
-      inset 0 0 25px rgba(245, 198, 26, 0.3);
-    background: rgba(245, 198, 26, 0.15);
+      0 4px 12px rgba(245, 198, 26, 0.35),
+      0 8px 24px rgba(245, 198, 26, 0.25);
   }
 
-  /* SECONDARY BUTTON */
+  .enough-button-primary:hover::before {
+    opacity: 1;
+  }
+
+  .enough-button-primary:active {
+    transform: translateY(0px);
+  }
+
+  /* Secondary Button - Glass Morphism */
   .enough-button-secondary {
-    @apply enough-button;
-    background: #F5F5F5;
+    @apply px-6 py-3 text-base relative overflow-hidden;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #1D1D1F;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    box-shadow: 
+      0 1px 3px rgba(0, 0, 0, 0.04),
+      0 4px 8px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .enough-button-secondary:hover {
-    background: rgba(245, 198, 26, 0.1);
+    background: rgba(255, 255, 255, 1);
+    border-color: rgba(245, 198, 26, 0.3);
     box-shadow: 
-      0 6px 0px #000,
-      0 0 20px rgba(245, 198, 26, 0.6),
-      inset 0 0 20px rgba(245, 198, 26, 0.2);
+      0 2px 6px rgba(0, 0, 0, 0.06),
+      0 8px 16px rgba(245, 198, 26, 0.15);
+    transform: translateY(-2px);
   }
 
-  /* OUTLINED TEXT - Signature Enough Style */
-  .enough-text {
-    font-family: 'Inter', 'Arial Black', sans-serif;
-    font-weight: 900;
-    color: #FFFEF7;
-    text-shadow:
-      -3px -3px 0 #000,
-      3px -3px 0 #000,
-      -3px 3px 0 #000,
-      3px 3px 0 #000,
-      -3px 0 0 #000,
-      3px 0 0 #000,
-      0 -3px 0 #000,
-      0 3px 0 #000;
-    letter-spacing: 0.05em;
+  .enough-button-secondary:active {
+    transform: translateY(0px);
   }
 
-  .enough-text-large {
-    @apply enough-text;
-    text-shadow:
-      -4px -4px 0 #000,
-      4px -4px 0 #000,
-      -4px 4px 0 #000,
-      4px 4px 0 #000,
-      -4px 0 0 #000,
-      4px 0 0 #000,
-      0 -4px 0 #000,
-      0 4px 0 #000;
+  /* Standard Button */
+  .enough-button {
+    @apply enough-button-secondary;
   }
 
-  /* BADGE - Professional Tag */
-  .enough-badge {
-    @apply px-4 py-2 relative;
-    font-family: 'Inter', 'Arial Black', sans-serif;
-    font-weight: 800;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    background: #FFFFFF;
-    color: #000;
-    border: 2px solid #000;
-    font-size: 0.875rem;
-    transition: all 0.3s ease;
-  }
-
-  .enough-badge:hover {
-    box-shadow: 0 0 15px rgba(245, 198, 26, 0.6);
-    background: rgba(245, 198, 26, 0.1);
-  }
-
-  /* CARD - Modern Professional */
+  /* ==================== PREMIUM CARD ==================== */
   .enough-card {
     @apply p-6 relative;
     background: #FFFFFF;
-    border: 3px solid #000;
-    box-shadow: 0 4px 0px #000;
-    transition: all 0.3s ease;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 
+      0 1px 3px rgba(0, 0, 0, 0.04),
+      0 4px 8px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-  }
-
-  /* Business texture for cards */
-  .enough-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: 
-      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.015) 2px, rgba(0,0,0,0.015) 4px),
-      repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,0.015) 2px, rgba(0,0,0,0.015) 4px);
-    pointer-events: none;
-    opacity: 0.5;
   }
 
   .enough-card:hover {
-    transform: translateY(-3px);
+    border-color: rgba(245, 198, 26, 0.2);
     box-shadow: 
-      0 7px 0px #000,
-      0 0 20px rgba(245, 198, 26, 0.4);
+      0 2px 6px rgba(0, 0, 0, 0.06),
+      0 8px 16px rgba(0, 0, 0, 0.06),
+      0 4px 12px rgba(245, 198, 26, 0.1);
+    transform: translateY(-3px);
   }
 
-  /* PROGRESS BAR - Clean & Bold */
+  /* ==================== PREMIUM BADGE/TAG ==================== */
+  .enough-badge, .enough-tag {
+    @apply px-3 py-1.5 relative;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    font-size: 0.875rem;
+    background: rgba(245, 198, 26, 0.1);
+    color: #1D1D1F;
+    border: 1px solid rgba(245, 198, 26, 0.2);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+
+  .enough-badge:hover, .enough-tag:hover {
+    background: rgba(245, 198, 26, 0.15);
+    border-color: rgba(245, 198, 26, 0.3);
+    transform: translateY(-1px);
+  }
+
+  /* ==================== PROGRESS BAR - Modern ==================== */
   .enough-progress {
-    @apply w-full h-8 overflow-hidden relative;
-    background: #FFFFFF;
-    border: 3px solid #000;
-    position: relative;
-  }
-
-  .enough-progress::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: 
-      repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(0,0,0,0.03) 10px, rgba(0,0,0,0.03) 11px);
-    pointer-events: none;
+    @apply w-full h-2 overflow-hidden relative;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
   }
 
   .enough-progress-fill {
     @apply h-full relative;
-    background: linear-gradient(135deg, #F5C61A 0%, #FFD700 100%);
-    transition: all 0.6s ease;
-    border-right: 3px solid #000;
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+    background: linear-gradient(90deg, #F5C61A 0%, #FFD93D 100%);
+    border-radius: 4px;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 8px rgba(245, 198, 26, 0.3);
   }
 
-  /* MODAL OVERLAY - Professional */
+  /* ==================== MODAL - Glass Morphism ==================== */
   .enough-modal-overlay {
-    background: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 
-  /* MODAL - Professional Panel */
   .enough-modal {
     @apply p-8 relative;
-    background: #FFFFFF;
-    border: 4px solid #000;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
     box-shadow: 
-      0 12px 0px #000,
-      0 15px 40px rgba(0,0,0,0.4);
-    position: relative;
+      0 8px 32px rgba(0, 0, 0, 0.12),
+      0 16px 64px rgba(0, 0, 0, 0.08);
   }
 
-  .enough-modal::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: 
-      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.015) 2px, rgba(0,0,0,0.015) 4px),
-      repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,0.015) 2px, rgba(0,0,0,0.015) 4px);
-    pointer-events: none;
-    opacity: 0.5;
-  }
-
-  .enough-modal::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 6px;
-    background: linear-gradient(90deg, #F5C61A 0%, #FFD700 100%);
-  }
-
-  /* ==================== ANIMATIONS ==================== */
-
+  /* ==================== PREMIUM ANIMATIONS ==================== */
+  
   @keyframes slideUp {
     from {
-      transform: translateY(30px);
+      transform: translateY(20px);
       opacity: 0;
     }
     to {
@@ -337,7 +277,7 @@
   }
 
   .slide-up {
-    animation: slideUp 0.4s ease-out;
+    animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   @keyframes fadeIn {
@@ -350,12 +290,12 @@
   }
 
   .fade-in {
-    animation: fadeIn 0.3s ease-out;
+    animation: fadeIn 0.4s ease-out;
   }
 
   @keyframes scaleIn {
     from {
-      transform: scale(0.95);
+      transform: scale(0.96);
       opacity: 0;
     }
     to {
@@ -365,15 +305,17 @@
   }
 
   .scale-in {
-    animation: scaleIn 0.3s ease-out;
+    animation: scaleIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   @keyframes pulse {
     0%, 100% {
       transform: scale(1);
+      opacity: 1;
     }
     50% {
-      transform: scale(1.03);
+      transform: scale(1.02);
+      opacity: 0.95;
     }
   }
 
@@ -381,323 +323,245 @@
     animation: pulse 2s ease-in-out infinite;
   }
 
-  @keyframes shine {
+  @keyframes shimmer {
     0% {
-      transform: translateX(-100%);
+      background-position: -200% center;
     }
     100% {
-      transform: translateX(200%);
+      background-position: 200% center;
     }
   }
 
-  .enough-shine {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .enough-shine::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 50%;
-    height: 100%;
+  .enough-shimmer {
     background: linear-gradient(
       90deg,
-      transparent,
-      rgba(255,255,255,0.4),
-      transparent
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.3) 50%,
+      rgba(255, 255, 255, 0) 100%
     );
-    animation: shine 3s ease-in-out infinite;
+    background-size: 200% 100%;
+    animation: shimmer 2s ease-in-out infinite;
   }
 
-  @keyframes achievementGlow {
+  @keyframes glow {
     0%, 100% {
       box-shadow: 
-        0 0 20px rgba(245, 198, 26, 0.5),
-        0 4px 0px #000;
+        0 0 10px rgba(245, 198, 26, 0.2),
+        0 0 20px rgba(245, 198, 26, 0.1);
     }
     50% {
       box-shadow: 
-        0 0 40px rgba(245, 198, 26, 0.8),
-        0 4px 0px #000;
+        0 0 20px rgba(245, 198, 26, 0.4),
+        0 0 40px rgba(245, 198, 26, 0.2);
     }
   }
 
-  .achievement-glow {
-    animation: achievementGlow 2s ease-in-out infinite;
+  .enough-glow {
+    animation: glow 2s ease-in-out infinite;
   }
 
-  @keyframes starBurst {
-    0% {
-      transform: scale(0);
-      opacity: 0;
-    }
-    50% {
-      transform: scale(1.5);
-      opacity: 1;
-    }
-    100% {
-      transform: scale(1);
-      opacity: 1;
-    }
-  }
-
-  .star-burst {
-    animation: starBurst 0.6s ease-out;
-  }
-
-  @keyframes bounceEnough {
-    0%, 20%, 50%, 80%, 100% {
-      transform: translateY(0);
-    }
-    40% {
-      transform: translateY(-10px);
-    }
-    60% {
-      transform: translateY(-5px);
-    }
-  }
-
-  .bounce-enough {
-    animation: bounceEnough 1s ease-in-out;
-  }
-
-  @keyframes slideInLeft {
-    from {
-      transform: translateX(-50px);
-      opacity: 0;
-    }
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-
-  @keyframes slideInRight {
-    from {
-      transform: translateX(50px);
-      opacity: 0;
-    }
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-
-  .slide-in-left {
-    animation: slideInLeft 0.4s ease-out;
-  }
-
-  .slide-in-right {
-    animation: slideInRight 0.4s ease-out;
-  }
-
-  /* TAG - Professional Label */
-  .enough-tag {
-    @apply relative;
-    font-family: 'Inter', 'Arial Black', sans-serif;
-    font-weight: 700;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-    background: #FFFFFF;
-    color: #000;
-    border: 2px solid #000;
-    transition: all 0.3s ease;
-    font-size: 0.75rem;
-    padding: 0.25rem 0.75rem;
-    position: relative;
-  }
-
-  .enough-tag::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: 
-      repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.02) 4px);
-    pointer-events: none;
-  }
-
-  .enough-tag:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 15px rgba(245, 198, 26, 0.6);
-    background: rgba(245, 198, 26, 0.1);
-  }
-
-  /* GRADIENT TEXT - Professional Highlight */
+  /* ==================== PREMIUM TEXT STYLES ==================== */
+  
   .text-gradient-enough {
-    font-family: 'Inter', 'Arial Black', sans-serif;
-    background: linear-gradient(135deg, #F5C61A 0%, #FFD700 100%);
+    background: linear-gradient(135deg, #F5C61A 0%, #FFD93D 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    font-weight: 900;
-    letter-spacing: 0.02em;
+    font-weight: 600;
   }
 
-  /* STAT NUMBERS - Bold Display */
   .text-stat {
-    font-family: 'Inter', 'Arial Black', sans-serif;
-    font-weight: 900;
+    font-weight: 600;
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.02em;
-    color: #000;
+    color: #1D1D1F;
   }
 
-  /* LABEL TEXT - Clear & Professional */
   .text-label {
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
+    font-weight: 500;
+    font-size: 0.875rem;
+    letter-spacing: -0.01em;
+    color: #86868B;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-size: 0.75rem;
-    color: #000;
   }
 
-  /* PROFESSIONAL SHADOW */
+  /* ==================== SHADOWS ==================== */
+  
   .enough-shadow {
-    box-shadow: 0 4px 0px #000;
+    box-shadow: 
+      0 1px 3px rgba(0, 0, 0, 0.04),
+      0 4px 8px rgba(0, 0, 0, 0.04);
   }
 
   .enough-shadow-lg {
-    box-shadow: 0 8px 0px #000;
+    box-shadow: 
+      0 4px 12px rgba(0, 0, 0, 0.06),
+      0 8px 24px rgba(0, 0, 0, 0.06);
   }
 
-  /* Neon Glow Effect for Hover States */
-  .neon-hover:hover {
+  /* ==================== PREMIUM INPUT FIELDS ==================== */
+  
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  textarea,
+  select {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif !important;
+    font-weight: 400;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    border-radius: 10px !important;
+    background: rgba(255, 255, 255, 0.9);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 
-      0 0 20px rgba(245, 198, 26, 0.6),
-      0 0 40px rgba(245, 198, 26, 0.4),
-      0 4px 0px #000;
+      0 1px 3px rgba(0, 0, 0, 0.04),
+      inset 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+    color: #1D1D1F !important;
+  }
+
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  input[type="password"]:focus,
+  input[type="number"]:focus,
+  textarea:focus,
+  select:focus {
+    outline: none !important;
+    border-color: rgba(245, 198, 26, 0.4) !important;
+    box-shadow: 
+      0 0 0 4px rgba(245, 198, 26, 0.1),
+      0 2px 6px rgba(0, 0, 0, 0.06) !important;
+    background: #FFFFFF;
+  }
+
+  input[type="text"]:disabled,
+  input[type="email"]:disabled,
+  input[type="password"]:disabled,
+  input[type="number"]:disabled,
+  textarea:disabled,
+  select:disabled {
+    background: rgba(0, 0, 0, 0.02) !important;
+    opacity: 0.6;
+  }
+
+  /* ==================== PLACEHOLDER ==================== */
+  
+  ::placeholder {
+    color: #86868B;
+    font-weight: 400;
+    opacity: 1;
+  }
+
+  /* ==================== SELECTION ==================== */
+  
+  ::selection {
+    background: rgba(245, 198, 26, 0.3);
+    color: #1D1D1F;
+  }
+
+  ::-moz-selection {
+    background: rgba(245, 198, 26, 0.3);
+    color: #1D1D1F;
+  }
+
+  /* ==================== PREMIUM SCROLLBAR ==================== */
+  
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.02);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(245, 198, 26, 0.4);
+    border-radius: 5px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  /* ==================== UTILITY CLASSES ==================== */
+  
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+  }
+
+  .elevation-1 {
+    box-shadow: 
+      0 1px 3px rgba(0, 0, 0, 0.04),
+      0 2px 6px rgba(0, 0, 0, 0.04);
+  }
+
+  .elevation-2 {
+    box-shadow: 
+      0 2px 6px rgba(0, 0, 0, 0.06),
+      0 4px 12px rgba(0, 0, 0, 0.06);
+  }
+
+  .elevation-3 {
+    box-shadow: 
+      0 4px 12px rgba(0, 0, 0, 0.08),
+      0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  /* ==================== DIVIDER ==================== */
+  
+  .enough-divider {
+    height: 1px;
+    background: linear-gradient(90deg, 
+      rgba(0, 0, 0, 0) 0%, 
+      rgba(0, 0, 0, 0.08) 50%, 
+      rgba(0, 0, 0, 0) 100%
+    );
   }
 }
 
-/* UTILITY CLASSES - ENOUGH FONTS */
+/* ==================== UTILITY FONT CLASSES ==================== */
+
 .font-hero {
-  font-family: 'Inter', 'Arial Black', sans-serif !important;
-  font-weight: 900;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-  color: #000;
+  font-weight: 700 !important;
+  letter-spacing: -0.03em;
+  color: #1D1D1F;
 }
 
 .font-header {
-  font-family: 'Inter', 'Arial Black', sans-serif !important;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  color: #000;
-}
-
-.font-button {
-  font-family: 'Inter', 'Arial Black', sans-serif !important;
-  font-weight: 800;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: #000;
-}
-
-.font-number {
-  font-family: 'Inter', 'Arial Black', sans-serif !important;
-  font-weight: 900;
-  font-variant-numeric: tabular-nums;
-  color: #000;
+  font-weight: 600 !important;
+  letter-spacing: -0.02em;
+  color: #1D1D1F;
 }
 
 .font-body {
-  font-family: 'Inter', sans-serif !important;
-  font-weight: 500;
-  color: #000;
+  font-weight: 400 !important;
+  color: #1D1D1F;
 }
 
-/* CUSTOM SCROLLBAR - Professional Style */
-::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
+.font-number {
+  font-weight: 600 !important;
+  font-variant-numeric: tabular-nums;
+  color: #1D1D1F;
 }
 
-::-webkit-scrollbar-track {
-  background: #FFFFFF;
-  border: 2px solid #000;
-}
+/* ==================== RESPONSIVE SPACING ==================== */
 
-::-webkit-scrollbar-thumb {
-  background: #F5C61A;
-  border: 2px solid #000;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #FFD700;
-  box-shadow: 0 0 10px rgba(245, 198, 26, 0.6);
-}
-
-/* PROFESSIONAL INPUT FIELDS */
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="number"],
-textarea,
-select {
-  font-family: 'Inter', sans-serif !important;
-  font-weight: 500;
-  border: 3px solid #000 !important;
-  border-radius: 0 !important;
-  background: #FFFFFF;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 0px rgba(0,0,0,0.2) !important;
-  color: #000 !important;
-}
-
-input[type="text"]::before,
-input[type="email"]::before,
-textarea::before,
-select::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: 
-    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.01) 2px, rgba(0,0,0,0.01) 4px);
-  pointer-events: none;
-}
-
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus,
-input[type="number"]:focus,
-textarea:focus,
-select:focus {
-  outline: none !important;
-  border-color: #000 !important;
-  box-shadow: 
-    0 0 20px rgba(245, 198, 26, 0.6),
-    0 3px 0px rgba(0,0,0,0.3) !important;
-  transform: translateY(-1px);
-  background: rgba(245, 198, 26, 0.05);
-}
-
-input[type="text"]:disabled,
-input[type="email"]:disabled,
-input[type="password"]:disabled,
-input[type="number"]:disabled,
-textarea:disabled,
-select:disabled {
-  background: #F5F5F5 !important;
-  opacity: 0.6;
-}
-
-/* PLACEHOLDER - Professional */
-::placeholder {
-  color: #666;
-  font-weight: 400;
-  opacity: 0.6;
-}
-
-/* SELECTION - Brand Highlight */
-::selection {
-  background: #F5C61A;
-  color: #000;
-}
-
-::-moz-selection {
-  background: #F5C61A;
-  color: #000;
+@media (max-width: 640px) {
+  .enough-panel {
+    @apply p-6;
+    border-radius: 12px;
+  }
+  
+  .enough-modal {
+    @apply p-6;
+    border-radius: 16px;
+  }
 }

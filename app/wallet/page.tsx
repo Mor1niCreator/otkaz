@@ -122,28 +122,28 @@ export default function WalletPage() {
       <div className="enough-panel mb-6">
         <h1 className="text-4xl font-bold mb-4">💰 {t('yourWallet')}</h1>
         
-        <div className="bg-white from-black to-comic-pink border-0 border-4 border-black p-6 mb-6 enough-shadow-lg">
+        <div className="bg-white from-black to-comic-pink border-0  p-6 mb-6 enough-shadow-lg">
           <div className="text-center">
-            <p className="text-black text-lg mb-2">{t('totalSavings')}</p>
-            <p className="text-6xl font-bold text-black mb-2">
+            <p className="text-gray-900 text-lg mb-2">{t('totalSavings')}</p>
+            <p className="text-6xl font-bold text-gray-900 mb-2">
               {formatCurrency(convertedStats.allTime, user.currency)}
             </p>
-            <p className="text-black text-sm">
+            <p className="text-gray-900 text-sm">
               {userPoints.toFixed(0)} {t('points')} • {user.rank}
             </p>
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-3">
-          <div className="bg-white border-0 border-4 border-black p-4 text-center">
+          <div className="bg-white border-0  p-4 text-center">
             <p className="text-xs text-gray-700 mb-1">{t('today')}</p>
             <p className="text-2xl font-bold">{formatCurrency(convertedStats.today, user.currency)}</p>
           </div>
-          <div className="bg-white border-0 border-4 border-black p-4 text-center">
+          <div className="bg-white border-0  p-4 text-center">
             <p className="text-xs text-gray-700 mb-1">{t('thisWeek')}</p>
             <p className="text-2xl font-bold">{formatCurrency(convertedStats.week, user.currency)}</p>
           </div>
-          <div className="bg-white border-0 border-4 border-black p-4 text-center">
+          <div className="bg-white border-0  p-4 text-center">
             <p className="text-xs text-gray-700 mb-1">{t('thisMonth')}</p>
             <p className="text-2xl font-bold">{formatCurrency(convertedStats.month, user.currency)}</p>
           </div>
@@ -177,7 +177,7 @@ export default function WalletPage() {
               return (
                 <div
                   key={tagId}
-                  className={`px-4 py-2 border-0 border-4 border-black font-black flex items-center gap-2 
+                  className={`px-4 py-2 border-0  font-semibold flex items-center gap-2 
                     ${tag.color} transition-all hover:scale-105 hover:rotate-2 hover:enough-shadow-lg
                     animate-[popIn_0.5s_ease-out]`}
                   style={{ 

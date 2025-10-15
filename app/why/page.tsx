@@ -90,14 +90,14 @@ export default function WhyPage() {
       <MathWallBackground />
       
       <div className="enough-panel mb-6">
-        <h1 className="text-3xl font-black uppercase tracking-wide mb-2 flex items-center gap-3">
+        <h1 className="text-3xl font-semibold  tracking-wide mb-2 flex items-center gap-3">
           🤔 {t('whyTitle')}
         </h1>
         <p className="font-bold text-gray-700">{t('whyDescription')}</p>
       </div>
 
-      <div className="bg-white border-3 border-black p-4 mb-6">
-        <h3 className="font-black uppercase mb-2 flex items-center gap-2">
+      <div className="bg-white  p-4 mb-6">
+        <h3 className="font-semibold  mb-2 flex items-center gap-2">
           💡 {t('tip')}
         </h3>
         <p className="text-sm font-bold text-gray-700">
@@ -115,7 +115,7 @@ export default function WhyPage() {
                 <div className="flex items-center gap-3">
                   <span className="text-4xl">{preset.icon}</span>
                   <div>
-                    <h3 className="font-black text-lg uppercase tracking-wide">{preset.name}</h3>
+                    <h3 className="font-semibold text-lg  tracking-wide">{preset.name}</h3>
                     <p className="text-sm font-bold text-gray-600">{t(preset.category)}</p>
                   </div>
                 </div>
@@ -166,7 +166,7 @@ export default function WhyPage() {
               <div className="flex items-center gap-3">
                 <span className="text-4xl">{selectedPreset.icon}</span>
                 <div>
-                  <h2 className="text-2xl font-black uppercase">{selectedPreset.name}</h2>
+                  <h2 className="text-2xl font-semibold ">{selectedPreset.name}</h2>
                   <p className="text-sm font-bold text-gray-700">{t('selectWhyTags')}</p>
                 </div>
               </div>
@@ -189,7 +189,7 @@ export default function WhyPage() {
                   <button
                     key={tag.id}
                     onClick={() => toggleTag(selectedPreset.id, tag.id)}
-                    className={`p-4 border-3 border-black font-black uppercase tracking-wide text-left transition-all
+                    className={`p-4  font-semibold  tracking-wide text-left transition-all
                       ${isSelected ? 'bg-white' : 'bg-white hover:bg-white'}`}
                     style={{
                       boxShadow: isSelected ? '0 4px 0px #000' : '0 2px 0px #000',

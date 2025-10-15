@@ -274,7 +274,7 @@ export default function ComparisonPage() {
 
             <div className="space-y-4">
               {DAYS.map((day) => (
-                <div key={day} className="bg-white border-0 border-4 border-black p-4">
+                <div key={day} className="bg-white border-0  p-4">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <span className="text-2xl">{getDayIcon(day)}</span>
@@ -282,7 +282,7 @@ export default function ComparisonPage() {
                     </div>
                     <div className="text-right">
                       <div className="text-xs text-gray-600">{t('total')}:</div>
-                      <div className="text-xl font-bold text-black">
+                      <div className="text-xl font-bold text-gray-900">
                         {formatCurrency(weeklySpending[day].total, user.currency)}
                       </div>
                     </div>
@@ -340,7 +340,7 @@ export default function ComparisonPage() {
                           <button
                             key={preset.id}
                             onClick={() => addPresetEntry(day, preset)}
-                            className="bg-white hover:bg-green-300 border-2 border-black border-0 p-2 text-xs font-bold transition-all"
+                            className="bg-white hover:bg-green-300  border-0 p-2 text-xs font-bold transition-all"
                           >
                             {preset.icon} {preset.name}
                             <div className="text-[10px] text-gray-600">
@@ -359,13 +359,13 @@ export default function ComparisonPage() {
                           💰 {t('customEntry')}
                         </button>
                       ) : (
-                        <div className="bg-gray-100 border-0 border-2 border-black p-3 space-y-2">
+                        <div className="bg-gray-100 border-0  p-3 space-y-2">
                           <input
                             type="text"
                             placeholder={t('entryName')}
                             value={customEntry.name}
                             onChange={(e) => setCustomEntry({ ...customEntry, name: e.target.value })}
-                            className="w-full px-3 py-2 border-2 border-black border-0 text-sm"
+                            className="w-full px-3 py-2  border-0 text-sm"
                           />
                           <input
                             type="number"
@@ -374,7 +374,7 @@ export default function ComparisonPage() {
                             placeholder={t('amount')}
                             value={customEntry.amount}
                             onChange={(e) => setCustomEntry({ ...customEntry, amount: e.target.value })}
-                            className="w-full px-3 py-2 border-2 border-black border-0 text-sm"
+                            className="w-full px-3 py-2  border-0 text-sm"
                           />
                           <div className="flex gap-2">
                             <button
@@ -412,10 +412,10 @@ export default function ComparisonPage() {
               ))}
             </div>
 
-            <div className="mt-6 bg-white border-0 border-4 border-black p-4">
+            <div className="mt-6 bg-white border-0  p-4">
               <div className="flex justify-between items-center">
                 <span className="font-bold text-lg">{t('weeklyTotal')}:</span>
-                <span className="text-2xl font-bold text-black">
+                <span className="text-2xl font-bold text-gray-900">
                   {formatCurrency(calculateWeeklyTotal(), user.currency)}
                 </span>
               </div>
@@ -480,7 +480,7 @@ export default function ComparisonPage() {
 
             {/* Wallet Statistics Banner */}
             {comparison.walletStats.hasData && (
-              <div className="bg-white from-blue-100 to-purple-100 border-0 border-4 border-black p-4 mb-6">
+              <div className="bg-white from-blue-100 to-purple-100 border-0  p-4 mb-6">
                 <div className="text-center mb-3">
                   <div className="text-sm font-bold text-gray-700 mb-2">
                     💰 {t('dataFromWallet')}
@@ -493,15 +493,15 @@ export default function ComparisonPage() {
                   </div>
                 </div>
                 <div className="grid grid-cols-3 gap-2 text-center text-xs">
-                  <div className="bg-white border-0 border-2 border-black p-2">
+                  <div className="bg-white border-0  p-2">
                     <div className="font-bold text-lg">{comparison.walletStats.daysTracking}</div>
                     <div className="text-gray-600">{t('daysTracking')}</div>
                   </div>
-                  <div className="bg-white border-0 border-2 border-black p-2">
+                  <div className="bg-white border-0  p-2">
                     <div className="font-bold text-lg">{comparison.walletStats.entriesCount}</div>
                     <div className="text-gray-600">{t('refusals')}</div>
                   </div>
-                  <div className="bg-white border-0 border-2 border-black p-2">
+                  <div className="bg-white border-0  p-2">
                     <div className="font-bold text-lg">
                       {formatCurrency(convertCurrency(comparison.walletStats.dailyAverage, user.currency), user.currency)}
                     </div>
@@ -512,7 +512,7 @@ export default function ComparisonPage() {
             )}
 
             {!comparison.walletStats.hasData && (
-              <div className="bg-white border-0 border-4 border-black p-4 mb-6 text-center">
+              <div className="bg-white border-0  p-4 mb-6 text-center">
                 <div className="text-2xl mb-2">⚠️</div>
                 <div className="font-bold mb-1">{t('noWalletData')}</div>
                 <div className="text-sm text-gray-700">
@@ -524,7 +524,7 @@ export default function ComparisonPage() {
             {/* Weekly Comparison */}
             <div className="grid grid-cols-2 gap-4 mb-6">
               <motion.div 
-                className="bg-white border-0 border-4 border-black p-4"
+                className="bg-white border-0  p-4"
                 initial={{ opacity: 0, x: -30, rotate: -5 }}
                 animate={{ opacity: 1, x: 0, rotate: 0 }}
                 transition={{ delay: 0.3, type: 'spring' }}
@@ -552,7 +552,7 @@ export default function ComparisonPage() {
               </motion.div>
 
               <motion.div 
-                className="bg-white border-0 border-4 border-black p-4"
+                className="bg-white border-0  p-4"
                 initial={{ opacity: 0, x: 30, rotate: 5 }}
                 animate={{ opacity: 1, x: 0, rotate: 0 }}
                 transition={{ delay: 0.4, type: 'spring' }}
@@ -581,7 +581,7 @@ export default function ComparisonPage() {
             </div>
 
             <motion.div 
-              className="bg-white border-0 border-4 border-black p-6 mb-6 text-center relative overflow-hidden"
+              className="bg-white border-0  p-6 mb-6 text-center relative overflow-hidden"
               initial={{ opacity: 0, scale: 0.8, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ delay: 0.7, type: 'spring', stiffness: 300 }}
@@ -665,7 +665,7 @@ export default function ComparisonPage() {
               ].map((period, index) => (
                 <motion.div
                   key={period.key}
-                  className="bg-white from-white to-gray-50 border-0 border-4 border-black p-4"
+                  className="bg-white from-white to-gray-50 border-0  p-4"
                   initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 1.1 + index * 0.1, type: 'spring' }}
@@ -682,7 +682,7 @@ export default function ComparisonPage() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-2xl font-bold text-black">
+                      <div className="text-2xl font-bold text-gray-900">
                         {formatCurrency(
                           convertCurrency(
                             comparison.projections[period.key as keyof typeof comparison.projections],

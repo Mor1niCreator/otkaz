@@ -189,12 +189,12 @@ export default function GoalsPage() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <h1 className="text-3xl font-black uppercase tracking-wide mb-2 flex items-center gap-3">
+        <h1 className="text-3xl font-semibold  tracking-wide mb-2 flex items-center gap-3">
           🎯 {t('yourGoals')}
         </h1>
-        <div className="bg-white p-4 mt-4 border-3 border-black transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)]" style={{boxShadow: '0 3px 0px #000'}}>
-          <p className="text-xs font-black uppercase mb-1 text-gray-700">{t('totalSavings')}</p>
-          <p className="text-3xl font-black text-black">
+        <div className="bg-white p-4 mt-4  transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)]" style={{boxShadow: '0 3px 0px #000'}}>
+          <p className="text-xs font-semibold  mb-1 text-gray-700">{t('totalSavings')}</p>
+          <p className="text-3xl font-semibold text-gray-900">
             {formatCurrency(convertCurrency(totalSavings, user.currency), user.currency)}
           </p>
         </div>
@@ -202,7 +202,7 @@ export default function GoalsPage() {
 
       <div className="enough-panel mb-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-black uppercase">Active Goals</h2>
+          <h2 className="text-2xl font-semibold ">Active Goals</h2>
           <button
             onClick={() => setShowForm(true)}
             className="enough-button-primary px-4 py-2 text-sm"
@@ -225,24 +225,24 @@ export default function GoalsPage() {
               return (
                 <div 
                   key={goal.id} 
-                  className="bg-white border-3 border-black p-4 transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6),0_4px_0px_#000]"
+                  className="bg-white  p-4 transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6),0_4px_0px_#000]"
                   style={{ boxShadow: '0 3px 0px #000' }}
                 >
                   {progress >= 100 && (
                     <div className="bg-green-200 border-2 border-green-600 p-2 mb-3 text-center">
-                      <span className="font-black text-green-800">🎉 GOAL ACHIEVED! 🎉</span>
+                      <span className="font-semibold text-green-800">🎉 GOAL ACHIEVED! 🎉</span>
                     </div>
                   )}
                   
                   <div className="flex justify-between items-start mb-3">
                     <div>
-                      <h3 className="font-black text-lg uppercase tracking-wide">{goal.name}</h3>
+                      <h3 className="font-semibold text-lg  tracking-wide">{goal.name}</h3>
                       <p className="text-sm font-bold text-gray-700">
                         {t('target')}: {formatCurrency(convertedTarget, user.currency)}
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="text-2xl font-black">
+                      <p className="text-2xl font-semibold">
                         {progress.toFixed(0)}%
                         {progress >= 100 && <span className="ml-2">✅</span>}
                       </p>
@@ -263,12 +263,12 @@ export default function GoalsPage() {
 
       {totalSavings > 0 && (
         <div className="enough-panel mb-6">
-          <h2 className="text-2xl font-black uppercase mb-4 flex items-center gap-2">
+          <h2 className="text-2xl font-semibold  mb-4 flex items-center gap-2">
             🚀 {t('cryptoROICalculator')}
           </h2>
-          <div className="bg-white border-3 border-black p-4 mb-4">
+          <div className="bg-white  p-4 mb-4">
             <p className="text-sm font-bold text-gray-700 mb-2">
-              {t('yourSavings')}: <span className="font-black">{formatCurrency(convertCurrency(totalSavings, user.currency), user.currency)}</span>
+              {t('yourSavings')}: <span className="font-semibold">{formatCurrency(convertCurrency(totalSavings, user.currency), user.currency)}</span>
             </p>
             <p className="text-xs font-bold text-gray-600">
               See what this would be worth if you invested in top cryptocurrencies 5 years ago!
@@ -313,7 +313,7 @@ export default function GoalsPage() {
                   <div className="flex justify-between items-center">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <div className="font-black text-xl uppercase">{crypto.symbol}</div>
+                        <div className="font-semibold text-xl ">{crypto.symbol}</div>
                         <div className="enough-tag text-xs">
                           {crypto.multiplier.toFixed(1)}x
                         </div>
@@ -324,7 +324,7 @@ export default function GoalsPage() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-2xl font-black">
+                      <div className="text-2xl font-semibold">
                         {formatCurrency(convertCurrency(crypto.yourValue, user.currency), user.currency)}
                       </div>
                       <div className="text-xs font-bold text-gray-600 mt-1">
@@ -335,9 +335,9 @@ export default function GoalsPage() {
                 </div>
               ))}
               
-              <div className="bg-white border-3 border-black p-4 mt-4 transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)]">
-                <div className="text-sm font-bold text-center text-black">
-                  💎 Best performer: <span className="font-black">{cryptoData[0]?.symbol}</span> ({cryptoData[0]?.multiplier.toFixed(1)}x)
+              <div className="bg-white  p-4 mt-4 transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)]">
+                <div className="text-sm font-bold text-center text-gray-900">
+                  💎 Best performer: <span className="font-semibold">{cryptoData[0]?.symbol}</span> ({cryptoData[0]?.multiplier.toFixed(1)}x)
                 </div>
               </div>
             </div>
@@ -359,7 +359,7 @@ export default function GoalsPage() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
             >
-            <h2 className="text-2xl font-black uppercase mb-4">{t('createGoal')}</h2>
+            <h2 className="text-2xl font-semibold  mb-4">{t('createGoal')}</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 type="text"

@@ -267,7 +267,7 @@ export default function DashboardPage() {
         <div className="flex items-center gap-3 mb-4">
           <div className="text-4xl">✋</div>
           <div>
-            <h1 className="text-3xl font-black uppercase tracking-wide">
+            <h1 className="text-3xl font-semibold  tracking-wide">
               ENOUGH DASHBOARD
             </h1>
             <p className="text-sm font-bold text-gray-700">
@@ -277,21 +277,21 @@ export default function DashboardPage() {
         </div>
         
         <div className="grid grid-cols-3 gap-3">
-          <div className="bg-white p-4 text-center border-3 border-black transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)]" style={{boxShadow: '0 3px 0px #000'}}>
-            <p className="text-xs font-black uppercase mb-1 text-gray-700">{t('totalSavings')}</p>
-            <p className="text-2xl font-black text-black">
+          <div className="bg-white p-4 text-center  transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)]" style={{boxShadow: '0 3px 0px #000'}}>
+            <p className="text-xs font-semibold  mb-1 text-gray-700">{t('totalSavings')}</p>
+            <p className="text-2xl font-semibold text-gray-900">
               {formatCurrency(convertedStats.allTime, user.currency)}
             </p>
           </div>
           
-          <div className="bg-white p-4 text-center border-3 border-black transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)]" style={{boxShadow: '0 3px 0px #000'}}>
-            <p className="text-xs font-black uppercase mb-1 text-gray-700">{t('points')}</p>
-            <p className="text-2xl font-black text-black">{userPoints.toFixed(0)}</p>
+          <div className="bg-white p-4 text-center  transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)]" style={{boxShadow: '0 3px 0px #000'}}>
+            <p className="text-xs font-semibold  mb-1 text-gray-700">{t('points')}</p>
+            <p className="text-2xl font-semibold text-gray-900">{userPoints.toFixed(0)}</p>
           </div>
           
-          <div className="bg-white p-4 text-center border-3 border-black transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)]" style={{boxShadow: '0 3px 0px #000'}}>
-            <p className="text-xs font-black uppercase mb-1 text-gray-700">{t('rank')}</p>
-            <p className="text-lg font-black text-black">
+          <div className="bg-white p-4 text-center  transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)]" style={{boxShadow: '0 3px 0px #000'}}>
+            <p className="text-xs font-semibold  mb-1 text-gray-700">{t('rank')}</p>
+            <p className="text-lg font-semibold text-gray-900">
               {language === 'ru' ? currentRank.nameRu : currentRank.name}
             </p>
           </div>
@@ -304,7 +304,7 @@ export default function DashboardPage() {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex-1 px-4 py-3 font-black uppercase tracking-wide border-3 border-black transition-all text-sm bg-white text-black
+            className={`flex-1 px-4 py-3 font-semibold  tracking-wide  transition-all text-sm bg-white text-gray-900
               ${activeTab === tab.id 
                 ? 'shadow-[0_4px_0px_rgba(0,0,0,0.3)]' 
                 : 'hover:shadow-[0_0_20px_rgba(245,198,26,0.6)] hover:bg-[rgba(245,198,26,0.08)]'
@@ -339,7 +339,7 @@ function WalletTab({ stats, chartData, topTags, user, t }: any) {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       <div className="enough-panel mb-6">
-        <h2 className="text-2xl font-black uppercase mb-4">💎 {t('savingsOverview')}</h2>
+        <h2 className="text-2xl font-semibold  mb-4">💎 {t('savingsOverview')}</h2>
         
         <div className="grid grid-cols-3 gap-3 mb-6">
           {[
@@ -347,16 +347,16 @@ function WalletTab({ stats, chartData, topTags, user, t }: any) {
             { label: t('thisWeek'), value: stats.week, icon: '📅' },
             { label: t('thisMonth'), value: stats.month, icon: '📊' },
           ].map((stat) => (
-            <div key={stat.label} className="bg-white border-3 border-black p-4 text-center transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6),0_3px_0px_#000]" style={{boxShadow: '0 2px 0px #000'}}>
+            <div key={stat.label} className="bg-white  p-4 text-center transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6),0_3px_0px_#000]" style={{boxShadow: '0 2px 0px #000'}}>
               <div className="text-2xl mb-1">{stat.icon}</div>
-              <p className="text-xs font-black uppercase mb-1 text-gray-700">{stat.label}</p>
-              <p className="text-lg font-black text-black">{formatCurrency(stat.value, user.currency)}</p>
+              <p className="text-xs font-semibold  mb-1 text-gray-700">{stat.label}</p>
+              <p className="text-lg font-semibold text-gray-900">{formatCurrency(stat.value, user.currency)}</p>
             </div>
           ))}
         </div>
 
-        <h3 className="text-lg font-black uppercase mb-3">📊 {t('savingsChart')}</h3>
-        <div className="bg-white border-3 border-black p-4">
+        <h3 className="text-lg font-semibold  mb-3">📊 {t('savingsChart')}</h3>
+        <div className="bg-white  p-4">
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -371,7 +371,7 @@ function WalletTab({ stats, chartData, topTags, user, t }: any) {
 
       {topTags.length > 0 && (
         <div className="enough-panel">
-          <h2 className="text-2xl font-black uppercase mb-4">✋ {t('yourTopReasons')}</h2>
+          <h2 className="text-2xl font-semibold  mb-4">✋ {t('yourTopReasons')}</h2>
           <div className="flex flex-wrap gap-2">
             {topTags.map(({ tagId, count }: any) => {
               const tag = WHY_TAGS.find(t => t.id === tagId);
@@ -381,7 +381,7 @@ function WalletTab({ stats, chartData, topTags, user, t }: any) {
                 <div key={tagId} className="enough-tag px-4 py-2 flex items-center gap-2">
                   <span className="text-xl">{tag.icon}</span>
                   <div>
-                    <div className="text-xs font-black">{getWhyTagName(tagId, user.language)}</div>
+                    <div className="text-xs font-semibold">{getWhyTagName(tagId, user.language)}</div>
                     <div className="text-[10px] opacity-75">{count}x</div>
                   </div>
                 </div>
@@ -399,11 +399,11 @@ function AchievementsTab({ allAchievements, unlocked, unlockedIds, progress, use
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       <div className="enough-panel mb-6">
-        <h2 className="text-2xl font-black uppercase mb-4">🏅 {t('yourProgress')}</h2>
-        <div className="bg-white border-3 border-black p-4 transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)]">
+        <h2 className="text-2xl font-semibold  mb-4">🏅 {t('yourProgress')}</h2>
+        <div className="bg-white  p-4 transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)]">
           <div className="flex justify-between items-center mb-2">
-            <p className="font-black uppercase text-black">{t('progress')}</p>
-            <p className="text-2xl font-black text-black">{unlocked.length}/{allAchievements.length}</p>
+            <p className="font-semibold  text-gray-900">{t('progress')}</p>
+            <p className="text-2xl font-semibold text-gray-900">{unlocked.length}/{allAchievements.length}</p>
           </div>
           <div className="enough-progress">
             <div className="enough-progress-fill" style={{ width: `${progress}%` }} />
@@ -425,7 +425,7 @@ function AchievementsTab({ allAchievements, unlocked, unlockedIds, progress, use
               <div className="flex items-center gap-4">
                 <div className="text-5xl">{achievement.icon}</div>
                 <div className="flex-1">
-                  <h3 className="text-lg font-black uppercase flex items-center gap-2">
+                  <h3 className="text-lg font-semibold  flex items-center gap-2">
                     {user.language === 'ru' ? achievement.nameRu : achievement.nameEn}
                     {isUnlocked && <span>✨</span>}
                   </h3>
@@ -455,26 +455,26 @@ function ProfileTab({ user, editMode, setEditMode, name, setName, username, setU
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       <div className="enough-panel mb-6">
-        <h2 className="text-2xl font-black uppercase mb-2 text-black">
+        <h2 className="text-2xl font-semibold  mb-2 text-gray-900">
           👤 {user.name || user.email}
         </h2>
-        {user.username && <p className="text-lg font-bold text-black">@{user.username}</p>}
+        {user.username && <p className="text-lg font-bold text-gray-900">@{user.username}</p>}
         <p className="text-sm text-gray-700">{user.email}</p>
       </div>
 
       <div className="enough-panel mb-6">
-        <h3 className="text-xl font-black uppercase mb-4">🏆 {t('rankProgress')}</h3>
-        <div className="bg-white border-3 border-black p-4 mb-4 transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)]">
+        <h3 className="text-xl font-semibold  mb-4">🏆 {t('rankProgress')}</h3>
+        <div className="bg-white  p-4 mb-4 transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)]">
           <div className="flex justify-between items-center mb-2">
             <div>
               <p className="text-sm font-bold text-gray-700">{t('currentRank')}</p>
-              <p className="text-2xl font-black text-black">
+              <p className="text-2xl font-semibold text-gray-900">
                 {language === 'ru' ? currentRank.nameRu : currentRank.name}
               </p>
             </div>
             <div className="text-right">
               <p className="text-sm font-bold text-gray-700">{t('points')}</p>
-              <p className="text-3xl font-black text-black">{user.points.toFixed(0)}</p>
+              <p className="text-3xl font-semibold text-gray-900">{user.points.toFixed(0)}</p>
             </div>
           </div>
         </div>
@@ -483,7 +483,7 @@ function ProfileTab({ user, editMode, setEditMode, name, setName, username, setU
           <div>
             <div className="flex justify-between items-center mb-2">
               <p className="text-sm font-bold text-gray-700">{t('nextRank')}</p>
-              <p className="font-black" style={{ color: nextRank.color }}>
+              <p className="font-semibold" style={{ color: nextRank.color }}>
                 {language === 'ru' ? nextRank.nameRu : nextRank.name}
               </p>
             </div>
@@ -498,10 +498,10 @@ function ProfileTab({ user, editMode, setEditMode, name, setName, username, setU
       </div>
 
       <div className="enough-panel mb-6">
-        <h3 className="text-xl font-black uppercase mb-4 text-black">🎁 {t('referralSystem')}</h3>
-        <div className="bg-white border-3 border-black p-4 mb-3 transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)]">
+        <h3 className="text-xl font-semibold  mb-4 text-gray-900">🎁 {t('referralSystem')}</h3>
+        <div className="bg-white  p-4 mb-3 transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)]">
           <p className="text-sm font-bold text-gray-700 mb-2">{t('yourReferralCode')}</p>
-          <p className="text-3xl font-black text-center mb-2 text-black">{user.referralCode}</p>
+          <p className="text-3xl font-semibold text-center mb-2 text-gray-900">{user.referralCode}</p>
           <button onClick={onCopyReferral} className="w-full enough-button text-sm">
             {t('copyLink')}
           </button>
@@ -510,7 +510,7 @@ function ProfileTab({ user, editMode, setEditMode, name, setName, username, setU
 
       <div className="enough-panel mb-6">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-black uppercase">⚙️ {t('settings')}</h3>
+          <h3 className="text-xl font-semibold ">⚙️ {t('settings')}</h3>
           {!editMode && (
             <button onClick={() => setEditMode(true)} className="enough-button-primary px-4 py-2 text-sm">
               ✏️ {t('edit')}
@@ -520,12 +520,12 @@ function ProfileTab({ user, editMode, setEditMode, name, setName, username, setU
 
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-black uppercase mb-2">Display Name</label>
+            <label className="block text-sm font-semibold  mb-2">Display Name</label>
             <input type="text" value={name} onChange={(e) => setName(e.target.value)} disabled={!editMode} className="w-full px-4 py-3" />
           </div>
 
           <div>
-            <label className="block text-sm font-black uppercase mb-2">Username</label>
+            <label className="block text-sm font-semibold  mb-2">Username</label>
             <div className="relative">
               <input type="text" value={username} onChange={(e) => { setUsername(e.target.value); onCheckUsername(e.target.value); }} disabled={!editMode} className="w-full px-4 py-3 pr-12" />
               {isCheckingUsername && <div className="absolute right-3 top-1/2 transform -translate-y-1/2"><div className="animate-spin border-0 h-4 w-4 border-b-2 border-black"></div></div>}
@@ -539,7 +539,7 @@ function ProfileTab({ user, editMode, setEditMode, name, setName, username, setU
           </div>
 
           <div>
-            <label className="block text-sm font-black uppercase mb-2">{t('currency')}</label>
+            <label className="block text-sm font-semibold  mb-2">{t('currency')}</label>
             <select value={currency} onChange={(e) => setCurrency(e.target.value)} disabled={!editMode} className="w-full px-4 py-3">
               {Object.entries(CURRENCIES).map(([code, data]) => (
                 <option key={code} value={code}>{code} - {data.name} ({data.symbol})</option>
@@ -548,7 +548,7 @@ function ProfileTab({ user, editMode, setEditMode, name, setName, username, setU
           </div>
 
           <div>
-            <label className="block text-sm font-black uppercase mb-2">{t('language')}</label>
+            <label className="block text-sm font-semibold  mb-2">{t('language')}</label>
             <select value={language} onChange={(e) => setLanguage(e.target.value)} disabled={!editMode} className="w-full px-4 py-3">
               <option value="en">English 🇬🇧</option>
               <option value="ru">Русский 🇷🇺</option>
@@ -564,7 +564,7 @@ function ProfileTab({ user, editMode, setEditMode, name, setName, username, setU
         </div>
       </div>
 
-      <button onClick={onLogout} className="w-full bg-white text-black font-black py-3 px-6 border-3 border-black transition-all hover:shadow-[0_0_20px_rgba(239,68,68,0.6),0_5px_0px_#000] hover:bg-red-50" style={{boxShadow: '0 4px 0px #000'}}>
+      <button onClick={onLogout} className="w-full bg-white text-gray-900 font-semibold py-3 px-6  transition-all hover:shadow-[0_0_20px_rgba(239,68,68,0.6),0_5px_0px_#000] hover:bg-red-50" style={{boxShadow: '0 4px 0px #000'}}>
         🚪 {t('logout')}
       </button>
     </motion.div>

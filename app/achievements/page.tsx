@@ -78,7 +78,7 @@ export default function AchievementsPage() {
       <div className="enough-panel mb-6">
         <h1 className="text-4xl font-bold mb-4">🏅 {t('achievementsTitle')}</h1>
         
-        <div className="bg-white border-0 border-4 border-black p-4 mb-4">
+        <div className="bg-white border-0  p-4 mb-4">
           <div className="flex justify-between items-center mb-2">
             <p className="font-bold">{t('progress')}</p>
             <p className="text-2xl font-bold">{unlocked.length}/{all.length}</p>
