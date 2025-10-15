@@ -1,6 +1,6 @@
 {
-  "name": "Отказник - Gamified Savings PWA",
-  "short_name": "Отказник",
+  "name": "Enough - Gamified Savings PWA",
+  "short_name": "Enough",
   "description": "Track your savings, earn achievements, and see crypto ROI",
   "start_url": "/",
   "display": "standalone",

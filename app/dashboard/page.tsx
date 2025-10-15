@@ -246,9 +246,9 @@ export default function DashboardPage() {
     : 100;
 
   const tabs = [
-    { id: 'wallet' as TabType, label: t('wallet'), icon: '💰', color: 'from-orange-400 to-pink-400' },
-    { id: 'achievements' as TabType, label: t('achievements'), icon: '🏅', color: 'from-yellow-400 to-orange-400' },
-    { id: 'profile' as TabType, label: t('profile'), icon: '👤', color: 'from-purple-400 to-pink-400' },
+    { id: 'wallet' as TabType, label: t('wallet'), icon: '💎', color: 'from-emerald-400 to-teal-500' },
+    { id: 'achievements' as TabType, label: t('achievements'), icon: '🏆', color: 'from-amber-400 to-orange-500' },
+    { id: 'profile' as TabType, label: t('profile'), icon: '✋', color: 'from-purple-400 to-pink-500' },
   ];
 
   return (
@@ -262,7 +262,10 @@ export default function DashboardPage() {
 
       {/* Animated Header */}
       <motion.div 
-        className="comic-panel mb-6 relative overflow-hidden bg-gradient-to-br from-comic-orange via-comic-yellow to-comic-lime"
+        className="comic-panel mb-6 relative overflow-hidden"
+        style={{
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+        }}
         initial={{ scale: 0.9, opacity: 0, y: -50 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
         transition={{ type: 'spring', stiffness: 200 }}
@@ -274,45 +277,69 @@ export default function DashboardPage() {
         />
         
         <div className="relative z-10">
-          <motion.h1 
-            className="text-4xl font-bold mb-2 flex items-center gap-3"
-            animate={{ y: [0, -5, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
+          <motion.div
+            className="flex items-center gap-3 mb-4"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
           >
-            <motion.span
+            <motion.div
+              className="text-5xl"
               animate={{ rotate: [0, -10, 10, -10, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
+              transition={{ duration: 3, repeat: Infinity }}
             >
-              📊
-            </motion.span>
-            {t('dashboard')}
-          </motion.h1>
+              ✋
+            </motion.div>
+            <div>
+              <motion.h1 
+                className="text-4xl font-black text-white"
+                style={{
+                  fontFamily: "'Bangers', 'Russo One', cursive",
+                  textShadow: '3px 3px 0px rgba(0,0,0,0.3)',
+                }}
+              >
+                ENOUGH DASHBOARD
+              </motion.h1>
+              <p className="text-white/90 text-sm font-bold">
+                Your journey to mindful spending
+              </p>
+            </div>
+          </motion.div>
           
-          <div className="flex items-center gap-4 mt-4">
+          <div className="grid grid-cols-3 gap-3">
             <motion.div 
-              className="text-center"
-              whileHover={{ scale: 1.05 }}
+              className="bg-white/20 backdrop-blur-sm rounded-2xl border-3 border-white/40 p-4 text-center"
+              whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.3)' }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
             >
-              <p className="text-sm text-gray-700">{t('totalSavings')}</p>
-              <p className="text-3xl font-black">
+              <p className="text-xs text-white/80 font-bold mb-1">{t('totalSavings')}</p>
+              <p className="text-2xl font-black text-white">
                 {formatCurrency(convertedStats.allTime, user.currency)}
               </p>
             </motion.div>
-            <div className="h-12 w-1 bg-black rounded"></div>
+            
             <motion.div 
-              className="text-center"
-              whileHover={{ scale: 1.05 }}
+              className="bg-white/20 backdrop-blur-sm rounded-2xl border-3 border-white/40 p-4 text-center"
+              whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.3)' }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
             >
-              <p className="text-sm text-gray-700">{t('points')}</p>
-              <p className="text-3xl font-black">{userPoints.toFixed(0)}</p>
+              <p className="text-xs text-white/80 font-bold mb-1">{t('points')}</p>
+              <p className="text-2xl font-black text-white">{userPoints.toFixed(0)}</p>
             </motion.div>
-            <div className="h-12 w-1 bg-black rounded"></div>
+            
             <motion.div 
-              className="text-center"
-              whileHover={{ scale: 1.05 }}
+              className="bg-white/20 backdrop-blur-sm rounded-2xl border-3 border-white/40 p-4 text-center"
+              whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.3)' }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
             >
-              <p className="text-sm text-gray-700">{t('rank')}</p>
-              <p className="text-2xl font-black" style={{ color: currentRank.color }}>
+              <p className="text-xs text-white/80 font-bold mb-1">{t('rank')}</p>
+              <p className="text-xl font-black text-white">
                 {language === 'ru' ? currentRank.nameRu : currentRank.name}
               </p>
             </motion.div>
@@ -427,36 +454,53 @@ function WalletContent({ convertedStats, chartData, topTags, user, t }: any) {
       transition={{ type: 'spring', stiffness: 200 }}
     >
       <motion.div 
-        className="comic-panel mb-6"
+        className="comic-panel mb-6 relative overflow-hidden"
+        style={{
+          background: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+        }}
         initial={{ scale: 0.9 }}
         animate={{ scale: 1 }}
         transition={{ delay: 0.1 }}
       >
-        <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-          <motion.span animate={{ rotate: [0, 360] }} transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}>
-            💰
-          </motion.span>
-          {t('savingsOverview')}
-        </h2>
+        <motion.div
+          className="absolute -bottom-10 -left-10 w-40 h-40 bg-white rounded-full opacity-20"
+          animate={{ scale: [1, 1.3, 1] }}
+          transition={{ duration: 5, repeat: Infinity }}
+        />
         
-        <div className="grid grid-cols-3 gap-3">
-          {[
-            { label: t('today'), value: convertedStats.today, color: 'bg-comic-yellow' },
-            { label: t('thisWeek'), value: convertedStats.week, color: 'bg-comic-lime' },
-            { label: t('thisMonth'), value: convertedStats.month, color: 'bg-comic-cyan' },
-          ].map((stat, index) => (
-            <motion.div
-              key={stat.label}
-              className={`${stat.color} rounded-xl border-4 border-black p-4 text-center`}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 + index * 0.1 }}
-              whileHover={{ scale: 1.05, rotate: 2 }}
+        <div className="relative z-10">
+          <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+            <motion.span 
+              animate={{ scale: [1, 1.2, 1] }} 
+              transition={{ duration: 2, repeat: Infinity }}
             >
-              <p className="text-xs text-gray-700 mb-1">{stat.label}</p>
-              <p className="text-xl font-bold">{formatCurrency(stat.value, user.currency)}</p>
-            </motion.div>
-          ))}
+              💎
+            </motion.span>
+            {t('savingsOverview')}
+          </h2>
+          
+          <div className="grid grid-cols-3 gap-3">
+            {[
+              { label: t('today'), value: convertedStats.today, gradient: 'from-yellow-300 to-amber-400', icon: '☀️' },
+              { label: t('thisWeek'), value: convertedStats.week, gradient: 'from-emerald-300 to-teal-400', icon: '📅' },
+              { label: t('thisMonth'), value: convertedStats.month, gradient: 'from-blue-300 to-indigo-400', icon: '📊' },
+            ].map((stat, index) => (
+              <motion.div
+                key={stat.label}
+                className={`bg-gradient-to-br ${stat.gradient} rounded-xl border-4 border-black p-4 text-center relative overflow-hidden`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 + index * 0.1 }}
+                whileHover={{ scale: 1.08, y: -5 }}
+              >
+                <div className="absolute top-1 right-1 text-2xl opacity-30">
+                  {stat.icon}
+                </div>
+                <p className="text-xs text-gray-800 font-bold mb-1">{stat.label}</p>
+                <p className="text-xl font-black">{formatCurrency(stat.value, user.currency)}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </motion.div>
 
@@ -480,12 +524,23 @@ function WalletContent({ convertedStats, chartData, topTags, user, t }: any) {
 
       {topTags.length > 0 && (
         <motion.div 
-          className="comic-panel bg-gradient-to-r from-purple-100 to-pink-100"
+          className="comic-panel relative overflow-hidden"
+          style={{
+            background: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)',
+          }}
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.4 }}
         >
-          <h2 className="text-2xl font-bold mb-4">🤔 {t('yourTopReasons')}</h2>
+          <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+            <motion.span
+              animate={{ rotate: [0, 10, -10, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              ✋
+            </motion.span>
+            {t('yourTopReasons')}
+          </h2>
           <div className="flex flex-wrap gap-2">
             {topTags.map(({ tagId, count }: any, index: number) => {
               const tag = WHY_TAGS.find(t => t.id === tagId);
