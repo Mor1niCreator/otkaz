@@ -97,7 +97,7 @@ export default function HomePage() {
             className="inline-block"
           >
             <div 
-              className="px-8 py-4 bg-black text-enough-yellow"
+              className="px-8 py-4 bg-white text-black border-3 border-black"
               style={{
                 boxShadow: '0 6px 0px rgba(0,0,0,0.3)',
               }}
@@ -123,37 +123,27 @@ export default function HomePage() {
           >
             {/* Toggle Tabs */}
             <div className="flex gap-3 mb-8">
-              <motion.button
+              <button
                 onClick={() => setIsLogin(true)}
-                className={`flex-1 py-4 font-black text-base uppercase tracking-wider border-3 border-black transition-all
+                className={`flex-1 py-4 font-black text-base uppercase tracking-wider bg-white text-black border-3 border-black transition-all
                   ${isLogin 
-                    ? 'bg-black text-enough-yellow' 
-                    : 'bg-enough-white text-black hover:bg-enough-cream'
+                    ? 'shadow-[0_4px_0px_rgba(0,0,0,0.3)]' 
+                    : 'hover:shadow-[0_0_20px_rgba(245,198,26,0.6)] hover:bg-[rgba(245,198,26,0.1)]'
                   }`}
-                style={{
-                  boxShadow: isLogin ? '0 4px 0px rgba(0,0,0,0.3)' : 'none',
-                }}
-                whileHover={{ y: -2 }}
-                whileTap={{ y: 0 }}
               >
                 LOGIN
-              </motion.button>
+              </button>
 
-              <motion.button
+              <button
                 onClick={() => setIsLogin(false)}
-                className={`flex-1 py-4 font-black text-base uppercase tracking-wider border-3 border-black transition-all
+                className={`flex-1 py-4 font-black text-base uppercase tracking-wider bg-white text-black border-3 border-black transition-all
                   ${!isLogin 
-                    ? 'bg-black text-enough-yellow' 
-                    : 'bg-enough-white text-black hover:bg-enough-cream'
+                    ? 'shadow-[0_4px_0px_rgba(0,0,0,0.3)]' 
+                    : 'hover:shadow-[0_0_20px_rgba(245,198,26,0.6)] hover:bg-[rgba(245,198,26,0.1)]'
                   }`}
-                style={{
-                  boxShadow: !isLogin ? '0 4px 0px rgba(0,0,0,0.3)' : 'none',
-                }}
-                whileHover={{ y: -2 }}
-                whileTap={{ y: 0 }}
               >
                 REGISTER
-              </motion.button>
+              </button>
             </div>
 
             {/* Form */}
@@ -254,16 +244,14 @@ export default function HomePage() {
                   </>
                 )}
 
-                <motion.button 
+                <button 
                   type="submit" 
                   disabled={isLoading}
-                  className="enough-button-primary w-full py-5 text-xl
+                  className="enough-button-primary w-full py-5 text-xl text-black
                     disabled:opacity-50 disabled:cursor-not-allowed"
-                  whileHover={!isLoading ? { y: -3 } : {}}
-                  whileTap={!isLoading ? { y: 2 } : {}}
                 >
                   {isLoading ? 'LOADING...' : isLogin ? 'LET\'S GO' : 'START SAVING'}
-                </motion.button>
+                </button>
               </motion.form>
             </AnimatePresence>
 
@@ -279,22 +267,18 @@ export default function HomePage() {
                 { text: 'Build Wealth', emoji: '💎' },
                 { text: 'Reach Goals', emoji: '🎯' },
               ].map((item, i) => (
-                <motion.div
+                <div
                   key={i}
-                  className="bg-black text-enough-yellow p-4 text-center border-3 border-black"
+                  className="bg-white text-black p-4 text-center border-3 border-black transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)] hover:bg-[rgba(245,198,26,0.08)]"
                   style={{
                     boxShadow: '0 3px 0px rgba(0,0,0,0.3)',
                   }}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 1 + i * 0.1 }}
-                  whileHover={{ y: -3 }}
                 >
                   <div className="text-3xl mb-2">{item.emoji}</div>
                   <p className="text-xs font-black uppercase tracking-wide">
                     {item.text}
                   </p>
-                </motion.div>
+                </div>
               ))}
             </motion.div>
           </div>

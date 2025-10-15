@@ -87,7 +87,7 @@ export default function PresetsEditor({
           {presets.map((preset) => (
             <div
               key={preset.id}
-              className="bg-enough-cream border-3 border-black p-3"
+              className="bg-white border-3 border-black p-3"
               style={{ boxShadow: '0 2px 0px #000' }}
             >
               {editingId === preset.id ? (
@@ -97,7 +97,7 @@ export default function PresetsEditor({
                     <button
                       type="button"
                       onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                      className="text-3xl border-3 border-black px-3 py-2 hover:bg-enough-yellow transition-colors"
+                      className="text-3xl border-3 border-black px-3 py-2 hover:bg-white transition-colors"
                     >
                       {editForm.icon || '💰'}
                     </button>
@@ -125,13 +125,13 @@ export default function PresetsEditor({
 
                   {/* Emoji picker grid */}
                   {showEmojiPicker && (
-                    <div className="bg-enough-white border-2 border-black p-2 grid grid-cols-8 gap-1 max-h-40 overflow-y-auto">
+                    <div className="bg-white border-2 border-black p-2 grid grid-cols-8 gap-1 max-h-40 overflow-y-auto">
                       {PRESET_EMOJI_OPTIONS.map((emoji) => (
                         <button
                           key={emoji}
                           type="button"
                           onClick={() => selectEmoji(emoji)}
-                          className="text-2xl hover:bg-enough-yellow transition-colors p-1"
+                          className="text-2xl hover:bg-white transition-colors p-1"
                         >
                           {emoji}
                         </button>

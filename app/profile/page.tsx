@@ -187,7 +187,7 @@ export default function ProfilePage() {
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto">
       <div className="enough-panel mb-6">
         <h1 className="text-4xl font-bold mb-2">👤 {t('profile')}</h1>
-        <div className="bg-gradient-to-r from-comic-purple to-comic-pink rounded-2xl border-4 border-black p-6 mt-4 text-white">
+        <div className="bg-white from-comic-purple to-comic-pink border-0 border-4 border-black p-6 mt-4 text-black">
           <p className="text-2xl font-bold mb-1">{user.name || user.email}</p>
           {user.username && (
             <p className="text-lg font-bold mb-1">@{user.username}</p>
@@ -198,7 +198,7 @@ export default function ProfilePage() {
 
       <div className="enough-panel mb-6">
         <h2 className="text-2xl font-bold mb-4">{t('rankProgress')}</h2>
-        <div className="bg-enough-yellow rounded-xl border-4 border-black p-4 mb-4">
+        <div className="bg-white border-0 border-4 border-black p-4 mb-4">
           <div className="flex justify-between items-center mb-2">
             <div>
               <p className="text-sm text-gray-700">{t('currentRank')}</p>
@@ -233,7 +233,7 @@ export default function ProfilePage() {
 
       <div className="enough-panel mb-6">
         <h2 className="text-2xl font-bold mb-4">{t('referralSystem')}</h2>
-        <div className="bg-enough-yellow rounded-xl border-4 border-black p-4 mb-3">
+        <div className="bg-white border-0 border-4 border-black p-4 mb-3">
           <p className="text-sm text-gray-700 mb-2">{t('yourReferralCode')}</p>
           <p className="text-3xl font-bold text-center mb-2">{user.referralCode}</p>
           <button onClick={copyReferralLink} className="w-full enough-button text-sm">
@@ -254,7 +254,7 @@ export default function ProfilePage() {
           {!editMode && (
             <button
               onClick={() => setEditMode(true)}
-              className="enough-button-primary rounded-full px-4 py-2"
+              className="enough-button-primary border-0 px-4 py-2"
             >
               ✏️ {t('edit')}
             </button>
@@ -270,7 +270,7 @@ export default function ProfilePage() {
               onChange={(e) => setName(e.target.value)}
               disabled={!editMode}
               placeholder="Enter your display name"
-              className="w-full px-4 py-3 border-4 border-black rounded-xl disabled:bg-gray-100"
+              className="w-full px-4 py-3 border-4 border-black border-0 disabled:bg-gray-100"
             />
           </div>
 
@@ -286,11 +286,11 @@ export default function ProfilePage() {
                 }}
                 disabled={!editMode}
                 placeholder="Enter your username"
-                className="w-full px-4 py-3 border-4 border-black rounded-xl disabled:bg-gray-100 pr-12"
+                className="w-full px-4 py-3 border-4 border-black border-0 disabled:bg-gray-100 pr-12"
               />
               {isCheckingUsername && (
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-black"></div>
+                  <div className="animate-spin border-0 h-4 w-4 border-b-2 border-black"></div>
                 </div>
               )}
               {!isCheckingUsername && username && username !== user?.username && (
@@ -314,7 +314,7 @@ export default function ProfilePage() {
               value={currency}
               onChange={(e) => setCurrency(e.target.value)}
               disabled={!editMode}
-              className="w-full px-4 py-3 border-4 border-black rounded-xl disabled:bg-gray-100"
+              className="w-full px-4 py-3 border-4 border-black border-0 disabled:bg-gray-100"
             >
               {Object.entries(CURRENCIES).map(([code, data]) => (
                 <option key={code} value={code}>
@@ -330,7 +330,7 @@ export default function ProfilePage() {
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
               disabled={!editMode}
-              className="w-full px-4 py-3 border-4 border-black rounded-xl disabled:bg-gray-100"
+              className="w-full px-4 py-3 border-4 border-black border-0 disabled:bg-gray-100"
             >
               <option value="en">English 🇬🇧</option>
               <option value="ru">Русский 🇷🇺</option>
@@ -349,7 +349,7 @@ export default function ProfilePage() {
           )}
 
           {showPasswordForm && (
-            <div className="space-y-4 p-4 bg-gray-100 rounded-xl border-4 border-black">
+            <div className="space-y-4 p-4 bg-gray-100 border-0 border-4 border-black">
               <h3 className="text-lg font-bold">Change Password</h3>
               
               <div>
@@ -359,7 +359,7 @@ export default function ProfilePage() {
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
                   placeholder="Enter current password"
-                  className="w-full px-4 py-3 border-4 border-black rounded-xl"
+                  className="w-full px-4 py-3 border-4 border-black border-0"
                 />
               </div>
 
@@ -373,7 +373,7 @@ export default function ProfilePage() {
                     checkPasswordStrength(e.target.value);
                   }}
                   placeholder="Enter new password"
-                  className="w-full px-4 py-3 border-4 border-black rounded-xl"
+                  className="w-full px-4 py-3 border-4 border-black border-0"
                 />
                 {newPassword && (
                   <div className="mt-2">
@@ -383,7 +383,7 @@ export default function ProfilePage() {
                         {[1, 2, 3, 4, 5, 6].map((level) => (
                           <div
                             key={level}
-                            className={`w-4 h-2 rounded ${
+                            className={`w-4 h-2 border-0 ${
                               level <= passwordStrength.score
                                 ? level <= 2
                                   ? 'bg-red-500'
@@ -414,7 +414,7 @@ export default function ProfilePage() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Confirm new password"
-                  className="w-full px-4 py-3 border-4 border-black rounded-xl"
+                  className="w-full px-4 py-3 border-4 border-black border-0"
                 />
                 {confirmPassword && newPassword !== confirmPassword && (
                   <p className="text-red-600 text-sm mt-1">Passwords do not match</p>
@@ -441,7 +441,7 @@ export default function ProfilePage() {
 
       <button
         onClick={handleLogout}
-        className="w-full bg-red-500 text-white font-bold py-3 px-6 rounded-full border-4 border-black enough-shadow hover:enough-shadow-lg transition-all hover:-translate-y-1 active:translate-y-0"
+        className="w-full bg-red-500 text-black font-bold py-3 px-6 border-0 border-4 border-black enough-shadow hover:enough-shadow-lg transition-all hover:-translate-y-1 active:translate-y-0"
       >
         🚪 {t('logout')}
       </button>

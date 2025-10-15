@@ -41,9 +41,9 @@ export default function AchievementAnimation({
           exit={{ opacity: 0 }}
         >
           <motion.div 
-            className="bg-enough-yellow border-4 border-black p-8 max-w-md mx-4"
+            className="bg-white border-4 border-black p-8 max-w-md mx-4"
             style={{
-              boxShadow: '0 8px 0px #000',
+              boxShadow: '0 0 50px rgba(245, 198, 26, 1), 0 8px 0px #000',
             }}
             initial={{ scale: 0, y: 50 }}
             animate={{ scale: 1, y: 0 }}
@@ -61,8 +61,8 @@ export default function AchievementAnimation({
               >
                 {achievement.icon}
               </motion.div>
-              <div className="bg-black text-enough-yellow px-4 py-2 mb-3">
-                <div className="text-2xl font-black uppercase tracking-wider">
+              <div className="bg-white border-3 border-black px-4 py-2 mb-3" style={{boxShadow: '0 0 25px rgba(245, 198, 26, 0.7)'}}>
+                <div className="text-2xl font-black uppercase tracking-wider text-black">
                   🏆 ACHIEVEMENT UNLOCKED!
                 </div>
               </div>

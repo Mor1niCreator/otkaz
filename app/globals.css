@@ -16,59 +16,57 @@
     overflow-x: hidden;
   }
   
-  /* Ensure content is visible above background */
   main, .page-content {
     position: relative;
     z-index: 1;
   }
 
   /* ENOUGH BRAND FONT HIERARCHY - Professional & Bold */
-  
-  /* Hero Titles - BOLD & IMPACTFUL */
   h1, .text-hero {
     font-family: 'Inter', 'Arial Black', sans-serif;
     font-weight: 900;
     letter-spacing: -0.02em;
     text-transform: uppercase;
+    color: #000;
   }
 
-  /* Section Headers - STRONG */
   h2, .text-header {
     font-family: 'Inter', 'Arial Black', sans-serif;
     font-weight: 800;
     letter-spacing: -0.01em;
     text-transform: uppercase;
+    color: #000;
   }
 
-  /* Subheaders - BOLD */
   h3, .text-subheader {
     font-family: 'Inter', 'Arial Black', sans-serif;
     font-weight: 700;
     letter-spacing: 0em;
+    color: #000;
   }
 
-  /* Buttons & Action Text - POWERFUL */
   button, .btn-text {
     font-family: 'Inter', 'Arial Black', sans-serif;
     font-weight: 800;
     letter-spacing: 0.02em;
     text-transform: uppercase;
+    color: #000;
   }
 
-  /* Body Text - CLEAN */
   p, span, div, .body-text {
     font-family: 'Inter', sans-serif;
     font-weight: 500;
+    color: #000;
   }
 
-  /* Numbers & Stats - BOLD DISPLAY */
   .text-number {
     font-family: 'Inter', 'Arial Black', sans-serif;
     font-weight: 900;
     font-variant-numeric: tabular-nums;
+    color: #000;
   }
   
-  /* Professional panel pattern */
+  /* Professional grid pattern */
   body::before {
     content: '';
     position: fixed;
@@ -85,71 +83,102 @@
 }
 
 @layer components {
-  /* PROFESSIONAL PANEL - Enough Style */
+  /* PROFESSIONAL PANEL - White with Black Border & Texture */
   .enough-panel {
     @apply p-6 relative;
-    background: #FFFEF7;
-    border: 4px solid #000;
-    box-shadow: 
-      0 8px 0px #000,
-      0 10px 20px rgba(0,0,0,0.2);
-    border-radius: 0;
+    background: #FFFFFF;
+    border: 3px solid #000;
+    box-shadow: 0 4px 0px #000;
+    position: relative;
+    transition: all 0.3s ease;
   }
 
+  /* Subtle paper texture */
   .enough-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.015) 2px, rgba(0,0,0,0.015) 4px),
+      repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,0.015) 2px, rgba(0,0,0,0.015) 4px);
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  .enough-panel::after {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 6px;
-    background: #F5C61A;
+    height: 4px;
+    background: linear-gradient(90deg, #F5C61A 0%, #FFD700 100%);
   }
 
-  /* ENOUGH BUTTON - Bold & Professional */
+  /* ENOUGH BUTTON - White with Professional Style */
   .enough-button {
     @apply px-8 py-4 text-base relative overflow-hidden;
     font-family: 'Inter', 'Arial Black', sans-serif;
     font-weight: 800;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    background: #000;
-    color: #FFFEF7;
-    border: none;
-    box-shadow: 
-      0 4px 0px rgba(0,0,0,0.3),
-      0 6px 20px rgba(0,0,0,0.2);
-    transition: all 0.2s ease;
-    border-radius: 0;
+    background: #FFFFFF;
+    color: #000;
+    border: 3px solid #000;
+    box-shadow: 0 4px 0px #000;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  /* Business texture */
+  .enough-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+      repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.02) 4px);
+    pointer-events: none;
   }
 
   .enough-button:hover {
     transform: translateY(-2px);
     box-shadow: 
-      0 6px 0px rgba(0,0,0,0.3),
-      0 8px 25px rgba(0,0,0,0.25);
+      0 6px 0px #000,
+      0 0 20px rgba(245, 198, 26, 0.6),
+      inset 0 0 20px rgba(245, 198, 26, 0.2);
+    background: rgba(245, 198, 26, 0.1);
   }
 
   .enough-button:active {
     transform: translateY(2px);
-    box-shadow: 
-      0 2px 0px rgba(0,0,0,0.3),
-      0 3px 10px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 0px #000;
   }
 
-  /* YELLOW BUTTON - Primary Action */
+  /* PRIMARY BUTTON - White with Yellow Neon on Hover */
   .enough-button-primary {
     @apply enough-button;
-    background: #F5C61A;
-    color: #000;
   }
 
-  /* WHITE BUTTON - Secondary */
+  .enough-button-primary:hover {
+    box-shadow: 
+      0 6px 0px #000,
+      0 0 25px rgba(245, 198, 26, 0.8),
+      inset 0 0 25px rgba(245, 198, 26, 0.3);
+    background: rgba(245, 198, 26, 0.15);
+  }
+
+  /* SECONDARY BUTTON */
   .enough-button-secondary {
     @apply enough-button;
-    background: #FFFEF7;
-    color: #000;
-    border: 3px solid #000;
+    background: #F5F5F5;
+  }
+
+  .enough-button-secondary:hover {
+    background: rgba(245, 198, 26, 0.1);
+    box-shadow: 
+      0 6px 0px #000,
+      0 0 20px rgba(245, 198, 26, 0.6),
+      inset 0 0 20px rgba(245, 198, 26, 0.2);
   }
 
   /* OUTLINED TEXT - Signature Enough Style */
@@ -189,38 +218,70 @@
     font-weight: 800;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    background: #000;
-    color: #F5C61A;
-    border: none;
+    background: #FFFFFF;
+    color: #000;
+    border: 2px solid #000;
     font-size: 0.875rem;
+    transition: all 0.3s ease;
+  }
+
+  .enough-badge:hover {
+    box-shadow: 0 0 15px rgba(245, 198, 26, 0.6);
+    background: rgba(245, 198, 26, 0.1);
   }
 
   /* CARD - Modern Professional */
   .enough-card {
-    @apply rounded-none p-6 relative;
-    background: #FFFEF7;
+    @apply p-6 relative;
+    background: #FFFFFF;
     border: 3px solid #000;
     box-shadow: 0 4px 0px #000;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  /* Business texture for cards */
+  .enough-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.015) 2px, rgba(0,0,0,0.015) 4px),
+      repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,0.015) 2px, rgba(0,0,0,0.015) 4px);
+    pointer-events: none;
+    opacity: 0.5;
   }
 
   .enough-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 7px 0px #000;
+    box-shadow: 
+      0 7px 0px #000,
+      0 0 20px rgba(245, 198, 26, 0.4);
   }
 
   /* PROGRESS BAR - Clean & Bold */
   .enough-progress {
     @apply w-full h-8 overflow-hidden relative;
-    background: #FFFEF7;
+    background: #FFFFFF;
     border: 3px solid #000;
+    position: relative;
+  }
+
+  .enough-progress::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+      repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(0,0,0,0.03) 10px, rgba(0,0,0,0.03) 11px);
+    pointer-events: none;
   }
 
   .enough-progress-fill {
     @apply h-full relative;
-    background: #F5C61A;
+    background: linear-gradient(135deg, #F5C61A 0%, #FFD700 100%);
     transition: all 0.6s ease;
     border-right: 3px solid #000;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
   }
 
   /* MODAL OVERLAY - Professional */
@@ -232,15 +293,38 @@
 
   /* MODAL - Professional Panel */
   .enough-modal {
-    @apply enough-panel;
+    @apply p-8 relative;
+    background: #FFFFFF;
+    border: 4px solid #000;
     box-shadow: 
       0 12px 0px #000,
       0 15px 40px rgba(0,0,0,0.4);
+    position: relative;
+  }
+
+  .enough-modal::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.015) 2px, rgba(0,0,0,0.015) 4px),
+      repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,0.015) 2px, rgba(0,0,0,0.015) 4px);
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  .enough-modal::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, #F5C61A 0%, #FFD700 100%);
   }
 
   /* ==================== ANIMATIONS ==================== */
 
-  /* SLIDE UP - Professional Entry */
   @keyframes slideUp {
     from {
       transform: translateY(30px);
@@ -256,7 +340,6 @@
     animation: slideUp 0.4s ease-out;
   }
 
-  /* FADE IN - Smooth Appearance */
   @keyframes fadeIn {
     from {
       opacity: 0;
@@ -270,7 +353,6 @@
     animation: fadeIn 0.3s ease-out;
   }
 
-  /* SCALE IN - Professional Pop */
   @keyframes scaleIn {
     from {
       transform: scale(0.95);
@@ -286,7 +368,6 @@
     animation: scaleIn 0.3s ease-out;
   }
 
-  /* PULSE - Subtle Attention */
   @keyframes pulse {
     0%, 100% {
       transform: scale(1);
@@ -300,7 +381,6 @@
     animation: pulse 2s ease-in-out infinite;
   }
 
-  /* SHINE - Professional Highlight */
   @keyframes shine {
     0% {
       transform: translateX(-100%);
@@ -331,7 +411,6 @@
     animation: shine 3s ease-in-out infinite;
   }
 
-  /* ACHIEVEMENT GLOW - Celebration */
   @keyframes achievementGlow {
     0%, 100% {
       box-shadow: 
@@ -349,7 +428,6 @@
     animation: achievementGlow 2s ease-in-out infinite;
   }
 
-  /* STAR BURST - Quick Flash */
   @keyframes starBurst {
     0% {
       transform: scale(0);
@@ -369,7 +447,6 @@
     animation: starBurst 0.6s ease-out;
   }
 
-  /* BOUNCE - Professional */
   @keyframes bounceEnough {
     0%, 20%, 50%, 80%, 100% {
       transform: translateY(0);
@@ -386,7 +463,6 @@
     animation: bounceEnough 1s ease-in-out;
   }
 
-  /* SLIDE IN from sides */
   @keyframes slideInLeft {
     from {
       transform: translateX(-50px);
@@ -424,16 +500,28 @@
     font-weight: 700;
     letter-spacing: 0.03em;
     text-transform: uppercase;
-    background: #F5C61A;
+    background: #FFFFFF;
     color: #000;
     border: 2px solid #000;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     font-size: 0.75rem;
     padding: 0.25rem 0.75rem;
+    position: relative;
+  }
+
+  .enough-tag::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+      repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.02) 4px);
+    pointer-events: none;
   }
 
   .enough-tag:hover {
     transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(245, 198, 26, 0.6);
+    background: rgba(245, 198, 26, 0.1);
   }
 
   /* GRADIENT TEXT - Professional Highlight */
@@ -453,6 +541,7 @@
     font-weight: 900;
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.02em;
+    color: #000;
   }
 
   /* LABEL TEXT - Clear & Professional */
@@ -462,6 +551,7 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
     font-size: 0.75rem;
+    color: #000;
   }
 
   /* PROFESSIONAL SHADOW */
@@ -472,6 +562,14 @@
   .enough-shadow-lg {
     box-shadow: 0 8px 0px #000;
   }
+
+  /* Neon Glow Effect for Hover States */
+  .neon-hover:hover {
+    box-shadow: 
+      0 0 20px rgba(245, 198, 26, 0.6),
+      0 0 40px rgba(245, 198, 26, 0.4),
+      0 4px 0px #000;
+  }
 }
 
 /* UTILITY CLASSES - ENOUGH FONTS */
@@ -480,12 +578,14 @@
   font-weight: 900;
   letter-spacing: -0.02em;
   text-transform: uppercase;
+  color: #000;
 }
 
 .font-header {
   font-family: 'Inter', 'Arial Black', sans-serif !important;
   font-weight: 800;
   letter-spacing: -0.01em;
+  color: #000;
 }
 
 .font-button {
@@ -493,17 +593,20 @@
   font-weight: 800;
   letter-spacing: 0.05em;
   text-transform: uppercase;
+  color: #000;
 }
 
 .font-number {
   font-family: 'Inter', 'Arial Black', sans-serif !important;
   font-weight: 900;
   font-variant-numeric: tabular-nums;
+  color: #000;
 }
 
 .font-body {
   font-family: 'Inter', sans-serif !important;
   font-weight: 500;
+  color: #000;
 }
 
 /* CUSTOM SCROLLBAR - Professional Style */
@@ -513,7 +616,7 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #FFFEF7;
+  background: #FFFFFF;
   border: 2px solid #000;
 }
 
@@ -523,7 +626,8 @@
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #000;
+  background: #FFD700;
+  box-shadow: 0 0 10px rgba(245, 198, 26, 0.6);
 }
 
 /* PROFESSIONAL INPUT FIELDS */
@@ -537,9 +641,22 @@ select {
   font-weight: 500;
   border: 3px solid #000 !important;
   border-radius: 0 !important;
-  background: #FFFEF7;
-  transition: all 0.2s ease;
+  background: #FFFFFF;
+  transition: all 0.3s ease;
   box-shadow: 0 2px 0px rgba(0,0,0,0.2) !important;
+  color: #000 !important;
+}
+
+input[type="text"]::before,
+input[type="email"]::before,
+textarea::before,
+select::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.01) 2px, rgba(0,0,0,0.01) 4px);
+  pointer-events: none;
 }
 
 input[type="text"]:focus,
@@ -549,11 +666,12 @@ input[type="number"]:focus,
 textarea:focus,
 select:focus {
   outline: none !important;
-  border-color: #F5C61A !important;
+  border-color: #000 !important;
   box-shadow: 
-    0 0 0 3px rgba(245, 198, 26, 0.3),
+    0 0 20px rgba(245, 198, 26, 0.6),
     0 3px 0px rgba(0,0,0,0.3) !important;
   transform: translateY(-1px);
+  background: rgba(245, 198, 26, 0.05);
 }
 
 input[type="text"]:disabled,
@@ -568,7 +686,7 @@ select:disabled {
 
 /* PLACEHOLDER - Professional */
 ::placeholder {
-  color: #999;
+  color: #666;
   font-weight: 400;
   opacity: 0.6;
 }

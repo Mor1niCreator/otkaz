@@ -192,9 +192,9 @@ export default function GoalsPage() {
         <h1 className="text-3xl font-black uppercase tracking-wide mb-2 flex items-center gap-3">
           🎯 {t('yourGoals')}
         </h1>
-        <div className="bg-black text-enough-yellow p-4 mt-4">
-          <p className="text-xs font-black uppercase mb-1">{t('totalSavings')}</p>
-          <p className="text-3xl font-black">
+        <div className="bg-white p-4 mt-4 border-3 border-black transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)]" style={{boxShadow: '0 3px 0px #000'}}>
+          <p className="text-xs font-black uppercase mb-1 text-gray-700">{t('totalSavings')}</p>
+          <p className="text-3xl font-black text-black">
             {formatCurrency(convertCurrency(totalSavings, user.currency), user.currency)}
           </p>
         </div>
@@ -225,7 +225,7 @@ export default function GoalsPage() {
               return (
                 <div 
                   key={goal.id} 
-                  className="bg-enough-cream border-3 border-black p-4"
+                  className="bg-white border-3 border-black p-4 transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6),0_4px_0px_#000]"
                   style={{ boxShadow: '0 3px 0px #000' }}
                 >
                   {progress >= 100 && (
@@ -266,7 +266,7 @@ export default function GoalsPage() {
           <h2 className="text-2xl font-black uppercase mb-4 flex items-center gap-2">
             🚀 {t('cryptoROICalculator')}
           </h2>
-          <div className="bg-enough-yellow border-3 border-black p-4 mb-4">
+          <div className="bg-white border-3 border-black p-4 mb-4">
             <p className="text-sm font-bold text-gray-700 mb-2">
               {t('yourSavings')}: <span className="font-black">{formatCurrency(convertCurrency(totalSavings, user.currency), user.currency)}</span>
             </p>
@@ -288,7 +288,7 @@ export default function GoalsPage() {
               {cryptoData.map((crypto) => (
                 <div
                   key={crypto.symbol}
-                  className="enough-card bg-enough-cream cursor-pointer"
+                  className="enough-card bg-white cursor-pointer hover:shadow-[0_0_25px_rgba(245,198,26,0.7),0_6px_0px_#000]"
                   onClick={() => {
                     const convertedYourValue = convertCurrency(crypto.yourValue, user.currency);
                     const convertedOriginal = convertCurrency(totalSavings, user.currency);
@@ -335,8 +335,8 @@ export default function GoalsPage() {
                 </div>
               ))}
               
-              <div className="bg-enough-yellow border-3 border-black p-4 mt-4">
-                <div className="text-sm font-bold text-center">
+              <div className="bg-white border-3 border-black p-4 mt-4 transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)]">
+                <div className="text-sm font-bold text-center text-black">
                   💎 Best performer: <span className="font-black">{cryptoData[0]?.symbol}</span> ({cryptoData[0]?.multiplier.toFixed(1)}x)
                 </div>
               </div>

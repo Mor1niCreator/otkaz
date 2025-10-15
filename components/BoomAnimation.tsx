@@ -52,7 +52,7 @@ export default function BoomAnimation({
               {[...Array(12)].map((_, i) => (
                 <motion.div
                   key={i}
-                  className="absolute bg-enough-yellow border-2 border-black"
+                  className="absolute bg-white border-2 border-black"
                   style={{
                     width: '6px',
                     height: '60px',
@@ -86,7 +86,7 @@ export default function BoomAnimation({
             </motion.div>
             
             <motion.div 
-              className="bg-enough-yellow border-4 border-black px-8 py-4"
+              className="bg-white border-4 border-black px-8 py-4"
               style={{
                 boxShadow: '0 6px 0px #000',
               }}

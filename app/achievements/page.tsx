@@ -78,7 +78,7 @@ export default function AchievementsPage() {
       <div className="enough-panel mb-6">
         <h1 className="text-4xl font-bold mb-4">🏅 {t('achievementsTitle')}</h1>
         
-        <div className="bg-enough-yellow rounded-xl border-4 border-black p-4 mb-4">
+        <div className="bg-white border-0 border-4 border-black p-4 mb-4">
           <div className="flex justify-between items-center mb-2">
             <p className="font-bold">{t('progress')}</p>
             <p className="text-2xl font-bold">{unlocked.length}/{all.length}</p>
@@ -104,14 +104,14 @@ export default function AchievementsPage() {
               whileTap={isUnlocked ? { scale: 0.95 } : {}}
               className={`enough-panel relative overflow-hidden cursor-pointer ${
                 isUnlocked
-                  ? 'bg-gradient-to-br from-black via-enough-yellow to-enough-yellow'
+                  ? 'bg-white from-black via-enough-yellow to-enough-yellow'
                   : 'bg-gray-200 opacity-60'
               }`}
               onClick={() => isUnlocked && showAchievementAnimation(achievement)}
             >
               {/* Shine effect for unlocked achievements */}
               {isUnlocked && (
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-20 animate-[shine_3s_ease-in-out_infinite]" />
+                <div className="absolute inset-0 bg-white from-transparent via-white to-transparent opacity-20 animate-[shine_3s_ease-in-out_infinite]" />
               )}
               
               {/* Glow effect */}

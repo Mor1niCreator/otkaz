@@ -96,7 +96,7 @@ export default function WhyPage() {
         <p className="font-bold text-gray-700">{t('whyDescription')}</p>
       </div>
 
-      <div className="bg-enough-yellow border-3 border-black p-4 mb-6">
+      <div className="bg-white border-3 border-black p-4 mb-6">
         <h3 className="font-black uppercase mb-2 flex items-center gap-2">
           💡 {t('tip')}
         </h3>
@@ -190,7 +190,7 @@ export default function WhyPage() {
                     key={tag.id}
                     onClick={() => toggleTag(selectedPreset.id, tag.id)}
                     className={`p-4 border-3 border-black font-black uppercase tracking-wide text-left transition-all
-                      ${isSelected ? 'bg-enough-yellow' : 'bg-enough-white hover:bg-enough-cream'}`}
+                      ${isSelected ? 'bg-white' : 'bg-white hover:bg-white'}`}
                     style={{
                       boxShadow: isSelected ? '0 4px 0px #000' : '0 2px 0px #000',
                     }}

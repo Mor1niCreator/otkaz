@@ -44,7 +44,7 @@ export default function Navigation() {
 
   return (
     <nav 
-      className="fixed bottom-0 left-0 right-0 bg-enough-white border-t-4 border-black z-50"
+      className="fixed bottom-0 left-0 right-0 bg-white border-t-4 border-black z-50"
       style={{
         boxShadow: '0 -4px 0px rgba(0,0,0,0.1)',
       }}
@@ -57,11 +57,14 @@ export default function Navigation() {
               key={item.href}
               href={item.href}
               className={`flex flex-col items-center py-3 px-3 sm:px-4 transition-all min-w-[70px] sm:min-w-[80px] relative
-                ${isActive ? 'bg-enough-yellow' : 'hover:bg-enough-cream'}`}
+                ${isActive ? 'bg-white shadow-[0_0_20px_rgba(245,198,26,0.8)_inset]' : 'hover:bg-white hover:shadow-[0_0_15px_rgba(245,198,26,0.5)_inset]'}`}
             >
               {isActive && (
                 <div 
-                  className="absolute top-0 left-0 right-0 h-1 bg-black"
+                  className="absolute top-0 left-0 right-0 h-2 bg-black"
+                  style={{
+                    boxShadow: '0 0 10px rgba(245, 198, 26, 0.8)'
+                  }}
                 />
               )}
               <span 

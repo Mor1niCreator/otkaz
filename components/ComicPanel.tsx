@@ -21,9 +21,9 @@ export default function ComicPanel({
   const variantClasses = {
     default: 'comic-panel',
     action: 'comic-panel-action',
-    hero: 'comic-panel bg-comic-hero text-white',
+    hero: 'comic-panel bg-comic-hero text-black',
     neon: 'comic-panel neon-border',
-    starburst: 'comic-panel bg-starburst text-white',
+    starburst: 'comic-panel bg-starburst text-black',
   };
 
   if (!animate) {
