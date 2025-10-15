@@ -122,7 +122,7 @@ export default function WalletPage() {
       <div className="enough-panel mb-6">
         <h1 className="text-4xl font-bold mb-4">💰 {t('yourWallet')}</h1>
         
-        <div className="bg-white  border-0  p-6 mb-6 enough-shadow-lg">
+        <div className="bg-white border-0 p-6 mb-6 enough-shadow-lg">
           <div className="text-center">
             <p className="text-gray-900 text-lg mb-2">{t('totalSavings')}</p>
             <p className="text-6xl font-bold text-gray-900 mb-2">
@@ -135,15 +135,15 @@ export default function WalletPage() {
         </div>
 
         <div className="grid grid-cols-3 gap-3">
-          <div className="bg-white border-0  p-4 text-center">
+          <div className="bg-white border-0 p-4 text-center">
             <p className="text-xs text-gray-700 mb-1">{t('today')}</p>
             <p className="text-2xl font-bold">{formatCurrency(convertedStats.today, user.currency)}</p>
           </div>
-          <div className="bg-white border-0  p-4 text-center">
+          <div className="bg-white border-0 p-4 text-center">
             <p className="text-xs text-gray-700 mb-1">{t('thisWeek')}</p>
             <p className="text-2xl font-bold">{formatCurrency(convertedStats.week, user.currency)}</p>
           </div>
-          <div className="bg-white border-0  p-4 text-center">
+          <div className="bg-white border-0 p-4 text-center">
             <p className="text-xs text-gray-700 mb-1">{t('thisMonth')}</p>
             <p className="text-2xl font-bold">{formatCurrency(convertedStats.month, user.currency)}</p>
           </div>

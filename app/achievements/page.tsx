@@ -78,7 +78,7 @@ export default function AchievementsPage() {
       <div className="enough-panel mb-6">
         <h1 className="text-4xl font-bold mb-4">🏅 {t('achievementsTitle')}</h1>
         
-        <div className="bg-white border-0  p-4 mb-4">
+        <div className="bg-white border-0 p-4 mb-4">
           <div className="flex justify-between items-center mb-2">
             <p className="font-bold">{t('progress')}</p>
             <p className="text-2xl font-bold">{unlocked.length}/{all.length}</p>
@@ -117,7 +117,7 @@ export default function AchievementsPage() {
               {/* Glow effect */}
               {isUnlocked && (
                 <motion.div
-                  className="absolute inset-0 bg-yellow-300 opacity-20"
+                  className="absolute inset-0 bg-yellow-300 opacity-20 elevation-2"
                   animate={{
                     scale: [1, 1.05, 1],
                     opacity: [0.1, 0.3, 0.1]
@@ -137,7 +137,7 @@ export default function AchievementsPage() {
                   {achievement.icon}
                   {isUnlocked && (
                     <motion.span
-                      className="absolute -top-2 -right-2 text-3xl"
+                      className="absolute -top-2 -right-2 text-3xl elevation-2"
                       animate={{
                         scale: [1, 1.3, 1],
                         rotate: [0, 180, 360]
@@ -155,7 +155,7 @@ export default function AchievementsPage() {
                       <motion.span
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        className="text-2xl"
+                        className="text-2xl elevation-2"
                       >
                         ✨
                       </motion.span>
@@ -166,7 +166,7 @@ export default function AchievementsPage() {
                   </p>
                   {isUnlocked && userAchievement && (
                     <motion.p 
-                      className="text-xs text-gray-600 mt-1 flex items-center gap-1"
+                      className="text-xs text-gray-600 mt-1 flex items-center gap-1 elevation-2"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                     >
@@ -180,7 +180,7 @@ export default function AchievementsPage() {
                   )}
                   {isUnlocked && (
                     <motion.p 
-                      className="text-xs text-purple-600 mt-1 font-bold"
+                      className="text-xs text-purple-600 mt-1 font-bold elevation-2"
                       animate={{ opacity: [0.5, 1, 0.5] }}
                       transition={{ duration: 2, repeat: Infinity }}
                     >

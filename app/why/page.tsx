@@ -90,14 +90,14 @@ export default function WhyPage() {
       <MathWallBackground />
       
       <div className="enough-panel mb-6">
-        <h1 className="text-3xl font-semibold  tracking-tight mb-2 flex items-center gap-3">
+        <h1 className="text-3xl font-semibold tracking-tight mb-2 flex items-center gap-3">
           🤔 {t('whyTitle')}
         </h1>
         <p className="font-bold text-gray-700">{t('whyDescription')}</p>
       </div>
 
-      <div className="bg-white  p-4 mb-6">
-        <h3 className="font-semibold  mb-2 flex items-center gap-2">
+      <div className="bg-white p-4 mb-6">
+        <h3 className="font-semibold mb-2 flex items-center gap-2">
           💡 {t('tip')}
         </h3>
         <p className="text-sm font-bold text-gray-700">
@@ -115,13 +115,13 @@ export default function WhyPage() {
                 <div className="flex items-center gap-3">
                   <span className="text-4xl">{preset.icon}</span>
                   <div>
-                    <h3 className="font-semibold text-lg  tracking-tight">{preset.name}</h3>
+                    <h3 className="font-semibold text-lg tracking-tight">{preset.name}</h3>
                     <p className="text-sm font-bold text-gray-600">{t(preset.category)}</p>
                   </div>
                 </div>
                 <button
                   onClick={() => openTagModal(preset)}
-                  className="enough-button-secondary px-4 py-2 text-sm"
+                  className="enough-button-secondary px-4 py-2 text-sm elevation-2"
                 >
                   {tags.length > 0 ? `✏️ ${t('edit')}` : `➕ ${t('addTags')}`}
                 </button>
@@ -157,7 +157,7 @@ export default function WhyPage() {
       {showTagModal && selectedPreset && (
         <div className="fixed inset-0 enough-modal-overlay flex items-center justify-center p-4 z-50">
           <motion.div 
-            className="enough-modal max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+            className="enough-modal max-w-2xl w-full max-h-[80vh] overflow-y-auto elevation-2"
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
@@ -175,7 +175,7 @@ export default function WhyPage() {
                   setShowTagModal(false);
                   setSelectedPreset(null);
                 }}
-                className="text-3xl hover:scale-110 transition-transform"
+                className="text-3xl hover:scale-110 transition-transform elevation-2"
               >
                 ✖️
               </button>
@@ -189,7 +189,7 @@ export default function WhyPage() {
                   <button
                     key={tag.id}
                     onClick={() => toggleTag(selectedPreset.id, tag.id)}
-                    className={`p-4  font-semibold  tracking-tight text-left transition-all
+                    className={`p-4  font-semibold tracking-tight text-left transition-all
                       ${isSelected ? 'bg-white' : 'bg-white hover:bg-white'}`}
                     style={{
                       boxShadow: isSelected ? '0 4px 0px #000' : '0 2px 0px #000',
@@ -238,7 +238,7 @@ export default function WhyPage() {
                     console.error('Failed to check achievements:', error);
                   }
                 }}
-                className="w-full enough-button-primary py-3"
+                className="w-full enough-button-primary py-3 elevation-2"
               >
                 💾 {t('done')}
               </button>

@@ -144,27 +144,26 @@ export default function CalendarPage() {
       <BoomAnimation 
         show={showBoom} 
         onComplete={() => setShowBoom(false)}
-        text="SAVED!"
-        emoji="💰"
-        type="pow"
+        text="Saved!"
+        emoji="✓"
+        type="success"
       />
 
       <motion.div 
-        className="enough-panel mb-6"
+        className="enough-panel mb-6 elevation-2"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
       >
-        <h1 className="text-3xl font-semibold mb-2  tracking-tight">
+        <h1 className="text-3xl font-semibold mb-2 tracking-tight">
           📅 {t('todaysRefusals')}
         </h1>
         <p className="text-lg font-bold text-gray-700">{format(new Date(), 'MMMM d, yyyy')}</p>
         
         <div 
-          className="mt-4 bg-white p-6 text-center "
-          style={{ boxShadow: '0 4px 0px rgba(0,0,0,0.3)' }}
+          className="mt-4 bg-white p-6 text-center rounded-2xl elevation-2 elevation-2"
         >
-          <p className="text-sm font-semibold  tracking-normal mb-1 text-gray-700">
+          <p className="text-sm font-semibold tracking-normal mb-1 text-gray-700">
             {t('savedToday')}
           </p>
           <p className="text-5xl font-semibold text-gray-900">
@@ -174,18 +173,18 @@ export default function CalendarPage() {
       </motion.div>
 
       <motion.div 
-        className="enough-panel mb-6"
+        className="enough-panel mb-6 elevation-2"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4 }}
       >
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-semibold  tracking-tight">
+          <h2 className="text-2xl font-semibold tracking-tight">
             ⚡ {t('quickAdd')}
           </h2>
           <button
             onClick={() => setShowPresetsEditor(true)}
-            className="enough-button-secondary px-4 py-2 text-sm"
+            className="enough-button-secondary px-4 py-2 text-sm elevation-2"
           >
             ⚙️ {t('customize')}
           </button>
@@ -198,11 +197,11 @@ export default function CalendarPage() {
               <button
                 key={preset.id}
                 onClick={() => handlePreset(preset)}
-                className="p-5 bg-white  font-semibold transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6),0_6px_0px_#000] hover:bg-[rgba(245,198,26,0.08)] hover:-translate-y-1"
+                className="p-5 bg-white font-semibold transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6),0_6px_0px_#000] hover:bg-[rgba(245,198,26,0.08)] hover:-translate-y-1 elevation-2"
                 style={{ boxShadow: '0 4px 0px #000' }}
               >
                 <div className="text-4xl mb-2">{preset.icon}</div>
-                <div className="font-semibold text-base  tracking-tight text-gray-900">{preset.name}</div>
+                <div className="font-semibold text-base tracking-tight text-gray-900">{preset.name}</div>
                 <div className="text-sm font-bold text-gray-700">
                   {getCurrencySymbol(user?.currency || 'USD')}{preset.price}
                 </div>
@@ -216,7 +215,7 @@ export default function CalendarPage() {
                       return (
                         <div
                           key={tagId}
-                          className="enough-tag text-[10px]"
+                          className="enough-tag text-[10px] elevation-2"
                           title={getWhyTagName(tagId, user?.language || 'en')}
                         >
                           {tag.icon}
@@ -236,7 +235,7 @@ export default function CalendarPage() {
         </div>
         <button
           onClick={() => setShowForm(true)}
-          className="enough-button w-full mt-4 py-4 text-lg"
+          className="enough-button w-full mt-4 py-4 text-lg elevation-2"
         >
           {t('customEntry')}
         </button>
@@ -256,12 +255,12 @@ export default function CalendarPage() {
       {showForm && (
         <div className="fixed inset-0 enough-modal-overlay flex items-center justify-center p-4 z-50">
           <motion.div 
-            className="enough-modal max-w-md w-full"
+            className="enough-modal max-w-md w-full elevation-2"
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
           >
-            <h2 className="text-2xl font-semibold  mb-4">{t('addRefusal')}</h2>
+            <h2 className="text-2xl font-semibold mb-4">{t('addRefusal')}</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 type="text"
@@ -269,7 +268,7 @@ export default function CalendarPage() {
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
-                className="w-full px-4 py-3"
+                className="w-full px-4 py-3 elevation-2"
               />
               <div className="flex gap-2">
                 <input
@@ -279,7 +278,7 @@ export default function CalendarPage() {
                   value={formData.pricePerUnit}
                   onChange={(e) => setFormData({ ...formData, pricePerUnit: e.target.value })}
                   required
-                  className="flex-1 px-4 py-3"
+                  className="flex-1 px-4 py-3 elevation-2"
                 />
                 <input
                   type="number"
@@ -287,13 +286,13 @@ export default function CalendarPage() {
                   placeholder={t('quantity')}
                   value={formData.quantity}
                   onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-                  className="w-20 px-4 py-3"
+                  className="w-20 px-4 py-3 elevation-2"
                 />
               </div>
               <select
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="w-full px-4 py-3"
+                className="w-full px-4 py-3 elevation-2"
               >
                 <option value="habits">{t('habits')}</option>
                 <option value="food">{t('food')}</option>
@@ -306,7 +305,7 @@ export default function CalendarPage() {
                 placeholder={t('note')}
                 value={formData.note}
                 onChange={(e) => setFormData({ ...formData, note: e.target.value })}
-                className="w-full px-4 py-3"
+                className="w-full px-4 py-3 elevation-2"
                 rows={2}
               />
               <div className="flex gap-2">
@@ -316,7 +315,7 @@ export default function CalendarPage() {
                 <button
                   type="button"
                   onClick={() => setShowForm(false)}
-                  className="flex-1 enough-button-secondary"
+                  className="flex-1 enough-button-secondary elevation-2"
                 >
                   ❌ {t('cancel')}
                 </button>
@@ -327,12 +326,12 @@ export default function CalendarPage() {
       )}
 
       <motion.div 
-        className="enough-panel"
+        className="enough-panel elevation-2"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
       >
-        <h2 className="text-2xl font-semibold  mb-4">
+        <h2 className="text-2xl font-semibold mb-4">
           {t('todaysEntries')}
         </h2>
         {entries.length === 0 ? (
@@ -347,14 +346,14 @@ export default function CalendarPage() {
             {entries.map((entry, index) => (
               <motion.div
                 key={entry.id}
-                className="bg-white  p-4 flex justify-between items-center"
-                style={{ boxShadow: '0 3px 0px #000' }}
+                className="bg-white p-4 flex justify-between items-center elevation-2"
+                
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.05 }}
               >
                 <div>
-                  <div className="font-semibold text-lg  tracking-tight">
+                  <div className="font-semibold text-lg tracking-tight">
                     {entry.name}
                   </div>
                   <div className="text-sm font-bold text-gray-700">

@@ -185,14 +185,14 @@ export default function GoalsPage() {
       <MathWallBackground />
       
       <motion.div 
-        className="enough-panel mb-6"
+        className="enough-panel mb-6 elevation-2"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <h1 className="text-3xl font-semibold  tracking-tight mb-2 flex items-center gap-3">
+        <h1 className="text-3xl font-semibold tracking-tight mb-2 flex items-center gap-3">
           🎯 {t('yourGoals')}
         </h1>
-        <div className="bg-white p-4 mt-4  transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)]" style={{boxShadow: '0 3px 0px #000'}}>
+        <div className="bg-white p-4 mt-4 transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)]" style={{boxShadow: '0 3px 0px #000'}}>
           <p className="text-xs font-medium mb-1 text-gray-700">{t('totalSavings')}</p>
           <p className="text-3xl font-semibold text-gray-900">
             {formatCurrency(convertCurrency(totalSavings, user.currency), user.currency)}
@@ -205,7 +205,7 @@ export default function GoalsPage() {
           <h2 className="text-2xl font-semibold ">Active Goals</h2>
           <button
             onClick={() => setShowForm(true)}
-            className="enough-button-primary px-4 py-2 text-sm"
+            className="enough-button-primary px-4 py-2 text-sm elevation-2"
           >
             ➕ New
           </button>
@@ -225,8 +225,8 @@ export default function GoalsPage() {
               return (
                 <div 
                   key={goal.id} 
-                  className="bg-white  p-4 transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6),0_4px_0px_#000]"
-                  style={{ boxShadow: '0 3px 0px #000' }}
+                  className="bg-white p-4 transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6),0_4px_0px_#000] elevation-2"
+                  
                 >
                   {progress >= 100 && (
                     <div className="bg-green-200 border-2 border-green-600 p-2 mb-3 text-center">
@@ -236,7 +236,7 @@ export default function GoalsPage() {
                   
                   <div className="flex justify-between items-start mb-3">
                     <div>
-                      <h3 className="font-semibold text-lg  tracking-tight">{goal.name}</h3>
+                      <h3 className="font-semibold text-lg tracking-tight">{goal.name}</h3>
                       <p className="text-sm font-bold text-gray-700">
                         {t('target')}: {formatCurrency(convertedTarget, user.currency)}
                       </p>
@@ -263,10 +263,10 @@ export default function GoalsPage() {
 
       {totalSavings > 0 && (
         <div className="enough-panel mb-6">
-          <h2 className="text-2xl font-semibold  mb-4 flex items-center gap-2">
+          <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
             🚀 {t('cryptoROICalculator')}
           </h2>
-          <div className="bg-white  p-4 mb-4">
+          <div className="bg-white p-4 mb-4">
             <p className="text-sm font-bold text-gray-700 mb-2">
               {t('yourSavings')}: <span className="font-semibold">{formatCurrency(convertCurrency(totalSavings, user.currency), user.currency)}</span>
             </p>
@@ -279,7 +279,7 @@ export default function GoalsPage() {
             <button
               onClick={loadCryptoROI}
               disabled={loadingCrypto}
-              className="enough-button w-full py-4 text-lg"
+              className="enough-button w-full py-4 text-lg elevation-2"
             >
               {loadingCrypto ? '⏳ CALCULATING...' : '🚀 CALCULATE CRYPTO ROI'}
             </button>
@@ -288,7 +288,7 @@ export default function GoalsPage() {
               {cryptoData.map((crypto) => (
                 <div
                   key={crypto.symbol}
-                  className="enough-card bg-white cursor-pointer hover:shadow-[0_0_25px_rgba(245,198,26,0.7),0_6px_0px_#000]"
+                  className="enough-card bg-white cursor-pointer hover:shadow-[0_0_25px_rgba(245,198,26,0.7),0_6px_0px_#000] elevation-2"
                   onClick={() => {
                     const convertedYourValue = convertCurrency(crypto.yourValue, user.currency);
                     const convertedOriginal = convertCurrency(totalSavings, user.currency);
@@ -335,7 +335,7 @@ export default function GoalsPage() {
                 </div>
               ))}
               
-              <div className="bg-white  p-4 mt-4 transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)]">
+              <div className="bg-white p-4 mt-4 transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)]">
                 <div className="text-sm font-bold text-center text-gray-900">
                   💎 Best performer: <span className="font-semibold">{cryptoData[0]?.symbol}</span> ({cryptoData[0]?.multiplier.toFixed(1)}x)
                 </div>
@@ -348,18 +348,18 @@ export default function GoalsPage() {
       <AnimatePresence>
         {showForm && (
           <motion.div 
-            className="fixed inset-0 enough-modal-overlay flex items-center justify-center p-4 z-50"
+            className="fixed inset-0 enough-modal-overlay flex items-center justify-center p-4 z-50 elevation-2"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
             <motion.div 
-              className="enough-modal max-w-md w-full"
+              className="enough-modal max-w-md w-full elevation-2"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
             >
-            <h2 className="text-2xl font-semibold  mb-4">{t('createGoal')}</h2>
+            <h2 className="text-2xl font-semibold mb-4">{t('createGoal')}</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 type="text"
@@ -367,7 +367,7 @@ export default function GoalsPage() {
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
-                className="w-full px-4 py-3"
+                className="w-full px-4 py-3 elevation-2"
               />
               <input
                 type="number"
@@ -376,19 +376,19 @@ export default function GoalsPage() {
                 value={formData.targetAmount}
                 onChange={(e) => setFormData({ ...formData, targetAmount: e.target.value })}
                 required
-                className="w-full px-4 py-3"
+                className="w-full px-4 py-3 elevation-2"
               />
               <div className="flex gap-2">
                 <button 
                   type="submit" 
-                  className="flex-1 enough-button-primary"
+                  className="flex-1 enough-button-primary elevation-2"
                 >
                   {t('save')}
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowForm(false)}
-                  className="flex-1 enough-button-secondary"
+                  className="flex-1 enough-button-secondary elevation-2"
                 >
                   {t('cancel')}
                 </button>

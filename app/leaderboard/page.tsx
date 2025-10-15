@@ -127,19 +127,19 @@ export default function LeaderboardPage() {
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto relative">
       <MathWallBackground />
       <motion.div 
-        className="enough-panel mb-6 relative overflow-hidden"
+        className="enough-panel mb-6 relative overflow-hidden elevation-2"
         initial={{ scale: 0.9, opacity: 0, y: -30 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
         transition={{ type: 'spring', stiffness: 200 }}
       >
         <motion.div
-          className="absolute -top-20 -right-20 w-40 h-40 bg-white border-0 opacity-5"
+          className="absolute -top-20 -right-20 w-40 h-40 bg-white border-0 opacity-5 elevation-2"
           animate={{ scale: [1, 1.3, 1], rotate: [0, 180, 360] }}
           transition={{ duration: 10, repeat: Infinity }}
         />
         
         <motion.h1 
-          className="text-4xl font-bold mb-2 flex items-center gap-3 relative z-10"
+          className="text-4xl font-bold mb-2 flex items-center gap-3 relative z-10 elevation-2"
           animate={{ y: [0, -5, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
         >
@@ -156,14 +156,14 @@ export default function LeaderboardPage() {
 
       {/* Daily Tasks Section */}
       <motion.div 
-        className="enough-panel mb-6"
+        className="enough-panel mb-6 elevation-2"
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.2, type: 'spring' }}
       >
         <div className="flex justify-between items-center mb-4">
           <motion.h2 
-            className="text-2xl font-bold flex items-center gap-2"
+            className="text-2xl font-bold flex items-center gap-2 elevation-2"
             animate={{ x: [0, 5, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
           >
@@ -227,7 +227,7 @@ export default function LeaderboardPage() {
                       <div className="flex items-center gap-2">
                         <div className="w-24 bg-gray-200 border-0 h-2">
                           <div 
-                            className="bg-white h-2 border-0 transition-all"
+                            className="bg-white h-2 border-0 transition-all elevation-2"
                             style={{ width: `${(task.progress / task.maxProgress) * 100}%` }}
                           />
                         </div>
@@ -239,14 +239,14 @@ export default function LeaderboardPage() {
                   </div>
                   <div className="text-right ml-4 relative z-10">
                     <motion.div 
-                      className="text-2xl font-semibold text-gray-900"
+                      className="text-2xl font-semibold text-gray-900 elevation-2"
                       style={{ textShadow: '2px 2px 0px rgba(0,0,0,0.3)' }}
                     >
                       +{task.points}
                     </motion.div>
                     {task.isCompleted ? (
                       <motion.div 
-                        className="text-gray-900 text-sm font-semibold"
+                        className="text-gray-900 text-sm font-semibold elevation-2"
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.5)' }}
@@ -277,14 +277,14 @@ export default function LeaderboardPage() {
 
       {/* Leaderboard Section */}
       <motion.div 
-        className="enough-panel mb-6"
+        className="enough-panel mb-6 elevation-2"
         initial={{ opacity: 0, x: 50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.4, type: 'spring' }}
       >
         <div className="flex justify-between items-center mb-4">
           <motion.h2 
-            className="text-2xl font-bold flex items-center gap-2"
+            className="text-2xl font-bold flex items-center gap-2 elevation-2"
             animate={{ scale: [1, 1.05, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
           >
@@ -296,7 +296,7 @@ export default function LeaderboardPage() {
           <select
             value={selectedPeriod}
             onChange={(e) => setSelectedPeriod(e.target.value)}
-            className="px-4 py-2  border-0 font-semibold bg-white enough-shadow
+            className="px-4 py-2 border-0 font-semibold bg-white enough-shadow
               hover:enough-shadow-lg transition-all"
           >
             <option value="daily">📅 Today</option>
@@ -308,7 +308,7 @@ export default function LeaderboardPage() {
 
         {userRank && (
           <motion.div 
-            className="bg-white from-enough-yellow  border-0  p-6 mb-4 relative overflow-hidden"
+            className="bg-white from-enough-yellow border-0 p-6 mb-4 relative overflow-hidden elevation-2"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.5, type: 'spring' }}
@@ -320,7 +320,7 @@ export default function LeaderboardPage() {
                 YOUR RANK
               </p>
               <motion.p 
-                className="text-5xl font-semibold text-gray-900 mb-2"
+                className="text-5xl font-semibold text-gray-900 mb-2 elevation-2"
                 style={{ textShadow: '4px 4px 0px rgba(0,0,0,0.5)' }}
                 animate={{ scale: [1, 1.05, 1] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
