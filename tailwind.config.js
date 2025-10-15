@@ -8,39 +8,35 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // 2026 Modern Comic Palette - Ultra Vibrant
-        'comic-yellow': '#FFE030',
-        'comic-orange': '#FF6B35',
-        'comic-pink': '#FF006E',
-        'comic-purple': '#8338EC',
-        'comic-cyan': '#06FFF0',
-        'comic-lime': '#CCFF00',
-        'comic-blue': '#3A86FF',
-        'comic-red': '#FB5607',
-        'comic-green': '#06D6A0',
-        'comic-indigo': '#5E60CE',
-        // Accent colors
-        'comic-neon-pink': '#FF10F0',
-        'comic-neon-blue': '#00F5FF',
-        'comic-neon-green': '#39FF14',
-        'comic-dark': '#1A1A2E',
-        'comic-light': '#FFFEF7',
+        // Enough Logo Palette
+        'yellow': {
+          DEFAULT: '#FFC107',
+          50: '#FFF9E6',
+          100: '#FFF3CC',
+          200: '#FFE799',
+          300: '#FFDB66',
+          400: '#FFCF33',
+          500: '#FFC107',
+          600: '#FFB300',
+          700: '#FFA000',
+          800: '#FF8F00',
+          900: '#FF6F00',
+        },
+        'gray': {
+          50: '#FAFAFA',
+          100: '#F5F5F5',
+          200: '#EEEEEE',
+          300: '#E0E0E0',
+          400: '#BDBDBD',
+          500: '#9E9E9E',
+          600: '#757575',
+          700: '#616161',
+          800: '#424242',
+          900: '#212121',
+        },
       },
-      boxShadow: {
-        'comic': '6px 6px 0px #000',
-        'comic-lg': '10px 10px 0px #000',
-        'comic-xl': '14px 14px 0px #000',
-        'comic-neon': '0 0 20px rgba(255, 16, 240, 0.6), 6px 6px 0px #000',
-        'comic-glow': '0 0 30px rgba(255, 224, 48, 0.8), 8px 8px 0px #000',
-      },
-      backgroundImage: {
-        'comic-dots': 'radial-gradient(circle, #000 1px, transparent 1px)',
-        'comic-lines': 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.1) 10px, rgba(0,0,0,0.1) 20px)',
-      },
-      backgroundSize: {
-        'dots-sm': '8px 8px',
-        'dots-md': '12px 12px',
-        'dots-lg': '16px 16px',
+      fontFamily: {
+        'sans': ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Helvetica Neue', 'Arial', 'sans-serif'],
       },
     },
   },

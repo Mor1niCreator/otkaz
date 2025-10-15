@@ -19,12 +19,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       include: {
         achievement: true,
       },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { unlockedAt: 'desc' },
     });
 
     // Get all available achievements
     const allAchievements = await prisma.achievement.findMany({
-      orderBy: { createdAt: 'asc' },
+      orderBy: { id: 'asc' },
     });
 
     // Mark which achievements the user has
@@ -33,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return {
         ...achievement,
         isUnlocked: !!userAchievement,
-        unlockedAt: userAchievement?.createdAt || null,
+        unlockedAt: userAchievement?.unlockedAt || null,
       };
     });
 

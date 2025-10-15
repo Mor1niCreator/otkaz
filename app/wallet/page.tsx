@@ -2,23 +2,18 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
 import Navigation from '@/components/Navigation';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { useTranslation } from '@/lib/i18n';
 import { formatCurrency, convertCurrency } from '@/lib/currency-utils';
 import { getUserFromStorage } from '@/lib/user-sync';
-import { getUserPresets, WHY_TAGS, getWhyTagName } from '@/lib/user-presets';
+import { getUserPresets, getWhyTagName } from '@/lib/user-presets';
 
 export default function WalletPage() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
-  const [userPoints, setUserPoints] = useState(0);
-  const [stats, setStats] = useState({
-    today: 0,
-    week: 0,
-    month: 0,
-    allTime: 0,
-  });
+  const [stats, setStats] = useState({ today: 0, week: 0, month: 0, allTime: 0 });
   const [topTags, setTopTags] = useState<Array<{tagId: string; count: number}>>([]);
   
   const { t } = useTranslation(user?.language || 'en');
@@ -30,20 +25,8 @@ export default function WalletPage() {
       return;
     }
     setUser(parsedUser);
-    setUserPoints(Number(parsedUser.points) || 0);
     loadStats(parsedUser.id);
     loadTopTags(parsedUser.id);
-    
-    // Reload stats when page becomes visible
-    const handleVisibilityChange = () => {
-      if (!document.hidden && parsedUser) {
-        console.log('Page visible, reloading wallet stats...');
-        loadStats(parsedUser.id);
-      }
-    };
-    
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, [router]);
 
   const loadStats = async (userId: string) => {
@@ -52,25 +35,15 @@ export default function WalletPage() {
         fetch(`/api/entries/list?userId=${userId}&period=today`).then(r => r.json()),
         fetch(`/api/entries/list?userId=${userId}&period=week`).then(r => r.json()),
         fetch(`/api/entries/list?userId=${userId}&period=month`).then(r => r.json()),
-        fetch(`/api/entries/list?userId=${userId}`).then(r => r.json()),
+        fetch(`/api/entries/list?userId=${userId}&period=all`).then(r => r.json()),
       ]);
 
-      const newStats = {
+      setStats({
         today: today.totalUSD || 0,
         week: week.totalUSD || 0,
         month: month.totalUSD || 0,
         allTime: all.totalUSD || 0,
-      };
-      
-      setStats(newStats);
-      
-      console.log(`Wallet stats loaded: Today ${newStats.today} USD, All time ${newStats.allTime} USD`);
-      
-      // Update points from user object, not from totalUSD
-      const currentUser = getUserFromStorage();
-      if (currentUser) {
-        setUserPoints(Number(currentUser.points) || 0);
-      }
+      });
     } catch (error) {
       console.error('Failed to load stats:', error);
     }
@@ -82,17 +55,15 @@ export default function WalletPage() {
       const tagCounts: Record<string, number> = {};
       
       presets.forEach(preset => {
-        if (preset.tags && preset.tags.length > 0) {
-          preset.tags.forEach(tag => {
-            tagCounts[tag] = (tagCounts[tag] || 0) + 1;
-          });
-        }
+        preset.tags?.forEach(tag => {
+          tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+        });
       });
       
       const sorted = Object.entries(tagCounts)
         .map(([tagId, count]) => ({ tagId, count }))
         .sort((a, b) => b.count - a.count)
-        .slice(0, 5);
+        .slice(0, 10);
       
       setTopTags(sorted);
     } catch (error) {
@@ -102,114 +73,116 @@ export default function WalletPage() {
 
   if (!user) return null;
 
-  // Convert USD amounts to user's currency
-  const convertedStats = {
-    today: convertCurrency(stats.today, user.currency),
-    week: convertCurrency(stats.week, user.currency),
-    month: convertCurrency(stats.month, user.currency),
-    allTime: convertCurrency(stats.allTime, user.currency),
-  };
-
   const chartData = [
-    { name: t('today'), amount: convertedStats.today },
-    { name: t('thisWeek'), amount: convertedStats.week },
-    { name: t('thisMonth'), amount: convertedStats.month },
-    { name: 'All Time', amount: convertedStats.allTime },
+    { name: 'Today', value: stats.today },
+    { name: 'Week', value: stats.week },
+    { name: 'Month', value: stats.month },
+    { name: 'All Time', value: stats.allTime },
   ];
 
   return (
-    <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto">
-      <div className="comic-panel mb-6">
-        <h1 className="text-4xl font-bold mb-4">💰 {t('yourWallet')}</h1>
-        
-        <div className="bg-gradient-to-r from-comic-orange to-comic-pink rounded-2xl border-4 border-black p-6 mb-6 shadow-comic-lg">
-          <div className="text-center">
-            <p className="text-white text-lg mb-2">{t('totalSavings')}</p>
-            <p className="text-6xl font-bold text-white mb-2">
-              {formatCurrency(convertedStats.allTime, user.currency)}
-            </p>
-            <p className="text-white text-sm">
-              {userPoints.toFixed(0)} {t('points')} • {user.rank}
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-3 gap-3">
-          <div className="bg-comic-yellow rounded-xl border-4 border-black p-4 text-center">
-            <p className="text-xs text-gray-700 mb-1">{t('today')}</p>
-            <p className="text-2xl font-bold">{formatCurrency(convertedStats.today, user.currency)}</p>
-          </div>
-          <div className="bg-comic-lime rounded-xl border-4 border-black p-4 text-center">
-            <p className="text-xs text-gray-700 mb-1">{t('thisWeek')}</p>
-            <p className="text-2xl font-bold">{formatCurrency(convertedStats.week, user.currency)}</p>
-          </div>
-          <div className="bg-comic-cyan rounded-xl border-4 border-black p-4 text-center">
-            <p className="text-xs text-gray-700 mb-1">{t('thisMonth')}</p>
-            <p className="text-2xl font-bold">{formatCurrency(convertedStats.month, user.currency)}</p>
-          </div>
-        </div>
+    <div className="pb-24 px-4 py-6 max-w-4xl mx-auto" style={{ background: '#FAFAFA', minHeight: '100vh' }}>
+      <div className="mb-8">
+        <h1 className="text-3xl font-black mb-2" style={{ fontWeight: 900, color: '#212121' }}>
+          {t('wallet')}
+        </h1>
+        <p className="text-gray-500 text-sm font-medium">Your savings analytics</p>
       </div>
 
-      <div className="comic-panel mb-6">
-        <h2 className="text-2xl font-bold mb-4">📊 {t('savingsChart')}</h2>
+      {/* Stats Grid */}
+      <div className="grid grid-cols-2 gap-4 mb-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="stat-card"
+        >
+          <div className="stat-value">${stats.today.toFixed(2)}</div>
+          <div className="stat-label">Today</div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+          className="stat-card"
+        >
+          <div className="stat-value">${stats.week.toFixed(2)}</div>
+          <div className="stat-label">This Week</div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="stat-card"
+        >
+          <div className="stat-value">${stats.month.toFixed(2)}</div>
+          <div className="stat-label">This Month</div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="stat-card"
+          style={{ background: 'linear-gradient(135deg, #FFC107 0%, #FFB300 100%)', border: 'none' }}
+        >
+          <div className="stat-value">${stats.allTime.toFixed(2)}</div>
+          <div className="stat-label">All Time</div>
+        </motion.div>
+      </div>
+
+      {/* Chart */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="card mb-6"
+      >
+        <h2 className="text-lg font-bold text-gray-900 mb-4">Savings Overview</h2>
         <ResponsiveContainer width="100%" height={250}>
           <BarChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Bar dataKey="amount" fill="#FFB74D" stroke="#000" strokeWidth={3} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#E0E0E0" />
+            <XAxis dataKey="name" tick={{ fontSize: 12, fill: '#757575' }} />
+            <YAxis tick={{ fontSize: 12, fill: '#757575' }} />
+            <Tooltip 
+              contentStyle={{ 
+                background: '#FFFFFF',
+                border: '1px solid #E0E0E0',
+                borderRadius: '8px',
+                fontSize: '12px'
+              }}
+            />
+            <Bar dataKey="value" radius={[8, 8, 0, 0]}>
+              {chartData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={index === 3 ? '#FFC107' : '#E0E0E0'} />
+              ))}
+            </Bar>
           </BarChart>
         </ResponsiveContainer>
-      </div>
+      </motion.div>
 
+      {/* Top Motivations */}
       {topTags.length > 0 && (
-        <div className="comic-panel mb-6 bg-gradient-to-r from-purple-100 to-pink-100">
-          <h2 className="text-2xl font-bold mb-4">🤔 {t('yourTopReasons')}</h2>
-          <p className="text-sm text-gray-700 mb-3">
-            {t('topReasonsDescription')}
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {topTags.map(({ tagId, count }, index) => {
-              const tag = WHY_TAGS.find(t => t.id === tagId);
-              if (!tag) return null;
-              
-              return (
-                <div
-                  key={tagId}
-                  className={`px-4 py-2 rounded-xl border-4 border-black font-black flex items-center gap-2 
-                    ${tag.color} transition-all hover:scale-105 hover:rotate-2 hover:shadow-comic-lg
-                    animate-[popIn_0.5s_ease-out]`}
-                  style={{ 
-                    animationDelay: `${index * 0.1}s`,
-                    transformStyle: 'preserve-3d'
-                  }}
-                >
-                  <span className="text-2xl animate-[wiggle_2s_ease-in-out_infinite]" style={{ animationDelay: `${index * 0.3}s` }}>
-                    {tag.icon}
-                  </span>
-                  <div>
-                    <div className="text-sm">{getWhyTagName(tagId, user.language)}</div>
-                    <div className="text-xs opacity-75">{count} {count === 1 ? t('category') : t('categories')}</div>
-                  </div>
-                  {index < 3 && (
-                    <span className="ml-2 text-2xl">
-                      {index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉'}
-                    </span>
-                  )}
-                </div>
-              );
-            })}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+          className="card"
+        >
+          <h2 className="text-lg font-bold text-gray-900 mb-4">Top Motivations</h2>
+          <div className="space-y-2">
+            {topTags.map((tag, index) => (
+              <div key={tag.tagId} className="flex items-center justify-between">
+                <span className="font-medium text-gray-900">
+                  {getWhyTagName(tag.tagId, user.language || 'en')}
+                </span>
+                <span className="badge-yellow">{tag.count}</span>
+              </div>
+            ))}
           </div>
-        </div>
+        </motion.div>
       )}
-
-      <div className="speech-bubble mb-6">
-        <p className="text-center text-lg">
-          <strong>{t('keepItUp')}</strong><br />
-          {t('everyRefusal')}
-        </p>
-      </div>
 
       <Navigation />
     </div>

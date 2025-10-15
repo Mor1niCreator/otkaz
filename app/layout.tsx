@@ -3,18 +3,18 @@ import './globals.css';
 import { Toaster } from 'react-hot-toast';
 
 export const metadata: Metadata = {
-  title: 'Enough - Gamified Savings PWA',
-  description: 'Track your savings, earn achievements, and see crypto ROI',
+  title: 'ENOUGH - Know When to Stop',
+  description: 'Track your savings, build wealth, and reach your financial goals. Simple. Powerful. Effective.',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'Enough',
+    title: 'ENOUGH',
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: '#FFB74D',
+  themeColor: '#FFFFFF',
 };
 
 export default function RootLayout({
@@ -28,26 +28,33 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
         
-        {/* Hand-Drawn Comic Fonts - That's All Folks Style! */}
+        {/* Inter Font - Minimalist & Professional */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Luckiest+Guy&family=Titan+One&family=Carter+One&family=Lilita+One&family=Bungee+Shade&family=Shrikhand&family=Chewy&family=Kavoon&family=Righteous&family=Russo+One&family=Rubik+Mono+One&family=Bungee+Inline&family=Sigmar+One&family=Fontdiner+Swanky&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            @supports (font-variation-settings: normal) {
+              * { font-family: 'Inter var', sans-serif; }
+            }
+          `
+        }} />
       </head>
       <body className="bg-comic-bg min-h-screen">
         {children}
         <Toaster 
           position="top-center"
           toastOptions={{
-            className: 'comic-toast',
             style: {
-              background: 'linear-gradient(135deg, #FFE030 0%, #FF6B35 100%)',
+              background: '#FFFFFF',
               color: '#000',
-              fontWeight: '900',
-              border: '4px solid #000',
-              borderRadius: '1rem',
+              fontWeight: '500',
+              border: '1px solid #E5E7EB',
+              borderRadius: '0.5rem',
               padding: '1rem 1.5rem',
-              fontSize: '1rem',
-              boxShadow: '6px 6px 0px #000',
+              fontSize: '0.875rem',
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+              fontFamily: "'Inter', sans-serif",
             },
           }}
         />
