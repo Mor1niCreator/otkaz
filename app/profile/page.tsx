@@ -185,7 +185,7 @@ export default function ProfilePage() {
 
   return (
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto">
-      <div className="comic-panel mb-6">
+      <div className="enough-panel mb-6">
         <h1 className="text-4xl font-bold mb-2">👤 {t('profile')}</h1>
         <div className="bg-gradient-to-r from-comic-purple to-comic-pink rounded-2xl border-4 border-black p-6 mt-4 text-white">
           <p className="text-2xl font-bold mb-1">{user.name || user.email}</p>
@@ -196,9 +196,9 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <div className="comic-panel mb-6">
+      <div className="enough-panel mb-6">
         <h2 className="text-2xl font-bold mb-4">{t('rankProgress')}</h2>
-        <div className="bg-comic-yellow rounded-xl border-4 border-black p-4 mb-4">
+        <div className="bg-enough-yellow rounded-xl border-4 border-black p-4 mb-4">
           <div className="flex justify-between items-center mb-2">
             <div>
               <p className="text-sm text-gray-700">{t('currentRank')}</p>
@@ -231,12 +231,12 @@ export default function ProfilePage() {
         )}
       </div>
 
-      <div className="comic-panel mb-6">
+      <div className="enough-panel mb-6">
         <h2 className="text-2xl font-bold mb-4">{t('referralSystem')}</h2>
-        <div className="bg-comic-cyan rounded-xl border-4 border-black p-4 mb-3">
+        <div className="bg-enough-yellow rounded-xl border-4 border-black p-4 mb-3">
           <p className="text-sm text-gray-700 mb-2">{t('yourReferralCode')}</p>
           <p className="text-3xl font-bold text-center mb-2">{user.referralCode}</p>
-          <button onClick={copyReferralLink} className="w-full comic-button text-sm">
+          <button onClick={copyReferralLink} className="w-full enough-button text-sm">
             {t('copyLink')}
           </button>
         </div>
@@ -248,13 +248,13 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <div className="comic-panel mb-6">
+      <div className="enough-panel mb-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">{t('settings')}</h2>
           {!editMode && (
             <button
               onClick={() => setEditMode(true)}
-              className="comic-button-lime rounded-full px-4 py-2"
+              className="enough-button-primary rounded-full px-4 py-2"
             >
               ✏️ {t('edit')}
             </button>
@@ -341,7 +341,7 @@ export default function ProfilePage() {
             <div>
               <button
                 onClick={() => setShowPasswordForm(!showPasswordForm)}
-                className="comic-button-cyan w-full"
+                className="enough-button-cyan w-full"
               >
                 🔒 {showPasswordForm ? 'Hide Password Change' : 'Change Password'}
               </button>
@@ -425,12 +425,12 @@ export default function ProfilePage() {
 
           {editMode && (
             <div className="flex gap-2">
-              <button onClick={handleSave} className="flex-1 comic-button-lime">
+              <button onClick={handleSave} className="flex-1 enough-button-primary">
                 💾 {t('save')}
               </button>
               <button
                 onClick={() => setEditMode(false)}
-                className="flex-1 comic-button-secondary"
+                className="flex-1 enough-button-secondary"
               >
                 ❌ {t('cancel')}
               </button>
@@ -441,7 +441,7 @@ export default function ProfilePage() {
 
       <button
         onClick={handleLogout}
-        className="w-full bg-red-500 text-white font-bold py-3 px-6 rounded-full border-4 border-black shadow-comic hover:shadow-comic-lg transition-all hover:-translate-y-1 active:translate-y-0"
+        className="w-full bg-red-500 text-white font-bold py-3 px-6 rounded-full border-4 border-black enough-shadow hover:enough-shadow-lg transition-all hover:-translate-y-1 active:translate-y-0"
       >
         🚪 {t('logout')}
       </button>

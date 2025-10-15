@@ -75,10 +75,10 @@ export default function AchievementsPage() {
         achievement={currentAchievement || { icon: '🏅', name: 'Achievement', description: 'Description' }}
       />
       
-      <div className="comic-panel mb-6">
+      <div className="enough-panel mb-6">
         <h1 className="text-4xl font-bold mb-4">🏅 {t('achievementsTitle')}</h1>
         
-        <div className="bg-comic-yellow rounded-xl border-4 border-black p-4 mb-4">
+        <div className="bg-enough-yellow rounded-xl border-4 border-black p-4 mb-4">
           <div className="flex justify-between items-center mb-2">
             <p className="font-bold">{t('progress')}</p>
             <p className="text-2xl font-bold">{unlocked.length}/{all.length}</p>
@@ -102,9 +102,9 @@ export default function AchievementsPage() {
               transition={{ delay: index * 0.05, type: 'spring', stiffness: 200 }}
               whileHover={isUnlocked ? { scale: 1.05, rotate: 2, y: -5 } : {}}
               whileTap={isUnlocked ? { scale: 0.95 } : {}}
-              className={`comic-panel relative overflow-hidden cursor-pointer ${
+              className={`enough-panel relative overflow-hidden cursor-pointer ${
                 isUnlocked
-                  ? 'bg-gradient-to-br from-comic-orange via-comic-yellow to-comic-lime'
+                  ? 'bg-gradient-to-br from-black via-enough-yellow to-enough-yellow'
                   : 'bg-gray-200 opacity-60'
               }`}
               onClick={() => isUnlocked && showAchievementAnimation(achievement)}

@@ -127,7 +127,7 @@ export default function LeaderboardPage() {
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto relative">
       <MathWallBackground />
       <motion.div 
-        className="comic-panel mb-6 relative overflow-hidden"
+        className="enough-panel mb-6 relative overflow-hidden"
         initial={{ scale: 0.9, opacity: 0, y: -30 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
         transition={{ type: 'spring', stiffness: 200 }}
@@ -156,7 +156,7 @@ export default function LeaderboardPage() {
 
       {/* Daily Tasks Section */}
       <motion.div 
-        className="comic-panel mb-6"
+        className="enough-panel mb-6"
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.2, type: 'spring' }}
@@ -172,7 +172,7 @@ export default function LeaderboardPage() {
             </motion.span>
             Daily Tasks
           </motion.h2>
-          <div className="text-sm font-bold bg-comic-yellow px-3 py-1 rounded-full border-2 border-black">
+          <div className="text-sm font-bold bg-enough-yellow px-3 py-1 rounded-full border-2 border-black">
             {completedTasks}/{totalTasks}
           </div>
         </div>
@@ -187,7 +187,7 @@ export default function LeaderboardPage() {
             />
           </div>
           <p className="text-xs text-center font-bold text-gray-700 mt-2">
-            {progressPercentage.toFixed(0)}% complete • <span className="text-comic-orange">{dailyTasks.filter(t => !t.isCompleted).reduce((sum, t) => sum + t.points, 0)}</span> points remaining
+            {progressPercentage.toFixed(0)}% complete • <span className="text-black">{dailyTasks.filter(t => !t.isCompleted).reduce((sum, t) => sum + t.points, 0)}</span> points remaining
           </p>
         </div>
 
@@ -227,7 +227,7 @@ export default function LeaderboardPage() {
                       <div className="flex items-center gap-2">
                         <div className="w-24 bg-gray-200 rounded-full h-2">
                           <div 
-                            className="bg-comic-lime h-2 rounded-full transition-all"
+                            className="bg-enough-yellow h-2 rounded-full transition-all"
                             style={{ width: `${(task.progress / task.maxProgress) * 100}%` }}
                           />
                         </div>
@@ -239,7 +239,7 @@ export default function LeaderboardPage() {
                   </div>
                   <div className="text-right ml-4 relative z-10">
                     <motion.div 
-                      className="text-2xl font-black text-comic-orange"
+                      className="text-2xl font-black text-black"
                       style={{ textShadow: '2px 2px 0px rgba(0,0,0,0.3)' }}
                     >
                       +{task.points}
@@ -257,8 +257,8 @@ export default function LeaderboardPage() {
                       <motion.button
                         onClick={() => completeTask(task.id)}
                         className="px-4 py-2 rounded-full font-black text-sm border-4 border-black
-                          bg-gradient-to-br from-comic-lime to-comic-cyan shadow-comic
-                          hover:shadow-comic-lg hover:scale-110"
+                          bg-gradient-to-br from-enough-yellow to-enough-yellow enough-shadow
+                          hover:enough-shadow-lg hover:scale-110"
                         whileHover={{ scale: 1.1, rotate: 5 }}
                         whileTap={{ scale: 0.9 }}
                       >
@@ -277,7 +277,7 @@ export default function LeaderboardPage() {
 
       {/* Leaderboard Section */}
       <motion.div 
-        className="comic-panel mb-6"
+        className="enough-panel mb-6"
         initial={{ opacity: 0, x: 50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.4, type: 'spring' }}
@@ -296,8 +296,8 @@ export default function LeaderboardPage() {
           <select
             value={selectedPeriod}
             onChange={(e) => setSelectedPeriod(e.target.value)}
-            className="px-4 py-2 border-4 border-black rounded-xl font-black bg-white shadow-comic
-              hover:shadow-comic-lg transition-all"
+            className="px-4 py-2 border-4 border-black rounded-xl font-black bg-white enough-shadow
+              hover:enough-shadow-lg transition-all"
           >
             <option value="daily">📅 Today</option>
             <option value="weekly">📆 This Week</option>
@@ -308,7 +308,7 @@ export default function LeaderboardPage() {
 
         {userRank && (
           <motion.div 
-            className="bg-gradient-to-br from-comic-yellow via-comic-orange to-comic-pink rounded-2xl border-4 border-black p-6 mb-4 relative overflow-hidden"
+            className="bg-gradient-to-br from-enough-yellow via-black to-comic-pink rounded-2xl border-4 border-black p-6 mb-4 relative overflow-hidden"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.5, type: 'spring' }}
@@ -349,7 +349,7 @@ export default function LeaderboardPage() {
                 key={entry.id}
                 className={`flex items-center justify-between p-4 rounded-2xl border-4 ${borderColors} ${
                   index < 3 ? colors[index] : colors[3]
-                } ${index < 3 ? 'shadow-comic-lg' : 'shadow-comic'} relative overflow-hidden`}
+                } ${index < 3 ? 'enough-shadow-lg' : 'enough-shadow'} relative overflow-hidden`}
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.6 + index * 0.05, type: 'spring' }}
@@ -383,7 +383,7 @@ export default function LeaderboardPage() {
               </div>
               <div className="text-right relative z-10">
                 <motion.div 
-                  className={`font-black text-2xl ${index < 3 ? 'text-white' : 'text-comic-orange'}`}
+                  className={`font-black text-2xl ${index < 3 ? 'text-white' : 'text-black'}`}
                   style={index < 3 ? { textShadow: '2px 2px 0px rgba(0,0,0,0.5)' } : {}}
                 >
                   {entry.totalPoints.toFixed(0)}

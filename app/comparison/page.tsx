@@ -222,7 +222,7 @@ export default function ComparisonPage() {
     <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto relative">
       <MathWallBackground />
       <motion.div 
-        className="comic-panel mb-6 relative overflow-hidden"
+        className="enough-panel mb-6 relative overflow-hidden"
         initial={{ scale: 0.9, opacity: 0, y: -30 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
         transition={{ type: 'spring', stiffness: 200 }}
@@ -256,7 +256,7 @@ export default function ComparisonPage() {
             transition={{ type: 'spring', stiffness: 200 }}
           >
             <motion.div 
-              className="comic-panel mb-6"
+              className="enough-panel mb-6"
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2 }}
@@ -282,7 +282,7 @@ export default function ComparisonPage() {
                     </div>
                     <div className="text-right">
                       <div className="text-xs text-gray-600">{t('total')}:</div>
-                      <div className="text-xl font-bold text-comic-orange">
+                      <div className="text-xl font-bold text-black">
                         {formatCurrency(weeklySpending[day].total, user.currency)}
                       </div>
                     </div>
@@ -320,7 +320,7 @@ export default function ComparisonPage() {
                   {selectedDay !== day ? (
                     <button
                       onClick={() => setSelectedDay(day)}
-                      className="w-full comic-button-secondary py-2 text-sm"
+                      className="w-full enough-button-secondary py-2 text-sm"
                     >
                       + {t('addEntry')}
                     </button>
@@ -329,7 +329,7 @@ export default function ComparisonPage() {
                       {/* Quick settings button */}
                       <button
                         onClick={() => setShowPresetsEditor(true)}
-                        className="w-full comic-button-secondary py-2 text-xs"
+                        className="w-full enough-button-secondary py-2 text-xs"
                       >
                         ⚙️ {t('customizePresets')}
                       </button>
@@ -340,7 +340,7 @@ export default function ComparisonPage() {
                           <button
                             key={preset.id}
                             onClick={() => addPresetEntry(day, preset)}
-                            className="bg-comic-lime hover:bg-green-300 border-2 border-black rounded-lg p-2 text-xs font-bold transition-all"
+                            className="bg-enough-yellow hover:bg-green-300 border-2 border-black rounded-lg p-2 text-xs font-bold transition-all"
                           >
                             {preset.icon} {preset.name}
                             <div className="text-[10px] text-gray-600">
@@ -354,7 +354,7 @@ export default function ComparisonPage() {
                       {!showAddEntry ? (
                         <button
                           onClick={() => setShowAddEntry(true)}
-                          className="w-full comic-button py-2 text-sm"
+                          className="w-full enough-button py-2 text-sm"
                         >
                           💰 {t('customEntry')}
                         </button>
@@ -379,7 +379,7 @@ export default function ComparisonPage() {
                           <div className="flex gap-2">
                             <button
                               onClick={() => addCustomEntry(day)}
-                              className="flex-1 comic-button py-2 text-sm"
+                              className="flex-1 enough-button py-2 text-sm"
                             >
                               {t('add')}
                             </button>
@@ -388,7 +388,7 @@ export default function ComparisonPage() {
                                 setShowAddEntry(false);
                                 setCustomEntry({ name: '', amount: '' });
                               }}
-                              className="flex-1 comic-button-secondary py-2 text-sm"
+                              className="flex-1 enough-button-secondary py-2 text-sm"
                             >
                               {t('cancel')}
                             </button>
@@ -412,10 +412,10 @@ export default function ComparisonPage() {
               ))}
             </div>
 
-            <div className="mt-6 bg-comic-yellow rounded-xl border-4 border-black p-4">
+            <div className="mt-6 bg-enough-yellow rounded-xl border-4 border-black p-4">
               <div className="flex justify-between items-center">
                 <span className="font-bold text-lg">{t('weeklyTotal')}:</span>
-                <span className="text-2xl font-bold text-comic-orange">
+                <span className="text-2xl font-bold text-black">
                   {formatCurrency(calculateWeeklyTotal(), user.currency)}
                 </span>
               </div>
@@ -427,7 +427,7 @@ export default function ComparisonPage() {
             <motion.button
               onClick={handleAnalyze}
               disabled={loading || calculateWeeklyTotal() <= 0}
-              className="w-full mt-6 comic-button-orange py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full mt-6 enough-button py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
               whileHover={!loading && calculateWeeklyTotal() > 0 ? { scale: 1.02, y: -3 } : {}}
               whileTap={!loading && calculateWeeklyTotal() > 0 ? { scale: 0.98 } : {}}
             >
@@ -436,7 +436,7 @@ export default function ComparisonPage() {
             </motion.div>
 
             <motion.div 
-              className="comic-panel bg-comic-cyan"
+              className="enough-panel bg-enough-yellow"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3 }}
@@ -463,13 +463,13 @@ export default function ComparisonPage() {
             transition={{ type: 'spring', stiffness: 200 }}
           >
             <motion.div 
-              className="comic-panel mb-6"
+              className="enough-panel mb-6"
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
             >
               <motion.button
                 onClick={() => setStep('input')}
-                className="comic-button-secondary mb-4"
+                className="enough-button-secondary mb-4"
                 whileHover={{ scale: 1.02, x: -3 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -581,7 +581,7 @@ export default function ComparisonPage() {
             </div>
 
             <motion.div 
-              className="bg-comic-lime rounded-xl border-4 border-black p-6 mb-6 text-center relative overflow-hidden"
+              className="bg-enough-yellow rounded-xl border-4 border-black p-6 mb-6 text-center relative overflow-hidden"
               initial={{ opacity: 0, scale: 0.8, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ delay: 0.7, type: 'spring', stiffness: 300 }}
@@ -628,7 +628,7 @@ export default function ComparisonPage() {
 
           {/* Projections */}
           <motion.div 
-            className="comic-panel mb-6"
+            className="enough-panel mb-6"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9 }}
@@ -682,7 +682,7 @@ export default function ComparisonPage() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-2xl font-bold text-comic-orange">
+                      <div className="text-2xl font-bold text-black">
                         {formatCurrency(
                           convertCurrency(
                             comparison.projections[period.key as keyof typeof comparison.projections],
@@ -700,7 +700,7 @@ export default function ComparisonPage() {
 
           {/* Motivational message */}
           <motion.div 
-            className="comic-panel bg-comic-yellow relative overflow-hidden"
+            className="enough-panel bg-enough-yellow relative overflow-hidden"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1.7 }}
