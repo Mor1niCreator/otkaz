@@ -31,6 +31,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       orderBy: { createdAt: 'desc' }
     });
 
+    // Получаем информацию о текущем пользователе для его referralCode
+    const currentUser = await prisma.user.findUnique({
+      where: { id: userId as string },
+      select: { referralCode: true }
+    });
+
     // Получаем статистику рефералов
     const totalReferrals = referrals.length;
     const activeReferrals = referrals.filter(r => r.referred.points > 0).length;
@@ -62,7 +68,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         totalReferrals,
         activeReferrals,
         totalPointsFromReferrals,
-        referralCode: referrals[0]?.referrer?.referralCode || null
+        referralCode: currentUser?.referralCode || null
       },
       referrer: referrerInfo ? {
         name: referrerInfo.referrer.name,

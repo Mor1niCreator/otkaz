@@ -4,14 +4,13 @@
 
 @layer base {
   * {
-    font-family: 'Chewy', 'Russo One', cursive, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
   
   body {
-    background: 
-      linear-gradient(135deg, #FFE030 0%, #FF6B35 25%, #FF006E 50%, #8338EC 75%, #3A86FF 100%);
+    background: #FFFFFF;
     background-attachment: fixed;
     position: relative;
     overflow-x: hidden;
@@ -23,41 +22,38 @@
     z-index: 1;
   }
 
-  /* COMIC BOOK FONT HIERARCHY - That's All Folks Style! */
+  /* MINIMALIST FONT HIERARCHY */
   
-  /* Hero Titles - BIG & BOUNCY */
+  /* Hero Titles - Clean & Bold */
   h1, .text-hero {
-    font-family: 'Bangers', 'Russo One', cursive, sans-serif;
-    font-weight: 400;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-    transform: scaleY(1.1);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
   }
 
-  /* Section Headers - BOLD & FUN */
+  /* Section Headers - Clean */
   h2, .text-header {
-    font-family: 'Luckiest Guy', 'Russo One', cursive, sans-serif;
-    font-weight: 400;
-    letter-spacing: 0.02em;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.01em;
   }
 
-  /* Subheaders - PLAYFUL */
+  /* Subheaders - Simple */
   h3, .text-subheader {
-    font-family: 'Carter One', 'Russo One', cursive, sans-serif;
-    font-weight: 400;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+    font-weight: 600;
   }
 
-  /* Buttons & Action Text - PUNCHY */
+  /* Buttons & Action Text - Clean */
   button, .btn-text {
-    font-family: 'Titan One', 'Russo One', cursive, sans-serif;
-    font-weight: 400;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+    font-weight: 500;
+    letter-spacing: 0;
   }
 
-  /* Body Text - FRIENDLY */
+  /* Body Text - Clean */
   p, span, div, .body-text {
-    font-family: 'Chewy', 'Russo One', cursive, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
     font-weight: 400;
   }
 
@@ -98,7 +94,7 @@
     font-variant-numeric: tabular-nums;
   }
   
-  /* Comic Book Halftone Dots Background */
+  /* Clean minimalist background */
   body::before {
     content: '';
     position: fixed;
@@ -106,8 +102,6 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: radial-gradient(circle, rgba(0,0,0,0.03) 1px, transparent 1px);
-    background-size: 12px 12px;
     pointer-events: none;
     z-index: 0;
   }
@@ -1335,86 +1329,74 @@
   }
 }
 
-/* UTILITY CLASSES - COMIC FONTS! */
+/* UTILITY CLASSES - MINIMALIST FONTS! */
 .font-hero {
-  font-family: 'Bangers', 'Russo One', cursive, sans-serif !important;
-  font-weight: 400;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  transform: scaleY(1.1);
+  font-family: 'Inter', -apple-system, sans-serif !important;
+  font-weight: 900;
+  letter-spacing: -0.04em;
 }
 
 .font-header {
-  font-family: 'Luckiest Guy', 'Russo One', cursive, sans-serif !important;
-  font-weight: 400;
-  letter-spacing: 0.02em;
+  font-family: 'Inter', -apple-system, sans-serif !important;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 .font-button {
-  font-family: 'Titan One', 'Russo One', cursive, sans-serif !important;
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
+  font-family: 'Inter', -apple-system, sans-serif !important;
+  font-weight: 500;
+  letter-spacing: 0;
 }
 
 .font-number {
-  font-family: 'Rubik Mono One', 'Russo One', cursive, sans-serif !important;
-  font-weight: 400;
+  font-family: 'Inter', -apple-system, sans-serif !important;
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
 
 .font-tag {
-  font-family: 'Lilita One', 'Russo One', cursive, sans-serif !important;
-  font-weight: 400;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
+  font-family: 'Inter', -apple-system, sans-serif !important;
+  font-weight: 500;
+  letter-spacing: 0;
 }
 
 .font-body {
-  font-family: 'Chewy', 'Russo One', cursive, sans-serif !important;
+  font-family: 'Inter', -apple-system, sans-serif !important;
   font-weight: 400;
 }
 
-/* CUSTOM SCROLLBAR - Comic Style */
+/* CUSTOM SCROLLBAR - Minimalist */
 ::-webkit-scrollbar {
-  width: 14px;
-  height: 14px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #E0E0E0;
-  border: 3px solid #000;
-  border-radius: 12px;
+  background: #F3F4F6;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #FFE030 0%, #FF6B35 50%, #FF006E 100%);
-  border: 3px solid #000;
-  border-radius: 12px;
-  box-shadow: inset 0 2px 4px rgba(255,255,255,0.5);
+  background: #D1D5DB;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #FF006E 0%, #8338EC 50%, #3A86FF 100%);
-  transform: scale(1.1);
+  background: #9CA3AF;
 }
 
-/* COMIC INPUT FIELDS - Hand-Drawn! */
+/* MINIMALIST INPUT FIELDS */
 input[type="text"],
 input[type="email"],
 input[type="password"],
 input[type="number"],
 textarea,
 select {
-  font-family: 'Chewy', 'Russo One', cursive, sans-serif !important;
+  font-family: 'Inter', -apple-system, sans-serif !important;
   font-weight: 400;
-  border: 5px solid #000 !important;
-  border-radius: 18px 22px 20px 24px / 24px 18px 22px 20px !important; /* Неровные края */
-  box-shadow: 
-    inset 3px 3px 0px rgba(0,0,0,0.1),
-    3px 3px 0px rgba(0,0,0,0.2) !important;
-  background: 
-    linear-gradient(135deg, #FFFFFF 0%, #FFFEF7 100%);
+  border: 1px solid #E5E7EB !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  background: #FFFFFF;
   transition: all 0.2s ease;
 }
 
@@ -1425,12 +1407,9 @@ input[type="number"]:focus,
 textarea:focus,
 select:focus {
   outline: none !important;
-  border-color: #FF6B35 !important;
-  box-shadow: 
-    inset 3px 3px 0px rgba(0,0,0,0.1),
-    6px 6px 0px #000,
-    0 0 20px rgba(255, 107, 53, 0.5) !important;
-  transform: translateY(-2px) rotate(-1deg);
+  border-color: #000000 !important;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05) !important;
+  transform: none;
 }
 
 input[type="text"]:disabled,
@@ -1450,15 +1429,13 @@ select:disabled {
   opacity: 0.6;
 }
 
-/* SELECTION - Comic Highlight */
+/* SELECTION - Clean Highlight */
 ::selection {
-  background: #FFE030;
-  color: #000;
-  text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+  background: #000000;
+  color: #FFFFFF;
 }
 
 ::-moz-selection {
-  background: #FFE030;
-  color: #000;
-  text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+  background: #000000;
+  color: #FFFFFF;
 }
