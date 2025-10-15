@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import MathWallBackground from '@/components/MathWallBackground';
 import { CURRENCIES } from '@/lib/currencies';
 
 export default function HomePage() {
@@ -56,121 +55,57 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-      <MathWallBackground />
+    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-enough-yellow">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-10"
+        style={{
+          backgroundImage: 'linear-gradient(rgba(0,0,0,0.1) 2px, transparent 2px), linear-gradient(90deg, rgba(0,0,0,0.1) 2px, transparent 2px)',
+          backgroundSize: '40px 40px'
+        }}
+      />
       
       {/* Hero Section */}
       <div className="w-full max-w-6xl mx-auto relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: -100, scale: 0.8 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-          className="text-center mb-12"
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="text-center mb-16"
         >
           {/* Main Logo/Title */}
           <motion.div
-            className="relative inline-block mb-6"
-            animate={{ 
-              y: [0, -10, 0],
-            }}
-            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+            className="relative inline-block mb-8"
+            initial={{ scale: 0.9 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.5 }}
           >
-            {/* Explosion lines behind */}
-            <div className="absolute inset-0 -z-10">
-              {[...Array(16)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="absolute w-2 bg-comic-orange"
-                  style={{
-                    height: '120px',
-                    left: '50%',
-                    top: '50%',
-                    transformOrigin: 'center center',
-                    rotate: `${i * 22.5}deg`,
-                    opacity: 0.3,
-                  }}
-                  initial={{ scaleY: 0 }}
-                  animate={{ scaleY: [0, 1, 0.9] }}
-                  transition={{ 
-                    duration: 1,
-                    delay: i * 0.03,
-                    repeat: Infinity,
-                    repeatDelay: 5,
-                  }}
-                />
-              ))}
-            </div>
-
             <motion.h1
-              className="text-8xl md:text-9xl font-black relative"
+              className="enough-text-large text-[clamp(4rem,15vw,10rem)] leading-none"
               style={{
-                fontFamily: "'Bangers', 'Russo One', cursive",
-                background: 'linear-gradient(135deg, #FF006E 0%, #FF6B35 30%, #FFE030 60%, #CCFF00 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                filter: 'drop-shadow(6px 6px 0px #000)',
                 letterSpacing: '0.05em',
-                textTransform: 'uppercase',
-                transform: 'scaleY(1.15)',
               }}
-              animate={{
-                scale: [1, 1.02, 1],
-              }}
-              transition={{ duration: 2, repeat: Infinity }}
             >
-              ENOUGH
+              ENOUGH.
             </motion.h1>
-
-            {/* Floating emojis */}
-            {['💰', '⚡', '🎯', '🚀'].map((emoji, i) => (
-              <motion.div
-                key={i}
-                className="absolute text-5xl"
-                style={{
-                  left: `${-10 + i * 40}%`,
-                  top: `${-20 + (i % 2) * 140}%`,
-                  filter: 'drop-shadow(3px 3px 0px #000)',
-                }}
-                animate={{
-                  y: [0, -20, 0],
-                  rotate: [0, 10, -10, 0],
-                }}
-                transition={{
-                  duration: 3 + i * 0.5,
-                  repeat: Infinity,
-                  delay: i * 0.5,
-                }}
-              >
-                {emoji}
-              </motion.div>
-            ))}
           </motion.div>
 
           {/* Tagline */}
           <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3, type: 'spring' }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
             className="inline-block"
           >
             <div 
-              className="px-8 py-3 rounded-full border-5 border-black relative overflow-hidden"
+              className="px-8 py-4 bg-black text-enough-yellow"
               style={{
-                background: 'rgba(255, 224, 48, 0.95)',
-                backdropFilter: 'blur(10px)',
-                boxShadow: '6px 6px 0px #000',
-                borderRadius: '30px 35px 32px 38px / 38px 30px 35px 32px',
+                boxShadow: '0 6px 0px rgba(0,0,0,0.3)',
               }}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-[shine_3s_ease-in-out_infinite]" />
               <p 
-                className="text-xl md:text-2xl font-black relative z-10"
-                style={{
-                  fontFamily: "'Titan One', 'Russo One', cursive",
-                  textShadow: '2px 2px 0px rgba(0,0,0,0.2)',
-                }}
+                className="text-xl md:text-2xl font-black uppercase tracking-wide"
               >
-                Know When to Stop • Save Smart • Live Better 🌟
+                Enough to Change Your Life
               </p>
             </div>
           </motion.div>
@@ -178,73 +113,46 @@ export default function HomePage() {
 
         {/* Main Card */}
         <motion.div
-          initial={{ opacity: 0, y: 50, scale: 0.9 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ delay: 0.5, type: 'spring', stiffness: 150 }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.5 }}
           className="max-w-md mx-auto"
         >
           <div 
-            className="p-8 border-6 border-black relative"
-            style={{
-              background: 'rgba(255, 255, 255, 0.75)',
-              backdropFilter: 'blur(20px) saturate(180%)',
-              WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-              boxShadow: '12px 12px 0px #000, 0 0 60px rgba(255, 224, 48, 0.4)',
-              borderRadius: '35px 30px 40px 32px / 32px 40px 30px 35px',
-            }}
+            className="enough-panel"
           >
-            {/* Inner glow */}
-            <div 
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                background: 
-                  'radial-gradient(circle at 30% 20%, rgba(255, 224, 48, 0.2) 0%, transparent 50%)',
-                borderRadius: 'inherit',
-              }}
-            />
-
             {/* Toggle Tabs */}
-            <div className="flex gap-3 mb-8 relative z-10">
+            <div className="flex gap-3 mb-8">
               <motion.button
                 onClick={() => setIsLogin(true)}
-                className={`flex-1 py-4 rounded-2xl font-black text-lg border-5 border-black relative overflow-hidden
+                className={`flex-1 py-4 font-black text-base uppercase tracking-wider border-3 border-black transition-all
                   ${isLogin 
-                    ? 'bg-gradient-to-br from-comic-orange via-comic-pink to-comic-purple text-white shadow-comic-lg' 
-                    : 'bg-white/60 text-gray-700 shadow-comic'
+                    ? 'bg-black text-enough-yellow' 
+                    : 'bg-enough-white text-black hover:bg-enough-cream'
                   }`}
                 style={{
-                  fontFamily: "'Titan One', 'Russo One', cursive",
-                  textShadow: isLogin ? '2px 2px 0px rgba(0,0,0,0.5)' : 'none',
-                  borderRadius: '22px 25px 23px 26px / 26px 22px 25px 23px',
+                  boxShadow: isLogin ? '0 4px 0px rgba(0,0,0,0.3)' : 'none',
                 }}
-                whileHover={{ scale: 1.05, y: -3 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ y: -2 }}
+                whileTap={{ y: 0 }}
               >
-                {isLogin && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-[shine_3s_infinite]" />
-                )}
-                <span className="relative z-10">LOGIN 🚀</span>
+                LOGIN
               </motion.button>
 
               <motion.button
                 onClick={() => setIsLogin(false)}
-                className={`flex-1 py-4 rounded-2xl font-black text-lg border-5 border-black relative overflow-hidden
+                className={`flex-1 py-4 font-black text-base uppercase tracking-wider border-3 border-black transition-all
                   ${!isLogin 
-                    ? 'bg-gradient-to-br from-comic-lime via-comic-cyan to-comic-blue text-white shadow-comic-lg' 
-                    : 'bg-white/60 text-gray-700 shadow-comic'
+                    ? 'bg-black text-enough-yellow' 
+                    : 'bg-enough-white text-black hover:bg-enough-cream'
                   }`}
                 style={{
-                  fontFamily: "'Titan One', 'Russo One', cursive",
-                  textShadow: !isLogin ? '2px 2px 0px rgba(0,0,0,0.5)' : 'none',
-                  borderRadius: '25px 22px 26px 23px / 23px 26px 22px 25px',
+                  boxShadow: !isLogin ? '0 4px 0px rgba(0,0,0,0.3)' : 'none',
                 }}
-                whileHover={{ scale: 1.05, y: -3 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ y: -2 }}
+                whileTap={{ y: 0 }}
               >
-                {!isLogin && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-[shine_3s_infinite]" />
-                )}
-                <span className="relative z-10">REGISTER ✨</span>
+                REGISTER
               </motion.button>
             </div>
 
@@ -253,7 +161,7 @@ export default function HomePage() {
               <motion.form
                 key={isLogin ? 'login' : 'register'}
                 onSubmit={handleSubmit}
-                className="space-y-4 relative z-10"
+                className="space-y-4"
                 initial={{ opacity: 0, x: isLogin ? -20 : 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: isLogin ? 20 : -20 }}
@@ -262,10 +170,10 @@ export default function HomePage() {
                 {!isLogin && (
                   <motion.input
                     type="text"
-                    placeholder="Your Name"
+                    placeholder="YOUR NAME"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full px-6 py-4 text-lg"
+                    className="w-full px-6 py-4 text-base font-semibold uppercase placeholder:text-gray-400"
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 }}
@@ -274,30 +182,30 @@ export default function HomePage() {
                 
                 <input
                   type="email"
-                  placeholder="Email"
+                  placeholder="EMAIL"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full px-6 py-4 text-lg"
+                  className="w-full px-6 py-4 text-base font-semibold uppercase placeholder:text-gray-400"
                 />
                 
                 <input
                   type="password"
-                  placeholder="Password"
+                  placeholder="PASSWORD"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full px-6 py-4 text-lg"
+                  className="w-full px-6 py-4 text-base font-semibold uppercase placeholder:text-gray-400"
                 />
 
                 {!isLogin && (
                   <>
                     <motion.input
                       type="text"
-                      placeholder="Referral Code (optional)"
+                      placeholder="REFERRAL CODE (OPTIONAL)"
                       value={referralCode}
                       onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
-                      className="w-full px-6 py-4 text-lg"
+                      className="w-full px-6 py-4 text-base font-semibold uppercase placeholder:text-gray-400"
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2 }}
@@ -311,15 +219,14 @@ export default function HomePage() {
                     >
                       <div>
                         <label 
-                          className="block text-sm font-black mb-2 uppercase"
-                          style={{ fontFamily: "'Lilita One', 'Russo One', cursive" }}
+                          className="block text-xs font-black mb-2 uppercase tracking-wider"
                         >
-                          💵 Currency
+                          Currency
                         </label>
                         <select
                           value={currency}
                           onChange={(e) => setCurrency(e.target.value)}
-                          className="w-full px-4 py-4 text-base"
+                          className="w-full px-4 py-4 text-sm font-semibold"
                         >
                           {Object.entries(CURRENCIES).slice(0, 10).map(([code, data]) => (
                             <option key={code} value={code}>
@@ -330,18 +237,17 @@ export default function HomePage() {
                       </div>
                       <div>
                         <label 
-                          className="block text-sm font-black mb-2 uppercase"
-                          style={{ fontFamily: "'Lilita One', 'Russo One', cursive" }}
+                          className="block text-xs font-black mb-2 uppercase tracking-wider"
                         >
-                          🌍 Language
+                          Language
                         </label>
                         <select
                           value={language}
                           onChange={(e) => setLanguage(e.target.value)}
-                          className="w-full px-4 py-4 text-base"
+                          className="w-full px-4 py-4 text-sm font-semibold"
                         >
-                          <option value="en">🇬🇧 English</option>
-                          <option value="ru">🇷🇺 Русский</option>
+                          <option value="en">English</option>
+                          <option value="ru">Русский</option>
                         </select>
                       </div>
                     </motion.div>
@@ -351,82 +257,41 @@ export default function HomePage() {
                 <motion.button 
                   type="submit" 
                   disabled={isLoading}
-                  className="w-full py-5 rounded-2xl text-2xl font-black border-6 border-black relative overflow-hidden
+                  className="enough-button-primary w-full py-5 text-xl
                     disabled:opacity-50 disabled:cursor-not-allowed"
-                  style={{
-                    fontFamily: "'Titan One', 'Russo One', cursive",
-                    background: 'linear-gradient(135deg, #FF006E 0%, #FF6B35 50%, #FFE030 100%)',
-                    boxShadow: '8px 8px 0px #000',
-                    textShadow: '3px 3px 0px rgba(0,0,0,0.5)',
-                    color: 'white',
-                    borderRadius: '25px 28px 26px 30px / 30px 25px 28px 26px',
-                  }}
-                  whileHover={!isLoading ? { 
-                    scale: 1.02, 
-                    y: -4,
-                    boxShadow: '12px 12px 0px #000'
-                  } : {}}
-                  whileTap={!isLoading ? { scale: 0.98, y: 2 } : {}}
+                  whileHover={!isLoading ? { y: -3 } : {}}
+                  whileTap={!isLoading ? { y: 2 } : {}}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-[shine_2s_ease-in-out_infinite]" />
-                  <motion.span 
-                    className="relative z-10"
-                    animate={isLoading ? { opacity: [1, 0.5, 1] } : {}}
-                    transition={{ duration: 1, repeat: Infinity }}
-                  >
-                    {isLoading ? '⏳ LOADING...' : isLogin ? '🚀 LET\'S GO!' : '✨ START SAVING!'}
-                  </motion.span>
+                  {isLoading ? 'LOADING...' : isLogin ? 'LET\'S GO' : 'START SAVING'}
                 </motion.button>
               </motion.form>
             </AnimatePresence>
 
             {/* Info Cards */}
             <motion.div 
-              className="mt-8 grid grid-cols-3 gap-3 relative z-10"
-              initial={{ opacity: 0, y: 30 }}
+              className="mt-8 grid grid-cols-3 gap-3"
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8 }}
             >
               {[
-                { icon: '✋', text: 'Say Enough', color: 'from-purple-400 to-pink-500' },
-                { icon: '💎', text: 'Build Wealth', color: 'from-yellow-400 to-orange-400' },
-                { icon: '🎯', text: 'Reach Goals', color: 'from-cyan-400 to-blue-500' },
+                { text: 'Say Enough', emoji: '✋' },
+                { text: 'Build Wealth', emoji: '💎' },
+                { text: 'Reach Goals', emoji: '🎯' },
               ].map((item, i) => (
                 <motion.div
                   key={i}
-                  className="p-4 border-4 border-black relative overflow-hidden"
+                  className="bg-black text-enough-yellow p-4 text-center border-3 border-black"
                   style={{
-                    background: `linear-gradient(135deg, var(--tw-gradient-stops))`,
-                    backdropFilter: 'blur(10px)',
-                    borderRadius: '20px 22px 21px 23px / 23px 20px 22px 21px',
-                    boxShadow: '5px 5px 0px #000',
+                    boxShadow: '0 3px 0px rgba(0,0,0,0.3)',
                   }}
-                  initial={{ opacity: 0, scale: 0, rotate: -180 }}
-                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                  transition={{ 
-                    delay: 1 + i * 0.1,
-                    type: 'spring',
-                    stiffness: 200
-                  }}
-                  whileHover={{ scale: 1.05, y: -5, rotate: 3 }}
-                  className={`bg-gradient-to-br ${item.color}`}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 1 + i * 0.1 }}
+                  whileHover={{ y: -3 }}
                 >
-                  <div className="absolute inset-0 bg-white/20" />
-                  <motion.div 
-                    className="text-4xl mb-2"
-                    style={{ filter: 'drop-shadow(2px 2px 0px rgba(0,0,0,0.3))' }}
-                    animate={{ rotate: [0, -10, 10, 0] }}
-                    transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
-                  >
-                    {item.icon}
-                  </motion.div>
-                  <p 
-                    className="text-xs font-black text-white uppercase"
-                    style={{
-                      fontFamily: "'Lilita One', 'Russo One', cursive",
-                      textShadow: '2px 2px 0px rgba(0,0,0,0.4)',
-                    }}
-                  >
+                  <div className="text-3xl mb-2">{item.emoji}</div>
+                  <p className="text-xs font-black uppercase tracking-wide">
                     {item.text}
                   </p>
                 </motion.div>
@@ -435,28 +300,17 @@ export default function HomePage() {
           </div>
         </motion.div>
 
-        {/* Floating particles */}
-        {[...Array(8)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-3 h-3 rounded-full bg-comic-yellow border-2 border-black"
-            style={{
-              left: `${10 + Math.random() * 80}%`,
-              top: `${10 + Math.random() * 80}%`,
-            }}
-            animate={{
-              y: [0, -30, 0],
-              x: [0, Math.random() * 20 - 10, 0],
-              opacity: [0, 1, 0],
-              scale: [0, 1.5, 0],
-            }}
-            transition={{
-              duration: 3 + Math.random() * 2,
-              repeat: Infinity,
-              delay: Math.random() * 3,
-            }}
-          />
-        ))}
+        {/* Footer Text */}
+        <motion.div 
+          className="text-center mt-12"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2 }}
+        >
+          <p className="text-black font-bold text-lg uppercase tracking-wider">
+            Know When to Stop • Save Smart • Live Better
+          </p>
+        </motion.div>
       </div>
     </div>
   );

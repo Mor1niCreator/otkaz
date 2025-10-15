@@ -55,7 +55,6 @@ export default function CalendarPage() {
     loadEntries(parsedUser.id);
   }, [router]);
 
-  // Listen for storage changes to update user data
   useEffect(() => {
     const handleStorageChange = () => {
       const parsedUser = getUserFromStorage();
@@ -70,38 +69,22 @@ export default function CalendarPage() {
 
   const loadEntries = async (userId: string) => {
     try {
-      console.log(`[Calendar] Loading entries for user ${userId}...`);
       const res = await fetch(`/api/entries/list?userId=${userId}&period=today`);
       const data = await res.json();
       if (res.ok) {
-        console.log(`[Calendar] Loaded ${data.entries.length} entries, Total USD: ${data.totalUSD}`);
-        if (data.entries.length > 0) {
-          console.log(`[Calendar] Entries:`, data.entries.map((e: Entry) => ({ 
-            name: e.name, 
-            amount: e.pricePerUnit * e.quantity, 
-            currency: e.currency,
-            usdAmount: e.usdAmount,
-            date: e.date
-          })));
-        }
         setEntries(data.entries);
-      } else {
-        console.error(`[Calendar] Failed to load entries:`, data);
       }
     } catch (error) {
       console.error('[Calendar] Failed to load entries:', error);
     }
   };
 
-  // Update todayTotal whenever entries change
   useEffect(() => {
     if (!user) return;
     
     const todayTotalUSD = entries.reduce((sum, e) => sum + (e.usdAmount || 0), 0);
     const converted = convertCurrency(todayTotalUSD, user.currency || 'USD');
     setTodayTotal(converted);
-    
-    console.log(`[Calendar] Today total: ${todayTotalUSD.toFixed(2)} USD = ${formatCurrency(converted, user.currency)}`);
   }, [entries, user?.currency]);
 
   const handlePreset = (preset: UserPreset) => {
@@ -134,18 +117,13 @@ export default function CalendarPage() {
       const data = await res.json();
 
       if (res.ok) {
-        console.log(`[Calendar] Entry created successfully, reloading entries...`);
-        
-        // Show BOOM animation
         setShowBoom(true);
-        
-        toast.success(`+${data.pointsEarned.toFixed(1)} ${t('pointsEarned')} 🎉`);
+        toast.success(`+${data.pointsEarned.toFixed(1)} ${t('pointsEarned')}`);
         
         const updatedUser = { ...user, points: (Number(user.points) || 0) + data.pointsEarned };
         localStorage.setItem('user', JSON.stringify(updatedUser));
         setUser(updatedUser);
         
-        // Force reload entries
         await loadEntries(user.id);
         
         setShowForm(false);
@@ -161,7 +139,7 @@ export default function CalendarPage() {
   if (!user) return null;
 
   return (
-    <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto relative">
+    <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto relative min-h-screen">
       <TallyMarksBackground />
       <BoomAnimation 
         show={showBoom} 
@@ -172,80 +150,45 @@ export default function CalendarPage() {
       />
 
       <motion.div 
-        className="comic-panel mb-6 relative overflow-hidden"
-        initial={{ scale: 0.9, opacity: 0, y: -30 }}
-        animate={{ scale: 1, opacity: 1, y: 0 }}
-        transition={{ type: 'spring', stiffness: 200 }}
+        className="enough-panel mb-6"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
       >
-        <motion.div
-          className="absolute -top-20 -right-20 w-40 h-40 bg-orange-300 rounded-full opacity-20"
-          animate={{ scale: [1, 1.3, 1], rotate: [0, 180, 360] }}
-          transition={{ duration: 10, repeat: Infinity }}
-        />
+        <h1 className="text-3xl font-black mb-2 uppercase tracking-wide">
+          📅 {t('todaysRefusals')}
+        </h1>
+        <p className="text-lg font-bold text-gray-700">{format(new Date(), 'MMMM d, yyyy')}</p>
         
-        <motion.h1 
-          className="text-4xl font-bold mb-2 flex items-center gap-3 relative z-10"
-          animate={{ y: [0, -5, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
+        <div 
+          className="mt-4 bg-black text-enough-yellow p-6 text-center"
+          style={{ boxShadow: '0 4px 0px rgba(0,0,0,0.3)' }}
         >
-          <motion.span animate={{ rotate: [0, 360] }} transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}>
-            📅
-          </motion.span>
-          {t('todaysRefusals')}
-        </motion.h1>
-        <p className="text-xl font-bold text-gray-700 relative z-10">{format(new Date(), 'MMMM d, yyyy')}</p>
-        
-        <motion.div 
-          className="mt-4 bg-gradient-to-br from-comic-yellow via-comic-orange to-comic-pink rounded-2xl border-4 border-black p-6 text-center relative overflow-hidden"
-          initial={{ scale: 0.8 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.2, type: 'spring' }}
-          whileHover={{ scale: 1.02, y: -3 }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-[shine_3s_ease-in-out_infinite]" />
-          <p className="text-sm font-black text-white relative z-10" style={{ textShadow: '2px 2px 0px rgba(0,0,0,0.5)' }}>
+          <p className="text-sm font-black uppercase tracking-wider mb-1">
             {t('savedToday')}
           </p>
-          <motion.p 
-            className="text-5xl font-black text-white relative z-10"
-            style={{ textShadow: '4px 4px 0px rgba(0,0,0,0.5)' }}
-            animate={{ scale: [1, 1.05, 1] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-          >
+          <p className="text-5xl font-black">
             {formatCurrency(todayTotal, user?.currency || 'USD')}
-          </motion.p>
-        </motion.div>
+          </p>
+        </div>
       </motion.div>
 
       <motion.div 
-        className="comic-panel mb-6"
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.3, type: 'spring' }}
+        className="enough-panel mb-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, duration: 0.4 }}
       >
         <div className="flex justify-between items-center mb-4">
-          <motion.h2 
-            className="text-2xl font-bold flex items-center gap-2"
-            animate={{ x: [0, 5, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            <motion.span 
-              animate={{ rotate: [0, -15, 15, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-            >
-              ⚡
-            </motion.span>
-            {t('quickAdd')}
-          </motion.h2>
-          <motion.button
+          <h2 className="text-2xl font-black uppercase tracking-wide">
+            ⚡ {t('quickAdd')}
+          </h2>
+          <button
             onClick={() => setShowPresetsEditor(true)}
-            className="px-4 py-2 text-sm font-black rounded-xl border-4 border-black bg-white shadow-comic
-              hover:shadow-comic-lg transition-all"
-            whileHover={{ scale: 1.05, rotate: 5 }}
-            whileTap={{ scale: 0.95 }}
+            className="enough-button-secondary px-4 py-2 text-sm"
           >
             ⚙️ {t('customize')}
-          </motion.button>
+          </button>
         </div>
         <div className="grid grid-cols-2 gap-3">
           {presets.map((preset, index) => {
@@ -255,51 +198,30 @@ export default function CalendarPage() {
               <motion.button
                 key={preset.id}
                 onClick={() => handlePreset(preset)}
-                className="p-5 rounded-2xl font-black border-4 border-black shadow-comic
-                  bg-gradient-to-br from-comic-cyan via-comic-blue to-comic-indigo text-white
-                  relative overflow-hidden"
-                initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
-                animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                transition={{ delay: 0.4 + index * 0.05, type: 'spring', stiffness: 200 }}
-                whileHover={{ 
-                  scale: 1.05, 
-                  y: -5, 
-                  boxShadow: '10px 10px 0px #000',
-                  rotate: 2
-                }}
-                whileTap={{ scale: 0.95, rotate: -2 }}
+                className="p-5 bg-enough-yellow border-3 border-black font-black"
+                style={{ boxShadow: '0 4px 0px #000' }}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.3 + index * 0.05 }}
+                whileHover={{ y: -2, boxShadow: '0 6px 0px #000' }}
+                whileTap={{ y: 2, boxShadow: '0 2px 0px #000' }}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-black/10 pointer-events-none" />
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-[shine_3s_ease-in-out_infinite]" />
-                
-                <motion.div 
-                  className="text-5xl mb-2 relative z-10"
-                  style={{ filter: 'drop-shadow(3px 3px 0px rgba(0,0,0,0.5))' }}
-                  whileHover={{ scale: 1.2, rotate: 10 }}
-                  transition={{ type: 'spring', stiffness: 300 }}
-                >
-                  {preset.icon}
-                </motion.div>
-                <div className="font-black text-lg relative z-10" style={{ textShadow: '2px 2px 0px rgba(0,0,0,0.3)' }}>
-                  {preset.name}
-                </div>
-                <div className="text-sm font-bold text-white/90 relative z-10">
+                <div className="text-4xl mb-2">{preset.icon}</div>
+                <div className="font-black text-base uppercase tracking-wide">{preset.name}</div>
+                <div className="text-sm font-bold text-gray-700">
                   {getCurrencySymbol(user?.currency || 'USD')}{preset.price}
                 </div>
                 
-                {/* Show tags if any */}
                 {presetTags.length > 0 && (
                   <div className="flex flex-wrap gap-1 mt-2 justify-center">
-                    {presetTags.slice(0, 2).map((tagId, tagIndex) => {
+                    {presetTags.slice(0, 2).map((tagId) => {
                       const tag = WHY_TAGS.find(t => t.id === tagId);
                       if (!tag) return null;
                       
                       return (
                         <div
                           key={tagId}
-                          className={`px-2 py-0.5 rounded-full border-2 text-[10px] font-black ${tag.color} 
-                            transition-all hover:scale-110 hover:rotate-3 animate-[popIn_0.3s_ease-out]`}
-                          style={{ animationDelay: `${tagIndex * 0.1}s` }}
+                          className="enough-tag text-[10px]"
                           title={getWhyTagName(tagId, user?.language || 'en')}
                         >
                           {tag.icon}
@@ -307,10 +229,7 @@ export default function CalendarPage() {
                       );
                     })}
                     {presetTags.length > 2 && (
-                      <div className="px-2 py-0.5 rounded-full border-2 text-[10px] font-black bg-gradient-to-br from-gray-300 to-gray-400 text-gray-900 border-gray-600 
-                        transition-all hover:scale-110 animate-[popIn_0.3s_ease-out]"
-                        style={{ animationDelay: '0.2s' }}
-                      >
+                      <div className="enough-tag text-[10px]">
                         +{presetTags.length - 2}
                       </div>
                     )}
@@ -320,24 +239,12 @@ export default function CalendarPage() {
             );
           })}
         </div>
-        <motion.button
+        <button
           onClick={() => setShowForm(true)}
-          className="w-full mt-4 py-4 rounded-2xl font-black text-lg border-4 border-black shadow-comic-lg
-            bg-gradient-to-br from-comic-lime via-comic-cyan to-comic-blue text-white
-            hover:shadow-comic-xl hover:scale-102 hover:-translate-y-2
-            relative overflow-hidden"
-          style={{ textShadow: '2px 2px 0px rgba(0,0,0,0.5)' }}
-          whileHover={{ scale: 1.02, y: -3 }}
-          whileTap={{ scale: 0.98 }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
+          className="enough-button w-full mt-4 py-4 text-lg"
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-[shine_3s_ease-in-out_infinite]" />
-          <span className="relative z-10">
-            {t('customEntry')}
-          </span>
-        </motion.button>
+          {t('customEntry')}
+        </button>
       </motion.div>
 
       {showPresetsEditor && (
@@ -352,15 +259,14 @@ export default function CalendarPage() {
       )}
 
       {showForm && (
-        <div className="fixed inset-0 comic-modal-overlay flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 enough-modal-overlay flex items-center justify-center p-4 z-50">
           <motion.div 
-            className="comic-modal max-w-md w-full"
-            initial={{ scale: 0.8, rotate: -10, opacity: 0 }}
-            animate={{ scale: 1, rotate: 0, opacity: 1 }}
-            exit={{ scale: 0.8, rotate: 10, opacity: 0 }}
-            transition={{ type: 'spring', stiffness: 300 }}
+            className="enough-modal max-w-md w-full"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
           >
-            <h2 className="text-2xl font-bold mb-4">{t('addRefusal')}</h2>
+            <h2 className="text-2xl font-black uppercase mb-4">{t('addRefusal')}</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 type="text"
@@ -368,7 +274,7 @@ export default function CalendarPage() {
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
-                className="w-full px-4 py-3 border-4 border-black rounded-xl"
+                className="w-full px-4 py-3"
               />
               <div className="flex gap-2">
                 <input
@@ -378,7 +284,7 @@ export default function CalendarPage() {
                   value={formData.pricePerUnit}
                   onChange={(e) => setFormData({ ...formData, pricePerUnit: e.target.value })}
                   required
-                  className="flex-1 px-4 py-3 border-4 border-black rounded-xl"
+                  className="flex-1 px-4 py-3"
                 />
                 <input
                   type="number"
@@ -386,13 +292,13 @@ export default function CalendarPage() {
                   placeholder={t('quantity')}
                   value={formData.quantity}
                   onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-                  className="w-20 px-4 py-3 border-4 border-black rounded-xl"
+                  className="w-20 px-4 py-3"
                 />
               </div>
               <select
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="w-full px-4 py-3 border-4 border-black rounded-xl"
+                className="w-full px-4 py-3"
               >
                 <option value="habits">{t('habits')}</option>
                 <option value="food">{t('food')}</option>
@@ -405,17 +311,17 @@ export default function CalendarPage() {
                 placeholder={t('note')}
                 value={formData.note}
                 onChange={(e) => setFormData({ ...formData, note: e.target.value })}
-                className="w-full px-4 py-3 border-4 border-black rounded-xl"
+                className="w-full px-4 py-3"
                 rows={2}
               />
               <div className="flex gap-2">
-                <button type="submit" className="flex-1 comic-button-lime">
+                <button type="submit" className="flex-1 enough-button-primary">
                   💾 {t('save')}
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowForm(false)}
-                  className="flex-1 comic-button-secondary"
+                  className="flex-1 enough-button-secondary"
                 >
                   ❌ {t('cancel')}
                 </button>
@@ -426,68 +332,45 @@ export default function CalendarPage() {
       )}
 
       <motion.div 
-        className="comic-panel"
-        initial={{ opacity: 0, y: 30 }}
+        className="enough-panel"
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.7 }}
+        transition={{ delay: 0.4 }}
       >
-        <motion.h2 
-          className="text-2xl font-bold mb-4"
-          animate={{ x: [0, 5, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
+        <h2 className="text-2xl font-black uppercase mb-4">
           {t('todaysEntries')}
-        </motion.h2>
+        </h2>
         {entries.length === 0 ? (
-          <motion.div 
-            className="text-center py-12 relative"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            <motion.div
-              className="text-6xl mb-4"
-              animate={{ 
-                y: [0, -10, 0],
-                rotate: [0, -5, 5, 0]
-              }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              💪
-            </motion.div>
+          <div className="text-center py-12">
+            <div className="text-6xl mb-4">💪</div>
             <p className="text-xl font-bold text-gray-600">
               {t('noRefusalsYet')}
             </p>
-          </motion.div>
+          </div>
         ) : (
           <div className="space-y-3">
             {entries.map((entry, index) => (
               <motion.div
                 key={entry.id}
-                className="bg-gradient-to-br from-comic-yellow via-comic-orange to-comic-pink rounded-2xl border-4 border-black p-4 
-                  flex justify-between items-center shadow-comic relative overflow-hidden"
-                initial={{ opacity: 0, x: -50 }}
+                className="bg-enough-cream border-3 border-black p-4 flex justify-between items-center"
+                style={{ boxShadow: '0 3px 0px #000' }}
+                initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.05, type: 'spring' }}
-                whileHover={{ scale: 1.02, boxShadow: '10px 10px 0px #000' }}
+                transition={{ delay: index * 0.05 }}
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-[shine_4s_ease-in-out_infinite]" />
-                
-                <div className="relative z-10">
-                  <div className="font-black text-xl text-white" style={{ textShadow: '2px 2px 0px rgba(0,0,0,0.5)' }}>
+                <div>
+                  <div className="font-black text-lg uppercase tracking-wide">
                     {entry.name}
                   </div>
-                  <div className="text-sm font-bold text-white/90">
+                  <div className="text-sm font-bold text-gray-700">
                     {entry.quantity}x @ {formatCurrency(entry.pricePerUnit, entry.currency)} • {entry.category}
                   </div>
                 </div>
-                <div className="text-right relative z-10">
-                  <motion.div 
-                    className="font-black text-2xl text-white"
-                    style={{ textShadow: '3px 3px 0px rgba(0,0,0,0.5)' }}
-                  >
+                <div className="text-right">
+                  <div className="font-black text-2xl">
                     {formatCurrency(entry.pricePerUnit * entry.quantity, entry.currency)}
-                  </motion.div>
-                  <div className="text-xs font-bold text-white/80">{format(new Date(entry.date), 'HH:mm')}</div>
+                  </div>
+                  <div className="text-xs font-bold text-gray-600">{format(new Date(entry.date), 'HH:mm')}</div>
                 </div>
               </motion.div>
             ))}
