@@ -744,6 +744,7 @@ export default function ComparisonPage() {
       )}
 
       <Navigation />
+      </div>
     </div>
   );
 }

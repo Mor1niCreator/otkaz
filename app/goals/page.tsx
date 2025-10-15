@@ -400,6 +400,7 @@ export default function GoalsPage() {
       </AnimatePresence>
 
       <Navigation />
+      </div>
     </div>
   );
 }

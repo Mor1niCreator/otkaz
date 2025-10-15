@@ -393,12 +393,13 @@ export default function LeaderboardPage() {
                 </div>
               </div>
             </motion.div>
-            );
+          );
           })}
         </div>
       </motion.div>
 
       <Navigation />
+      </div>
     </div>
   );
 }

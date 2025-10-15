@@ -207,6 +207,7 @@ export default function AchievementsPage() {
       )}
 
       <Navigation />
+      </div>
     </div>
   );
 }

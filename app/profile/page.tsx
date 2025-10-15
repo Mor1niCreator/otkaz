@@ -447,6 +447,7 @@ export default function ProfilePage() {
       </button>
 
       <Navigation />
+      </div>
     </div>
   );
 }

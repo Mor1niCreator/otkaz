@@ -291,9 +291,10 @@ export default function HomePage() {
             { icon: '💎', text: 'Build Wealth' },
             { icon: '🎯', text: 'Reach Goals' },
           ].map((item, i) => (
-            <div
+            <motion.div
               key={i}
-              className="text-center p-4 rounded-xl transition-all duration-300 hover:scale-105"
+              whileHover={{ scale: 1.05 }}
+              className="text-center p-4 rounded-xl transition-all duration-300"
               style={{
                 background: 'rgba(255, 255, 255, 0.4)',
                 backdropFilter: 'blur(10px)',
@@ -301,7 +302,7 @@ export default function HomePage() {
             >
               <div className="text-3xl mb-2">{item.icon}</div>
               <p className="text-xs font-medium text-gray-700">{item.text}</p>
-            </div>
+            </motion.div>
           ))}
         </motion.div>
       </div>
