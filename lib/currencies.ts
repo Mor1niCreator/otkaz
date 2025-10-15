@@ -43,3 +43,10 @@ export const CURRENCIES = {
 } as const;
 
 export type CurrencyCode = keyof typeof CURRENCIES;
+
+// Array version for select dropdowns
+export const CURRENCIES_ARRAY = Object.entries(CURRENCIES).map(([code, data]) => ({
+  code,
+  symbol: data.symbol,
+  name: data.name,
+}));

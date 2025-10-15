@@ -249,7 +249,7 @@ export default function HomePage() {
                       onChange={(e) => setCurrency(e.target.value)}
                       className="w-full px-4 py-3 text-base"
                     >
-                      {CURRENCIES.map((curr) => (
+                      {CURRENCIES_ARRAY.map((curr) => (
                         <option key={curr.code} value={curr.code}>
                           {curr.symbol} {curr.code} - {curr.name}
                         </option>
