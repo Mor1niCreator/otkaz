@@ -8,6 +8,7 @@ import { RANKS, getRankForPoints } from '@/lib/ranks';
 import toast from 'react-hot-toast';
 import { useTranslation } from '@/lib/i18n';
 import { getUserFromStorage } from '@/lib/user-sync';
+import { motion } from 'framer-motion';
 
 export default function ProfilePage() {
   const router = useRouter();

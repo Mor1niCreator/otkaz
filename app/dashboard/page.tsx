@@ -278,23 +278,27 @@ export default function DashboardPage() {
  </h2>
  
  <div className="grid grid-cols-4 gap-3">
- {presets.slice(0, 8).map((preset) => (
- <motion.button
- key={preset.id}
- onClick={() => handlePresetClick(preset)}
- whileHover={{ scale: 1.05, y: -2 }}
- whileTap={{ scale: 0.95 }}
- className="bg-white p-4 rounded-xl text-center transition-all hover:shadow-lg"
- style={{
- border: '1px solid rgba(0,0,0,0.1)',
- boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
- }}
- >
- <div className="text-4xl mb-2">{preset.icon}</div>
- <div className="text-xs font-semibold text-gray-900 mb-1">{preset.name}</div>
- <div className="text-xs font-bold text-gray-600">
- {getCurrencySymbol(user.currency)}{preset.price}
- </div>
+          {presets.slice(0, 8).map((preset) => (
+            <motion.button
+              key={preset.id}
+              onClick={() => handlePresetClick(preset)}
+              whileHover={{ scale: 1.08, y: -4 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-white p-5 rounded-2xl text-center transition-all"
+              style={{
+                border: '2px solid rgba(245, 198, 26, 0.2)',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(245,198,26,0.1)',
+              }}
+            >
+              <div className="text-5xl mb-3">{preset.icon}</div>
+              <div className="text-sm font-bold text-gray-900 mb-2">{preset.name}</div>
+              <div className="text-base font-bold" style={{
+                background: 'linear-gradient(135deg, #F5C61A 0%, #FFD93D 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}>
+                {getCurrencySymbol(user.currency)}{preset.price}
+              </div>
  {preset.tags && preset.tags.length > 0 && (
  <div className="flex gap-1 justify-center mt-2 flex-wrap">
  {preset.tags.slice(0, 2).map(tagId => {
@@ -512,29 +516,29 @@ export default function DashboardPage() {
  Why are you saying "Enough" to this?
  </p>
 
- <div className="space-y-3 mb-6">
- {WHY_TAGS.map((tag) => {
- const isSelected = selectedPreset.tags?.includes(tag.id) || false;
- 
- return (
- <motion.button
- key={tag.id}
- whileHover={{ scale: 1.02 }}
- whileTap={{ scale: 0.98 }}
- onClick={() => {
- const currentTags = selectedPreset.tags || [];
- const newTags = isSelected
- ? currentTags.filter(t => t !== tag.id)
- : [...currentTags, tag.id];
- 
- setSelectedPreset({ ...selectedPreset, tags: newTags });
- }}
- className={`w-full p-4 rounded-xl font-bold transition-all ${
- isSelected
- ? tag.color
- : 'bg-gray-100 text-gray-700 border border-gray-300'
- }`}
- >
+              <div className="space-y-3 mb-6">
+                {WHY_TAGS.map((tag) => {
+                  const isSelected = selectedPreset.tags?.includes(tag.id) || false;
+                  
+                  return (
+                    <motion.button
+                      key={tag.id}
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
+                      onClick={() => {
+                        const currentTags = selectedPreset.tags || [];
+                        const newTags = isSelected
+                          ? currentTags.filter(t => t !== tag.id)
+                          : [...currentTags, tag.id];
+                        
+                        setSelectedPreset({ ...selectedPreset, tags: newTags });
+                      }}
+                      className={`w-full p-5 rounded-xl font-bold transition-all text-base ${
+                        isSelected
+                          ? tag.color
+                          : 'bg-gray-100 text-gray-700 border-2 border-gray-300'
+                      }`}
+                    >
  <div className="flex items-center justify-between">
  <span className="flex items-center gap-3">
  <span className="text-2xl">{tag.icon}</span>
@@ -547,20 +551,25 @@ export default function DashboardPage() {
  })}
  </div>
 
- <div className="flex gap-3">
- <button
- onClick={() => setShowTagModal(false)}
- className="flex-1 bg-gray-200 text-gray-900 py-3 px-6 rounded-xl font-semibold hover:bg-gray-300 transition-colors"
- >
- Cancel
- </button>
- <button
- onClick={() => handleAddEntry(selectedPreset.tags || [])}
- className="flex-1 enough-button-primary py-3 px-6 rounded-xl"
- >
- Add Entry
- </button>
- </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowTagModal(false)}
+                  className="flex-1 bg-gray-200 text-gray-900 py-4 px-6 rounded-xl font-bold hover:bg-gray-300 transition-colors text-base"
+                >
+                  ❌ Cancel
+                </button>
+                <button
+                  onClick={() => handleAddEntry(selectedPreset.tags || [])}
+                  className="flex-1 py-4 px-6 rounded-xl font-bold text-base"
+                  style={{
+                    background: 'linear-gradient(135deg, #F5C61A 0%, #FFD93D 100%)',
+                    color: '#1D1D1F',
+                    boxShadow: '0 4px 12px rgba(245, 198, 26, 0.4)',
+                  }}
+                >
+                  ✅ Add Entry
+                </button>
+              </div>
  </motion.div>
  </motion.div>
  )}
