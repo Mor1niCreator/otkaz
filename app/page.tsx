@@ -59,7 +59,7 @@ export default function HomePage() {
       {/* Animated gradient orbs */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
-          className="absolute -top-1/2 -right-1/4 w-[600px] h-[600px] rounded-full opacity-20 elevation-2"
+          className="absolute -top-1/2 -right-1/4 w-[600px] h-[600px] rounded-full opacity-20"
           style={{
             background: 'radial-gradient(circle, rgba(245, 198, 26, 0.4) 0%, transparent 70%)',
             filter: 'blur(60px)',
@@ -76,7 +76,7 @@ export default function HomePage() {
           }}
         />
         <motion.div
-          className="absolute -bottom-1/2 -left-1/4 w-[800px] h-[800px] rounded-full opacity-15 elevation-2"
+          className="absolute -bottom-1/2 -left-1/4 w-[800px] h-[800px] rounded-full opacity-15"
           style={{
             background: 'radial-gradient(circle, rgba(255, 217, 61, 0.3) 0%, transparent 70%)',
             filter: 'blur(80px)',
@@ -102,11 +102,11 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
-          className="text-center mb-12 max-w-4xl elevation-2"
+          className="text-center mb-12 max-w-4xl"
         >
           {/* Logo */}
           <motion.h1
-            className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold mb-6 elevation-2"
+            className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold mb-6"
             style={{
               background: 'linear-gradient(135deg, #1D1D1F 0%, #48484A 100%)',
               WebkitBackgroundClip: 'text',
@@ -124,7 +124,7 @@ export default function HomePage() {
 
           {/* Tagline */}
           <motion.p
-            className="text-lg sm:text-xl md:text-2xl text-gray-600 mb-4 elevation-2"
+            className="text-lg sm:text-xl md:text-2xl text-gray-600 mb-4"
             style={{
               fontWeight: 400,
               letterSpacing: '-0.01em',
@@ -137,7 +137,7 @@ export default function HomePage() {
           </motion.p>
 
           <motion.p
-            className="text-sm sm:text-base text-gray-500 max-w-2xl mx-auto elevation-2"
+            className="text-sm sm:text-base text-gray-500 max-w-2xl mx-auto"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.5 }}
@@ -151,10 +151,10 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3, ease: [0.4, 0, 0.2, 1] }}
-          className="w-full max-w-md elevation-2"
+          className="w-full max-w-md"
         >
           <div
-            className="p-8 rounded-2xl elevation-2"
+            className="p-8 rounded-2xl"
             style={{
               background: 'rgba(255, 255, 255, 0.7)',
               backdropFilter: 'blur(20px)',
@@ -202,7 +202,7 @@ export default function HomePage() {
                       placeholder="Name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full px-4 py-3 text-base elevation-2"
+                      className="w-full px-4 py-3 text-base"
                       required={!isLogin}
                     />
                   </motion.div>
@@ -214,7 +214,7 @@ export default function HomePage() {
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 text-base elevation-2"
+                className="w-full px-4 py-3 text-base"
                 required
               />
 
@@ -223,7 +223,7 @@ export default function HomePage() {
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 text-base elevation-2"
+                className="w-full px-4 py-3 text-base"
                 required
               />
 
@@ -234,20 +234,20 @@ export default function HomePage() {
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="space-y-4 elevation-2"
+                    className="space-y-4"
                   >
                     <input
                       type="text"
                       placeholder="Referral Code (optional)"
                       value={referralCode}
                       onChange={(e) => setReferralCode(e.target.value)}
-                      className="w-full px-4 py-3 text-base elevation-2"
+                      className="w-full px-4 py-3 text-base"
                     />
 
                     <select
                       value={currency}
                       onChange={(e) => setCurrency(e.target.value)}
-                      className="w-full px-4 py-3 text-base elevation-2"
+                      className="w-full px-4 py-3 text-base"
                     >
                       {CURRENCIES.map((curr) => (
                         <option key={curr.code} value={curr.code}>
@@ -259,7 +259,7 @@ export default function HomePage() {
                     <select
                       value={language}
                       onChange={(e) => setLanguage(e.target.value)}
-                      className="w-full px-4 py-3 text-base elevation-2"
+                      className="w-full px-4 py-3 text-base"
                     >
                       <option value="en">🇬🇧 English</option>
                       <option value="ru">🇷🇺 Русский</option>
@@ -271,7 +271,7 @@ export default function HomePage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="enough-button-primary w-full py-4 text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed mt-6 elevation-2"
+                className="enough-button-primary w-full py-4 text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed mt-6"
               >
                 {isLoading ? 'Loading...' : isLogin ? 'Sign In' : 'Create Account'}
               </button>
@@ -284,7 +284,7 @@ export default function HomePage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.8 }}
-          className="grid grid-cols-3 gap-4 mt-12 max-w-2xl elevation-2"
+          className="grid grid-cols-3 gap-4 mt-12 max-w-2xl"
         >
           {[
             { icon: '✋', text: 'Say Enough' },
@@ -293,7 +293,7 @@ export default function HomePage() {
           ].map((item, i) => (
             <div
               key={i}
-              className="text-center p-4 rounded-xl transition-all duration-300 hover:scale-105 elevation-2"
+              className="text-center p-4 rounded-xl transition-all duration-300 hover:scale-105"
               style={{
                 background: 'rgba(255, 255, 255, 0.4)',
                 backdropFilter: 'blur(10px)',
