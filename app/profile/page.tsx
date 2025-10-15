@@ -440,15 +440,23 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <button
+      <motion.button
         onClick={handleLogout}
-        className="w-full bg-red-500 text-gray-900 font-bold py-3 px-6 border-0 enough-shadow hover:enough-shadow-lg transition-all hover:-translate-y-1 active:translate-y-0 elevation-2"
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        className="w-full py-4 px-6 rounded-xl font-bold transition-all"
+        style={{
+          background: 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)',
+          color: 'white',
+          boxShadow: '0 4px 12px rgba(239, 68, 68, 0.3)',
+        }}
       >
         🚪 {t('logout')}
-      </button>
+      </motion.button>
 
-      <Navigation />
       </div>
+      </div>
+      <Navigation />
     </div>
   );
 }

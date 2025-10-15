@@ -192,7 +192,7 @@ export default function GoalsPage() {
         <h1 className="text-3xl font-semibold tracking-tight mb-2 flex items-center gap-3">
           🎯 {t('yourGoals')}
         </h1>
-        <div className="bg-white p-4 mt-4 transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6)]" style={{boxShadow: '0 3px 0px #000'}}>
+        <div className="bg-white p-4 mt-4 rounded-xl border border-gray-200">
           <p className="text-xs font-medium mb-1 text-gray-700">{t('totalSavings')}</p>
           <p className="text-3xl font-semibold text-gray-900">
             {formatCurrency(convertCurrency(totalSavings, user.currency), user.currency)}
@@ -399,8 +399,8 @@ export default function GoalsPage() {
         )}
       </AnimatePresence>
 
-      <Navigation />
       </div>
+      <Navigation />
     </div>
   );
 }
