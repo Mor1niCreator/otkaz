@@ -16,7 +16,7 @@ export default function ProgressBar({
   const clampedProgress = Math.max(0, Math.min(100, progress));
 
   return (
-    <div className={`${height} bg-gray-200 rounded-full border-4 border-black overflow-hidden shadow-comic`}>
+    <div className={`${height} bg-gray-200 rounded-full border-2 border-gray-200 overflow-hidden shadow-comic`}>
       <motion.div
         className={`h-full bg-gradient-to-r ${color}`}
         initial={{ width: 0 }}

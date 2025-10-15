@@ -5,937 +5,577 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navigation from '@/components/Navigation';
 import MathWallBackground from '@/components/MathWallBackground';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import BoomAnimation from '@/components/BoomAnimation';
 import { useTranslation } from '@/lib/i18n';
-import { formatCurrency, convertCurrency } from '@/lib/currency-utils';
+import { formatCurrency, convertCurrency, getCurrencySymbol } from '@/lib/currency-utils';
 import { getUserFromStorage } from '@/lib/user-sync';
-import { getUserPresets, WHY_TAGS, getWhyTagName } from '@/lib/user-presets';
-import { CURRENCIES } from '@/lib/currencies';
+import { getUserPresets, saveUserPresets, UserPreset, WHY_TAGS, getWhyTagName } from '@/lib/user-presets';
 import { RANKS, getRankForPoints } from '@/lib/ranks';
 import toast from 'react-hot-toast';
-import AchievementAnimation from '@/components/AchievementAnimation';
-
-type TabType = 'wallet' | 'achievements' | 'profile';
 
 interface Achievement {
-  id: string;
-  code: string;
-  nameEn: string;
-  nameRu: string;
-  descriptionEn: string;
-  descriptionRu: string;
-  icon: string;
-}
-
-interface UserAchievement {
-  id: string;
-  achievement: Achievement;
-  unlockedAt: string;
+ id: string;
+ code: string;
+ nameEn: string;
+ nameRu: string;
+ icon: string;
 }
 
 export default function DashboardPage() {
-  const router = useRouter();
-  const [user, setUser] = useState<any>(null);
-  const [activeTab, setActiveTab] = useState<TabType>('wallet');
-  const [userPoints, setUserPoints] = useState(0);
-  const [stats, setStats] = useState({
-    today: 0,
-    week: 0,
-    month: 0,
-    allTime: 0,
-  });
-  const [topTags, setTopTags] = useState<Array<{tagId: string; count: number}>>([]);
-  
-  // Achievements
-  const [unlocked, setUnlocked] = useState<UserAchievement[]>([]);
-  const [allAchievements, setAllAchievements] = useState<Achievement[]>([]);
-  const [showAchievement, setShowAchievement] = useState(false);
-  const [currentAchievement, setCurrentAchievement] = useState<Achievement | null>(null);
-  
-  // Profile
-  const [editMode, setEditMode] = useState(false);
-  const [currency, setCurrency] = useState('USD');
-  const [language, setLanguage] = useState('en');
-  const [username, setUsername] = useState('');
-  const [name, setName] = useState('');
-  const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null);
-  const [isCheckingUsername, setIsCheckingUsername] = useState(false);
-  
-  const { t } = useTranslation(user?.language || 'en');
+ const router = useRouter();
+ const [user, setUser] = useState<any>(null);
+ const [presets, setPresets] = useState<UserPreset[]>([]);
+ const [stats, setStats] = useState({
+ today: 0,
+ week: 0,
+ month: 0,
+ allTime: 0,
+ });
+ const [topTags, setTopTags] = useState<Array<{tagId: string; count: number}>>([]);
+ const [recentAchievements, setRecentAchievements] = useState<Achievement[]>([]);
+ 
+ // Quick Add Entry State
+ const [showTagModal, setShowTagModal] = useState(false);
+ const [selectedPreset, setSelectedPreset] = useState<UserPreset | null>(null);
+ const [showBoom, setShowBoom] = useState(false);
+ 
+ // Comparison State
+ const [comparisonData, setComparisonData] = useState({
+ weeklyBefore: 0,
+ weeklyAfter: 0,
+ weeklySavings: 0,
+ savingsPercentage: 0,
+ });
+ 
+ const { t } = useTranslation(user?.language || 'en');
 
-  useEffect(() => {
-    const parsedUser = getUserFromStorage();
-    if (!parsedUser) {
-      router.push('/');
-      return;
-    }
-    setUser(parsedUser);
-    setUserPoints(Number(parsedUser.points) || 0);
-    setCurrency(parsedUser.currency || 'USD');
-    setLanguage(parsedUser.language || 'en');
-    setUsername(parsedUser.username || '');
-    setName(parsedUser.name || '');
-    
-    loadStats(parsedUser.id);
-    loadTopTags(parsedUser.id);
-    loadAchievements(parsedUser.id);
-    
-    const handleVisibilityChange = () => {
-      if (!document.hidden && parsedUser) {
-        loadStats(parsedUser.id);
-      }
-    };
-    
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, [router]);
+ useEffect(() => {
+ const parsedUser = getUserFromStorage();
+ if (!parsedUser) {
+ router.push('/');
+ return;
+ }
+ setUser(parsedUser);
+ setPresets(getUserPresets(parsedUser.id));
+ 
+ loadStats(parsedUser.id);
+ loadTopTags(parsedUser.id);
+ loadRecentAchievements(parsedUser.id);
+ loadComparisonData(parsedUser.id);
+ }, [router]);
 
-  const loadStats = async (userId: string) => {
-    try {
-      const [today, week, month, all] = await Promise.all([
-        fetch(`/api/entries/list?userId=${userId}&period=today`).then(r => r.json()),
-        fetch(`/api/entries/list?userId=${userId}&period=week`).then(r => r.json()),
-        fetch(`/api/entries/list?userId=${userId}&period=month`).then(r => r.json()),
-        fetch(`/api/entries/list?userId=${userId}`).then(r => r.json()),
-      ]);
+ const loadStats = async (userId: string) => {
+ try {
+ const [today, week, month, all] = await Promise.all([
+ fetch(`/api/entries/list?userId=${userId}&period=today`).then(r => r.json()),
+ fetch(`/api/entries/list?userId=${userId}&period=week`).then(r => r.json()),
+ fetch(`/api/entries/list?userId=${userId}&period=month`).then(r => r.json()),
+ fetch(`/api/entries/list?userId=${userId}`).then(r => r.json()),
+ ]);
 
-      setStats({
-        today: today.totalUSD || 0,
-        week: week.totalUSD || 0,
-        month: month.totalUSD || 0,
-        allTime: all.totalUSD || 0,
-      });
-      
-      const currentUser = getUserFromStorage();
-      if (currentUser) {
-        setUserPoints(Number(currentUser.points) || 0);
-      }
-    } catch (error) {
-      console.error('Failed to load stats:', error);
-    }
-  };
+ setStats({
+ today: today.totalAmount || 0,
+ week: week.totalAmount || 0,
+ month: month.totalAmount || 0,
+ allTime: all.totalAmount || 0,
+ });
+ } catch (error) {
+ console.error('Failed to load stats:', error);
+ }
+ };
 
-  const loadTopTags = (userId: string) => {
-    try {
-      const presets = getUserPresets(userId);
-      const tagCounts: Record<string, number> = {};
-      
-      presets.forEach(preset => {
-        if (preset.tags && preset.tags.length > 0) {
-          preset.tags.forEach(tag => {
-            tagCounts[tag] = (tagCounts[tag] || 0) + 1;
-          });
-        }
-      });
-      
-      const sorted = Object.entries(tagCounts)
-        .map(([tagId, count]) => ({ tagId, count }))
-        .sort((a, b) => b.count - a.count)
-        .slice(0, 5);
-      
-      setTopTags(sorted);
-    } catch (error) {
-      console.error('Failed to load top tags:', error);
-    }
-  };
+ const loadTopTags = async (userId: string) => {
+ try {
+ const response = await fetch(`/api/entries/list?userId=${userId}`);
+ if (!response.ok) return;
+ 
+ const data = await response.json();
+ const tagCounts: Record<string, number> = {};
+ 
+ data.entries?.forEach((entry: any) => {
+ if (entry.tags && Array.isArray(entry.tags)) {
+ entry.tags.forEach((tag: string) => {
+ tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+ });
+ }
+ });
+ 
+ const topTagsArray = Object.entries(tagCounts)
+ .map(([tagId, count]) => ({ tagId, count }))
+ .sort((a, b) => b.count - a.count)
+ .slice(0, 6);
+ 
+ setTopTags(topTagsArray);
+ } catch (error) {
+ console.error('Failed to load tags:', error);
+ }
+ };
 
-  const loadAchievements = async (userId: string) => {
-    try {
-      const res = await fetch(`/api/achievements/list?userId=${userId}`);
-      const data = await res.json();
-      if (res.ok) {
-        setUnlocked(data.unlocked);
-        setAllAchievements(data.all);
-      }
-    } catch (error) {
-      console.error('Failed to load achievements:', error);
-    }
-  };
+ const loadRecentAchievements = async (userId: string) => {
+ try {
+ const response = await fetch(`/api/achievements/list?userId=${userId}`);
+ if (!response.ok) return;
+ 
+ const data = await response.json();
+ const recent = data.unlocked
+ ?.sort((a: any, b: any) => new Date(b.unlockedAt).getTime() - new Date(a.unlockedAt).getTime())
+ .slice(0, 3)
+ .map((ua: any) => ua.achievement) || [];
+ 
+ setRecentAchievements(recent);
+ } catch (error) {
+ console.error('Failed to load achievements:', error);
+ }
+ };
 
-  const showAchievementAnimation = (achievement: Achievement) => {
-    setCurrentAchievement(achievement);
-    setShowAchievement(true);
-  };
+ const loadComparisonData = async (userId: string) => {
+ try {
+ // Default weekly spending estimate (can be customized later)
+ const weeklyBefore = 500; // $500/week default estimate
+ 
+ const response = await fetch(`/api/stats/comparison?userId=${userId}&weeklyBefore=${weeklyBefore}`);
+ if (!response.ok) return;
+ 
+ const data = await response.json();
+ 
+ setComparisonData({
+ weeklyBefore: data.weeklyBefore || 0,
+ weeklyAfter: data.weeklyAfter || 0,
+ weeklySavings: data.weeklySavings || 0,
+ savingsPercentage: data.savingsPercentage || 0,
+ });
+ } catch (error) {
+ console.error('Failed to load comparison data:', error);
+ }
+ };
 
-  const checkUsernameAvailability = async (username: string) => {
-    if (!username || username === user?.username) {
-      setUsernameAvailable(null);
-      return;
-    }
+ const handlePresetClick = (preset: UserPreset) => {
+ setSelectedPreset(preset);
+ setShowTagModal(true);
+ };
 
-    setIsCheckingUsername(true);
-    try {
-      const res = await fetch('/api/user/check-username', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, userId: user?.id })
-      });
-      const data = await res.json();
-      setUsernameAvailable(data.available);
-    } catch (error) {
-      setUsernameAvailable(null);
-    } finally {
-      setIsCheckingUsername(false);
-    }
-  };
+ const handleAddEntry = async (tags: string[]) => {
+ if (!selectedPreset || !user) return;
 
-  const handleSaveProfile = async () => {
-    try {
-      const updates: any = { currency, language };
-      if (name !== user.name) updates.name = name;
-      if (username !== user.username) updates.username = username;
+ try {
+ const amountInUSD = await fetch('/api/crypto/roi', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify({
+ amount: selectedPreset.price,
+ fromCurrency: user.currency,
+ }),
+ }).then(r => r.json()).then(d => d.amountInUSD);
 
-      const res = await fetch('/api/user/update-profile', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user.id, updates }),
-      });
+ const response = await fetch('/api/entries/create', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify({
+ userId: user.id,
+ name: selectedPreset.name,
+ amount: selectedPreset.price,
+ amountInUSD,
+ category: selectedPreset.category || 'other',
+ tags,
+ }),
+ });
 
-      const data = await res.json();
+ if (response.ok) {
+ const data = await response.json();
+ 
+ // Update user points
+ if (data.user) {
+ const updatedUser = { ...user, points: data.user.points, rank: data.user.rank };
+ setUser(updatedUser);
+ localStorage.setItem('user', JSON.stringify(updatedUser));
+ }
 
-      if (res.ok) {
-        const updatedUser = { ...user, ...data.user };
-        localStorage.setItem('user', JSON.stringify(updatedUser));
-        setUser(updatedUser);
-        setEditMode(false);
-        toast.success(t('settingsSaved') + ' ✅');
-        window.dispatchEvent(new Event('storage'));
-      } else {
-        toast.error(data.error || 'Failed to save');
-      }
-    } catch (error) {
-      toast.error('Network error');
-    }
-  };
+ setShowBoom(true);
+ setTimeout(() => setShowBoom(false), 1500);
+ 
+ // Reload stats
+ loadStats(user.id);
+ loadTopTags(user.id);
+ loadComparisonData(user.id);
+ 
+ toast.success(`✅ ${selectedPreset.name} saved!`);
+ }
+ } catch (error) {
+ toast.error('Failed to add entry');
+ console.error(error);
+ } finally {
+ setShowTagModal(false);
+ setSelectedPreset(null);
+ }
+ };
 
-  const handleLogout = () => {
-    localStorage.removeItem('user');
-    router.push('/');
-  };
+ if (!user) return null;
 
-  const copyReferralLink = () => {
-    const link = `${window.location.origin}/?ref=${user.referralCode}`;
-    navigator.clipboard.writeText(link);
-    toast.success(t('referralLinkCopied') + ' 📋');
-  };
+ const currentRank = getRankForPoints(user.points || 0);
+ const nextRank = RANKS.find(r => r.minPoints > (user.points || 0));
+ const pointsToNext = nextRank ? nextRank.minPoints - (user.points || 0) : 0;
 
-  if (!user) return null;
+ return (
+ <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto relative min-h-screen">
+ <MathWallBackground />
+ <BoomAnimation show={showBoom} />
 
-  const convertedStats = {
-    today: convertCurrency(stats.today, user.currency),
-    week: convertCurrency(stats.week, user.currency),
-    month: convertCurrency(stats.month, user.currency),
-    allTime: convertCurrency(stats.allTime, user.currency),
-  };
+ {/* Hero Section - Profile Card */}
+ <motion.div
+ initial={{ opacity: 0, y: 20 }}
+ animate={{ opacity: 1, y: 0 }}
+ className="enough-panel mb-6 relative overflow-hidden"
+ >
+ <div className="absolute top-0 right-0 text-9xl opacity-5">{currentRank.icon}</div>
+ 
+ <div className="relative">
+ <div className="flex items-start justify-between mb-4">
+ <div>
+ <h1 className="text-4xl font-bold tracking-tight mb-2">
+ {user.name || 'User'}
+ </h1>
+ <p className="text-gray-600">@{user.username || user.email?.split('@')[0]}</p>
+ </div>
+ <div className="text-right">
+ <div className="text-5xl mb-2">{currentRank.icon}</div>
+ <div className="text-lg font-semibold text-gray-900">{currentRank.name}</div>
+ </div>
+ </div>
 
-  const chartData = [
-    { name: t('today'), amount: convertedStats.today },
-    { name: t('thisWeek'), amount: convertedStats.week },
-    { name: t('thisMonth'), amount: convertedStats.month },
-    { name: 'All Time', amount: convertedStats.allTime },
-  ];
+ <div className="grid grid-cols-2 gap-4">
+ <div>
+ <div className="text-sm text-gray-600 mb-1">Points</div>
+ <div className="text-3xl font-bold text-gray-900">{user.points || 0}</div>
+ {nextRank && (
+ <div className="text-xs text-gray-500 mt-1">
+ {pointsToNext} to {nextRank.name}
+ </div>
+ )}
+ </div>
+ <div>
+ <div className="text-sm text-gray-600 mb-1">Total Saved</div>
+ <div className="text-3xl font-bold" style={{
+ background: 'linear-gradient(135deg, #F5C61A 0%, #FFD93D 100%)',
+ WebkitBackgroundClip: 'text',
+ WebkitTextFillColor: 'transparent',
+ }}>
+ {getCurrencySymbol(user.currency)}{stats.allTime.toFixed(0)}
+ </div>
+ </div>
+ </div>
+ </div>
+ </motion.div>
 
-  const unlockedIds = new Set(unlocked.map(u => u.achievement.id));
-  const progress = allAchievements.length > 0 ? (unlocked.length / allAchievements.length) * 100 : 0;
-  
-  const currentRank = getRankForPoints(user.points);
-  const nextRankIndex = RANKS.findIndex(r => r.name === currentRank.name) + 1;
-  const nextRank = nextRankIndex < RANKS.length ? RANKS[nextRankIndex] : null;
-  const progressToNext = nextRank
-    ? ((user.points - currentRank.minPoints) / (nextRank.minPoints - currentRank.minPoints)) * 100
-    : 100;
-
-  const tabs = [
-    { id: 'wallet' as TabType, label: t('wallet'), icon: '💎', color: 'from-emerald-400 to-teal-500' },
-    { id: 'achievements' as TabType, label: t('achievements'), icon: '🏆', color: 'from-amber-400 to-orange-500' },
-    { id: 'profile' as TabType, label: t('profile'), icon: '✋', color: 'from-purple-400 to-pink-500' },
-  ];
-
-  return (
-    <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto relative">
-      <MathWallBackground />
-      <AchievementAnimation 
-        show={showAchievement} 
-        onComplete={() => setShowAchievement(false)}
-        achievement={currentAchievement || { icon: '🏅', name: 'Achievement', description: 'Description' }}
-      />
-
-      {/* Animated Header */}
-      <motion.div 
-        className="comic-panel mb-6 relative overflow-hidden"
-        style={{
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
-        }}
-        initial={{ scale: 0.9, opacity: 0, y: -50 }}
-        animate={{ scale: 1, opacity: 1, y: 0 }}
-        transition={{ type: 'spring', stiffness: 200 }}
-      >
-        <motion.div
-          className="absolute -top-10 -right-10 w-40 h-40 bg-white rounded-full opacity-10"
-          animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }}
-          transition={{ duration: 10, repeat: Infinity }}
-        />
-        
-        <div className="relative z-10">
-          <motion.div
-            className="flex items-center gap-3 mb-4"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <motion.div
-              className="text-5xl"
-              animate={{ rotate: [0, -10, 10, -10, 0] }}
-              transition={{ duration: 3, repeat: Infinity }}
-            >
-              ✋
-            </motion.div>
-            <div>
-              <motion.h1 
-                className="text-4xl font-black text-white"
-                style={{
-                  fontFamily: "'Bangers', 'Russo One', cursive",
-                  textShadow: '3px 3px 0px rgba(0,0,0,0.3)',
-                }}
-              >
-                ENOUGH DASHBOARD
-              </motion.h1>
-              <p className="text-white/90 text-sm font-bold">
-                Your journey to mindful spending
-              </p>
-            </div>
-          </motion.div>
-          
-          <div className="grid grid-cols-3 gap-3">
-            <motion.div 
-              className="bg-white/20 backdrop-blur-sm rounded-2xl border-3 border-white/40 p-4 text-center"
-              whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.3)' }}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-            >
-              <p className="text-xs text-white/80 font-bold mb-1">{t('totalSavings')}</p>
-              <p className="text-2xl font-black text-white">
-                {formatCurrency(convertedStats.allTime, user.currency)}
-              </p>
-            </motion.div>
-            
-            <motion.div 
-              className="bg-white/20 backdrop-blur-sm rounded-2xl border-3 border-white/40 p-4 text-center"
-              whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.3)' }}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-            >
-              <p className="text-xs text-white/80 font-bold mb-1">{t('points')}</p>
-              <p className="text-2xl font-black text-white">{userPoints.toFixed(0)}</p>
-            </motion.div>
-            
-            <motion.div 
-              className="bg-white/20 backdrop-blur-sm rounded-2xl border-3 border-white/40 p-4 text-center"
-              whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.3)' }}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-            >
-              <p className="text-xs text-white/80 font-bold mb-1">{t('rank')}</p>
-              <p className="text-xl font-black text-white">
-                {language === 'ru' ? currentRank.nameRu : currentRank.name}
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Tabs Navigation */}
-      <motion.div 
-        className="flex gap-2 mb-6 overflow-x-auto"
-        initial={{ opacity: 0, x: -50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.2 }}
-      >
-        {tabs.map((tab, index) => (
-          <motion.button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`
-              flex-1 min-w-[100px] px-4 py-3 rounded-xl border-4 border-black font-black
-              transition-all relative overflow-hidden
-              ${activeTab === tab.id 
-                ? `bg-gradient-to-r ${tab.color} shadow-comic-lg scale-105` 
-                : 'bg-white hover:shadow-comic'
-              }
-            `}
-            whileHover={{ scale: 1.05, y: -2 }}
-            whileTap={{ scale: 0.95 }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-          >
-            {activeTab === tab.id && (
-              <motion.div
-                className="absolute inset-0 bg-white opacity-20"
-                animate={{ scale: [1, 1.5, 1], opacity: [0.2, 0, 0.2] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              />
-            )}
-            <span className="text-2xl mb-1 block">{tab.icon}</span>
-            <span className="text-sm relative z-10">{tab.label}</span>
-          </motion.button>
-        ))}
-      </motion.div>
-
-      {/* Tab Content */}
-      <AnimatePresence mode="wait">
-        {activeTab === 'wallet' && (
-          <WalletContent
-            key="wallet"
-            convertedStats={convertedStats}
-            chartData={chartData}
-            topTags={topTags}
-            user={user}
-            t={t}
-          />
-        )}
-        
-        {activeTab === 'achievements' && (
-          <AchievementsContent
-            key="achievements"
-            allAchievements={allAchievements}
-            unlocked={unlocked}
-            unlockedIds={unlockedIds}
-            progress={progress}
-            user={user}
-            t={t}
-            onShowAchievement={showAchievementAnimation}
-          />
-        )}
-        
-        {activeTab === 'profile' && (
-          <ProfileContent
-            key="profile"
-            user={user}
-            editMode={editMode}
-            setEditMode={setEditMode}
-            name={name}
-            setName={setName}
-            username={username}
-            setUsername={setUsername}
-            currency={currency}
-            setCurrency={setCurrency}
-            language={language}
-            setLanguage={setLanguage}
-            usernameAvailable={usernameAvailable}
-            isCheckingUsername={isCheckingUsername}
-            currentRank={currentRank}
-            nextRank={nextRank}
-            progressToNext={progressToNext}
-            t={t}
-            onCheckUsername={checkUsernameAvailability}
-            onSave={handleSaveProfile}
-            onLogout={handleLogout}
-            onCopyReferral={copyReferralLink}
-          />
-        )}
-      </AnimatePresence>
-
-      <Navigation />
-    </div>
-  );
-}
-
-// Wallet Tab Content
-function WalletContent({ convertedStats, chartData, topTags, user, t }: any) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: -50 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 50 }}
-      transition={{ type: 'spring', stiffness: 200 }}
-    >
-      <motion.div 
-        className="comic-panel mb-6 relative overflow-hidden"
-        style={{
-          background: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
-        }}
-        initial={{ scale: 0.9 }}
-        animate={{ scale: 1 }}
-        transition={{ delay: 0.1 }}
-      >
-        <motion.div
-          className="absolute -bottom-10 -left-10 w-40 h-40 bg-white rounded-full opacity-20"
-          animate={{ scale: [1, 1.3, 1] }}
-          transition={{ duration: 5, repeat: Infinity }}
-        />
-        
-        <div className="relative z-10">
-          <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-            <motion.span 
-              animate={{ scale: [1, 1.2, 1] }} 
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              💎
-            </motion.span>
-            {t('savingsOverview')}
-          </h2>
-          
-          <div className="grid grid-cols-3 gap-3">
-            {[
-              { label: t('today'), value: convertedStats.today, gradient: 'from-yellow-300 to-amber-400', icon: '☀️' },
-              { label: t('thisWeek'), value: convertedStats.week, gradient: 'from-emerald-300 to-teal-400', icon: '📅' },
-              { label: t('thisMonth'), value: convertedStats.month, gradient: 'from-blue-300 to-indigo-400', icon: '📊' },
-            ].map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                className={`bg-gradient-to-br ${stat.gradient} rounded-xl border-4 border-black p-4 text-center relative overflow-hidden`}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 + index * 0.1 }}
-                whileHover={{ scale: 1.08, y: -5 }}
-              >
-                <div className="absolute top-1 right-1 text-2xl opacity-30">
-                  {stat.icon}
-                </div>
-                <p className="text-xs text-gray-800 font-bold mb-1">{stat.label}</p>
-                <p className="text-xl font-black">{formatCurrency(stat.value, user.currency)}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </motion.div>
-
-      <motion.div 
-        className="comic-panel mb-6"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-      >
-        <h2 className="text-2xl font-bold mb-4">📊 {t('savingsChart')}</h2>
-        <ResponsiveContainer width="100%" height={250}>
-          <BarChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Bar dataKey="amount" fill="#FFB74D" stroke="#000" strokeWidth={3} />
-          </BarChart>
-        </ResponsiveContainer>
-      </motion.div>
-
-      {topTags.length > 0 && (
-        <motion.div 
-          className="comic-panel relative overflow-hidden"
-          style={{
-            background: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)',
-          }}
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.4 }}
-        >
-          <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-            <motion.span
-              animate={{ rotate: [0, 10, -10, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              ✋
-            </motion.span>
-            {t('yourTopReasons')}
-          </h2>
-          <div className="flex flex-wrap gap-2">
-            {topTags.map(({ tagId, count }: any, index: number) => {
-              const tag = WHY_TAGS.find(t => t.id === tagId);
-              if (!tag) return null;
-              
-              return (
-                <motion.div
-                  key={tagId}
-                  className={`px-4 py-2 rounded-xl border-4 border-black font-black flex items-center gap-2 
-                    ${tag.color} transition-all hover:scale-105 hover:rotate-2 hover:shadow-comic-lg`}
-                  initial={{ scale: 0, rotate: -180 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  transition={{ delay: 0.5 + index * 0.1, type: 'spring', stiffness: 200 }}
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                >
-                  <motion.span 
-                    className="text-2xl"
-                    animate={{ rotate: [0, -10, 10, 0] }}
-                    transition={{ duration: 2, repeat: Infinity, delay: index * 0.3 }}
-                  >
-                    {tag.icon}
-                  </motion.span>
-                  <div>
-                    <div className="text-sm">{getWhyTagName(tagId, user.language)}</div>
-                    <div className="text-xs opacity-75">{count} {count === 1 ? t('category') : t('categories')}</div>
-                  </div>
-                  {index < 3 && (
-                    <motion.span 
-                      className="ml-2 text-2xl"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ delay: 0.7 + index * 0.1, type: 'spring' }}
-                    >
-                      {index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉'}
-                    </motion.span>
-                  )}
-                </motion.div>
-              );
-            })}
-          </div>
-        </motion.div>
-      )}
-    </motion.div>
-  );
-}
-
-// Achievements Tab Content
-function AchievementsContent({ allAchievements, unlocked, unlockedIds, progress, user, t, onShowAchievement }: any) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: -50 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 50 }}
-      transition={{ type: 'spring', stiffness: 200 }}
-    >
-      <motion.div 
-        className="comic-panel mb-6"
-        initial={{ scale: 0.9 }}
-        animate={{ scale: 1 }}
-      >
-        <h2 className="text-2xl font-bold mb-4">🏅 {t('yourProgress')}</h2>
-        <div className="bg-comic-yellow rounded-xl border-4 border-black p-4">
-          <div className="flex justify-between items-center mb-2">
-            <p className="font-bold">{t('progress')}</p>
-            <p className="text-2xl font-bold">{unlocked.length}/{allAchievements.length}</p>
-          </div>
-          <div className="progress-bar">
-            <motion.div 
-              className="progress-fill" 
-              initial={{ width: 0 }}
-              animate={{ width: `${progress}%` }}
-              transition={{ duration: 1, delay: 0.2 }}
-            />
-          </div>
-        </div>
-      </motion.div>
-
-      <div className="space-y-4">
-        {allAchievements.map((achievement: Achievement, index: number) => {
-          const isUnlocked = unlockedIds.has(achievement.id);
-          const userAchievement = unlocked.find((u: UserAchievement) => u.achievement.id === achievement.id);
-          
-          return (
-            <motion.div
-              key={achievement.id}
-              initial={{ opacity: 0, y: 20, scale: 0.9 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ delay: index * 0.05, type: 'spring', stiffness: 200 }}
-              whileHover={isUnlocked ? { scale: 1.03, rotate: 1, y: -5 } : {}}
-              whileTap={isUnlocked ? { scale: 0.97 } : {}}
-              className={`comic-panel relative overflow-hidden cursor-pointer ${
-                isUnlocked
-                  ? 'bg-gradient-to-br from-comic-orange via-comic-yellow to-comic-lime'
-                  : 'bg-gray-200 opacity-60'
-              }`}
-              onClick={() => isUnlocked && onShowAchievement(achievement)}
-            >
-              {isUnlocked && (
-                <>
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-20"
-                    animate={{ x: ['-100%', '100%'] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
-                  />
-                  <motion.div
-                    className="absolute inset-0 bg-yellow-300 opacity-20"
-                    animate={{ scale: [1, 1.05, 1], opacity: [0.1, 0.3, 0.1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  />
-                </>
-              )}
-
-              <div className="flex items-center gap-4 relative z-10">
-                <motion.div 
-                  className={`text-6xl ${!isUnlocked && 'grayscale'}`}
-                  animate={isUnlocked ? {
-                    rotate: [0, -10, 10, -10, 0],
-                    scale: [1, 1.1, 1]
-                  } : {}}
-                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-                >
-                  {achievement.icon}
-                  {isUnlocked && (
-                    <motion.span
-                      className="absolute -top-2 -right-2 text-3xl"
-                      animate={{ scale: [1, 1.3, 1], rotate: [0, 180, 360] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    >
-                      ⭐
-                    </motion.span>
-                  )}
-                </motion.div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-bold flex items-center gap-2">
-                    {user.language === 'ru' ? achievement.nameRu : achievement.nameEn}
-                    {isUnlocked && (
-                      <motion.span
-                        initial={{ scale: 0, rotate: -180 }}
-                        animate={{ scale: 1, rotate: 0 }}
-                        className="text-2xl"
-                      >
-                        ✨
-                      </motion.span>
-                    )}
-                  </h3>
-                  <p className="text-sm text-gray-700">
-                    {user.language === 'ru' ? achievement.descriptionRu : achievement.descriptionEn}
-                  </p>
-                  {isUnlocked && userAchievement && (
-                    <p className="text-xs text-gray-600 mt-1">
-                      🎉 {new Date(userAchievement.unlockedAt).toLocaleDateString()}
-                    </p>
-                  )}
-                  {!isUnlocked && (
-                    <p className="text-xs text-gray-500 mt-1">🔒 {t('locked')}</p>
-                  )}
-                </div>
-              </div>
-            </motion.div>
-          );
-        })}
-      </div>
-    </motion.div>
-  );
-}
-
-// Profile Tab Content
-function ProfileContent({ user, editMode, setEditMode, name, setName, username, setUsername, 
-  currency, setCurrency, language, setLanguage, usernameAvailable, isCheckingUsername,
-  currentRank, nextRank, progressToNext, t, onCheckUsername, onSave, onLogout, onCopyReferral }: any) {
-  
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: -50 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 50 }}
-      transition={{ type: 'spring', stiffness: 200 }}
-    >
-      <motion.div 
-        className="comic-panel mb-6 bg-gradient-to-r from-comic-purple to-comic-pink"
-        initial={{ scale: 0.9 }}
-        animate={{ scale: 1 }}
-      >
-        <motion.h2 
-          className="text-2xl font-bold mb-4 text-white flex items-center gap-2"
-          animate={{ y: [0, -3, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          <motion.span animate={{ rotate: [0, 20, 0] }} transition={{ duration: 2, repeat: Infinity }}>
-            👤
-          </motion.span>
-          {user.name || user.email}
-        </motion.h2>
-        {user.username && (
-          <p className="text-lg font-bold text-white">@{user.username}</p>
-        )}
-        <p className="text-sm text-white opacity-90">{user.email}</p>
-      </motion.div>
-
-      <motion.div 
-        className="comic-panel mb-6"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-      >
-        <h3 className="text-xl font-bold mb-4">🏆 {t('rankProgress')}</h3>
-        <div className="bg-comic-yellow rounded-xl border-4 border-black p-4 mb-4">
-          <div className="flex justify-between items-center mb-2">
-            <div>
-              <p className="text-sm text-gray-700">{t('currentRank')}</p>
-              <p className="text-2xl font-bold" style={{ color: currentRank.color }}>
-                {language === 'ru' ? currentRank.nameRu : currentRank.name}
-              </p>
-            </div>
-            <div className="text-right">
-              <p className="text-sm text-gray-700">{t('points')}</p>
-              <p className="text-3xl font-bold">{user.points.toFixed(0)}</p>
-            </div>
-          </div>
-        </div>
-
-        {nextRank && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-          >
-            <div className="flex justify-between items-center mb-2">
-              <p className="text-sm text-gray-700">{t('nextRank')}</p>
-              <p className="font-bold" style={{ color: nextRank.color }}>
-                {language === 'ru' ? nextRank.nameRu : nextRank.name}
-              </p>
-            </div>
-            <div className="progress-bar">
-              <motion.div 
-                className="progress-fill" 
-                initial={{ width: 0 }}
-                animate={{ width: `${progressToNext}%` }}
-                transition={{ duration: 1, delay: 0.3 }}
-              />
-            </div>
-            <p className="text-xs text-center text-gray-600 mt-2">
-              {(nextRank.minPoints - user.points).toFixed(0)} {t('pointsToGo')}
-            </p>
-          </motion.div>
-        )}
-      </motion.div>
-
-      <motion.div 
-        className="comic-panel mb-6 bg-comic-cyan"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-      >
-        <h3 className="text-xl font-bold mb-4">🎁 {t('referralSystem')}</h3>
-        <div className="bg-white rounded-xl border-4 border-black p-4 mb-3">
-          <p className="text-sm text-gray-700 mb-2">{t('yourReferralCode')}</p>
-          <p className="text-3xl font-bold text-center mb-2">{user.referralCode}</p>
-          <motion.button 
-            onClick={onCopyReferral} 
-            className="w-full comic-button text-sm"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            {t('copyLink')}
-          </motion.button>
-        </div>
-      </motion.div>
-
-      <motion.div 
-        className="comic-panel mb-6"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-      >
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-bold">⚙️ {t('settings')}</h3>
-          {!editMode && (
+ {/* Quick Add Entry */}
+ <motion.div
+ initial={{ opacity: 0, y: 20 }}
+ animate={{ opacity: 1, y: 0 }}
+ transition={{ delay: 0.1 }}
+ className="enough-panel mb-6"
+ >
+ <h2 className="text-2xl font-semibold tracking-tight mb-4 flex items-center gap-2">
+ ⚡ Quick Add
+ </h2>
+ 
+ <div className="grid grid-cols-4 gap-3">
+          {presets.slice(0, 8).map((preset) => (
             <motion.button
-              onClick={() => setEditMode(true)}
-              className="comic-button-lime rounded-full px-4 py-2"
-              whileHover={{ scale: 1.05 }}
+              key={preset.id}
+              onClick={() => handlePresetClick(preset)}
+              whileHover={{ scale: 1.08, y: -4 }}
               whileTap={{ scale: 0.95 }}
+              className="bg-white p-5 rounded-2xl text-center transition-all"
+              style={{
+                border: '2px solid rgba(245, 198, 26, 0.2)',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(245,198,26,0.1)',
+              }}
             >
-              ✏️ {t('edit')}
-            </motion.button>
-          )}
-        </div>
+              <div className="text-5xl mb-3">{preset.icon}</div>
+              <div className="text-sm font-bold text-gray-900 mb-2">{preset.name}</div>
+              <div className="text-base font-bold" style={{
+                background: 'linear-gradient(135deg, #F5C61A 0%, #FFD93D 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}>
+                {getCurrencySymbol(user.currency)}{preset.price}
+              </div>
+ {preset.tags && preset.tags.length > 0 && (
+ <div className="flex gap-1 justify-center mt-2 flex-wrap">
+ {preset.tags.slice(0, 2).map(tagId => {
+ const tag = WHY_TAGS.find(t => t.id === tagId);
+ return tag ? (
+ <span key={tagId} className="text-xs">
+ {tag.icon}
+ </span>
+ ) : null;
+ })}
+ </div>
+ )}
+ </motion.button>
+ ))}
+ </div>
+ </motion.div>
 
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-bold mb-2">Display Name</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              disabled={!editMode}
-              className="w-full px-4 py-3 border-4 border-black rounded-xl disabled:bg-gray-100"
-            />
-          </div>
+ {/* Savings Comparison - Before/After */}
+ <motion.div
+ initial={{ opacity: 0, y: 20 }}
+ animate={{ opacity: 1, y: 0 }}
+ transition={{ delay: 0.2 }}
+ className="enough-panel mb-6"
+ >
+ <h2 className="text-2xl font-semibold tracking-tight mb-4 flex items-center gap-2">
+ 📊 Before vs After
+ </h2>
 
-          <div>
-            <label className="block text-sm font-bold mb-2">Username</label>
-            <div className="relative">
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => {
-                  setUsername(e.target.value);
-                  onCheckUsername(e.target.value);
-                }}
-                disabled={!editMode}
-                className="w-full px-4 py-3 border-4 border-black rounded-xl disabled:bg-gray-100 pr-12"
-              />
-              {isCheckingUsername && (
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-black"></div>
-                </div>
-              )}
-              {!isCheckingUsername && username && username !== user?.username && (
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  {usernameAvailable === true && <span className="text-green-600 text-xl">✓</span>}
-                  {usernameAvailable === false && <span className="text-red-600 text-xl">✗</span>}
-                </div>
-              )}
-            </div>
-          </div>
+ <div className="grid grid-cols-2 gap-4 mb-4">
+ <div className="bg-red-50 p-4 rounded-xl border border-red-200">
+ <div className="text-sm text-red-600 mb-1">Weekly Spending (Before)</div>
+ <div className="text-3xl font-bold text-red-700">
+ {getCurrencySymbol(user.currency)}{comparisonData.weeklyBefore.toFixed(0)}
+ </div>
+ </div>
+ <div className="bg-green-50 p-4 rounded-xl border border-green-200">
+ <div className="text-sm text-green-600 mb-1">Current Spending</div>
+ <div className="text-3xl font-bold text-green-700">
+ {getCurrencySymbol(user.currency)}{comparisonData.weeklyAfter.toFixed(0)}
+ </div>
+ </div>
+ </div>
 
-          <div>
-            <label className="block text-sm font-bold mb-2">{t('currency')}</label>
-            <select
-              value={currency}
-              onChange={(e) => setCurrency(e.target.value)}
-              disabled={!editMode}
-              className="w-full px-4 py-3 border-4 border-black rounded-xl disabled:bg-gray-100"
-            >
-              {Object.entries(CURRENCIES).map(([code, data]) => (
-                <option key={code} value={code}>
-                  {code} - {data.name} ({data.symbol})
-                </option>
-              ))}
-            </select>
-          </div>
+ <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-6 rounded-xl border border-yellow-200">
+ <div className="flex items-center justify-between mb-2">
+ <div className="text-sm font-semibold text-yellow-900">Weekly Savings</div>
+ <div className="text-2xl">💰</div>
+ </div>
+ <div className="text-4xl font-bold text-yellow-900 mb-2">
+ {getCurrencySymbol(user.currency)}{comparisonData.weeklySavings.toFixed(0)}
+ </div>
+ <div className="text-sm text-yellow-700">
+ {comparisonData.savingsPercentage > 0 && (
+ <>↓ {comparisonData.savingsPercentage.toFixed(1)}% reduction</>
+ )}
+ </div>
+ 
+ {comparisonData.weeklySavings > 0 && (
+ <div className="mt-4 pt-4 border-t border-yellow-300">
+ <div className="text-xs font-semibold text-yellow-900 mb-2">Projections:</div>
+ <div className="grid grid-cols-3 gap-2">
+ <div>
+ <div className="text-xs text-yellow-700">Month</div>
+ <div className="text-sm font-bold text-yellow-900">
+ {getCurrencySymbol(user.currency)}{(comparisonData.weeklySavings * 4).toFixed(0)}
+ </div>
+ </div>
+ <div>
+ <div className="text-xs text-yellow-700">6 Months</div>
+ <div className="text-sm font-bold text-yellow-900">
+ {getCurrencySymbol(user.currency)}{(comparisonData.weeklySavings * 26).toFixed(0)}
+ </div>
+ </div>
+ <div>
+ <div className="text-xs text-yellow-700">Year</div>
+ <div className="text-sm font-bold text-yellow-900">
+ {getCurrencySymbol(user.currency)}{(comparisonData.weeklySavings * 52).toFixed(0)}
+ </div>
+ </div>
+ </div>
+ </div>
+ )}
+ </div>
+ </motion.div>
 
-          <div>
-            <label className="block text-sm font-bold mb-2">{t('language')}</label>
-            <select
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
-              disabled={!editMode}
-              className="w-full px-4 py-3 border-4 border-black rounded-xl disabled:bg-gray-100"
-            >
-              <option value="en">English 🇬🇧</option>
-              <option value="ru">Русский 🇷🇺</option>
-            </select>
-          </div>
+ {/* Wallet Stats */}
+ <motion.div
+ initial={{ opacity: 0, y: 20 }}
+ animate={{ opacity: 1, y: 0 }}
+ transition={{ delay: 0.3 }}
+ className="enough-panel mb-6"
+ >
+ <h2 className="text-2xl font-semibold tracking-tight mb-4 flex items-center gap-2">
+ 💰 Wallet Stats
+ </h2>
 
-          {editMode && (
-            <motion.div 
-              className="flex gap-2"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
-              <motion.button 
-                onClick={onSave} 
-                className="flex-1 comic-button-lime"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                💾 {t('save')}
-              </motion.button>
-              <motion.button
-                onClick={() => setEditMode(false)}
-                className="flex-1 comic-button-secondary"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                ❌ {t('cancel')}
-              </motion.button>
-            </motion.div>
-          )}
-        </div>
-      </motion.div>
+ <div className="grid grid-cols-2 gap-4">
+ <div className="bg-white p-4 rounded-xl border border-gray-200">
+ <div className="text-sm text-gray-600 mb-1">Today</div>
+ <div className="text-2xl font-bold text-gray-900">
+ {getCurrencySymbol(user.currency)}{stats.today.toFixed(0)}
+ </div>
+ </div>
+ <div className="bg-white p-4 rounded-xl border border-gray-200">
+ <div className="text-sm text-gray-600 mb-1">This Week</div>
+ <div className="text-2xl font-bold text-gray-900">
+ {getCurrencySymbol(user.currency)}{stats.week.toFixed(0)}
+ </div>
+ </div>
+ <div className="bg-white p-4 rounded-xl border border-gray-200">
+ <div className="text-sm text-gray-600 mb-1">This Month</div>
+ <div className="text-2xl font-bold text-gray-900">
+ {getCurrencySymbol(user.currency)}{stats.month.toFixed(0)}
+ </div>
+ </div>
+ <div className="bg-gradient-to-br from-yellow-400 to-yellow-500 p-4 rounded-xl border border-yellow-600">
+ <div className="text-sm text-yellow-900 mb-1">All Time</div>
+ <div className="text-2xl font-bold text-yellow-900">
+ {getCurrencySymbol(user.currency)}{stats.allTime.toFixed(0)}
+ </div>
+ </div>
+ </div>
+ </motion.div>
 
-      <motion.button
-        onClick={onLogout}
-        className="w-full bg-red-500 text-white font-bold py-3 px-6 rounded-full border-4 border-black shadow-comic"
-        whileHover={{ scale: 1.02, y: -2, boxShadow: '8px 8px 0px rgba(0,0,0,0.3)' }}
-        whileTap={{ scale: 0.98, y: 0 }}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-      >
-        🚪 {t('logout')}
-      </motion.button>
-    </motion.div>
-  );
+ {/* Top Why Tags */}
+ {topTags.length > 0 && (
+ <motion.div
+ initial={{ opacity: 0, y: 20 }}
+ animate={{ opacity: 1, y: 0 }}
+ transition={{ delay: 0.4 }}
+ className="enough-panel mb-6"
+ >
+ <h2 className="text-2xl font-semibold tracking-tight mb-4 flex items-center gap-2">
+ 🏷️ Top Reasons
+ </h2>
+
+ <div className="grid grid-cols-2 gap-3">
+ {topTags.map(({ tagId, count }) => {
+ const tag = WHY_TAGS.find(t => t.id === tagId);
+ if (!tag) return null;
+
+ return (
+ <div
+ key={tagId}
+ className="bg-white p-4 rounded-xl border border-gray-200"
+ >
+ <div className="flex items-center justify-between mb-2">
+ <span className="text-2xl">{tag.icon}</span>
+ <span className="text-2xl font-bold text-gray-900">{count}</span>
+ </div>
+ <div className="text-sm font-semibold text-gray-700">
+ {getWhyTagName(tag, user.language || 'en')}
+ </div>
+ </div>
+ );
+ })}
+ </div>
+ </motion.div>
+ )}
+
+ {/* Recent Achievements */}
+ {recentAchievements.length > 0 && (
+ <motion.div
+ initial={{ opacity: 0, y: 20 }}
+ animate={{ opacity: 1, y: 0 }}
+ transition={{ delay: 0.5 }}
+ className="enough-panel mb-6"
+ >
+ <h2 className="text-2xl font-semibold tracking-tight mb-4 flex items-center gap-2">
+ 🏆 Recent Achievements
+ </h2>
+
+ <div className="grid grid-cols-3 gap-3">
+ {recentAchievements.map((achievement) => (
+ <motion.div
+ key={achievement.id}
+ whileHover={{ scale: 1.05, y: -2 }}
+ className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-4 rounded-xl border border-yellow-200 text-center"
+ >
+ <div className="text-4xl mb-2">{achievement.icon}</div>
+ <div className="text-xs font-semibold text-yellow-900">
+ {user.language === 'ru' ? achievement.nameRu : achievement.nameEn}
+ </div>
+ </motion.div>
+ ))}
+ </div>
+ </motion.div>
+ )}
+
+ {/* Tag Selection Modal */}
+ <AnimatePresence>
+ {showTagModal && selectedPreset && (
+ <motion.div
+ initial={{ opacity: 0 }}
+ animate={{ opacity: 1 }}
+ exit={{ opacity: 0 }}
+ className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+ onClick={() => setShowTagModal(false)}
+ >
+ <motion.div
+ initial={{ scale: 0.9, opacity: 0 }}
+ animate={{ scale: 1, opacity: 1 }}
+ exit={{ scale: 0.9, opacity: 0 }}
+ className="bg-white rounded-2xl p-6 max-w-md w-full"
+ style={{
+ boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+ }}
+ onClick={(e) => e.stopPropagation()}
+ >
+ <h3 className="text-2xl font-bold mb-4 text-center">
+ {selectedPreset.icon} {selectedPreset.name}
+ </h3>
+ 
+ <p className="text-center text-gray-600 mb-6">
+ Why are you saying "Enough" to this?
+ </p>
+
+              <div className="space-y-3 mb-6">
+                {WHY_TAGS.map((tag) => {
+                  const isSelected = selectedPreset.tags?.includes(tag.id) || false;
+                  
+                  return (
+                    <motion.button
+                      key={tag.id}
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
+                      onClick={() => {
+                        const currentTags = selectedPreset.tags || [];
+                        const newTags = isSelected
+                          ? currentTags.filter(t => t !== tag.id)
+                          : [...currentTags, tag.id];
+                        
+                        setSelectedPreset({ ...selectedPreset, tags: newTags });
+                      }}
+                      className={`w-full p-5 rounded-xl font-bold transition-all text-base ${
+                        isSelected
+                          ? tag.color
+                          : 'bg-gray-100 text-gray-700 border-2 border-gray-300'
+                      }`}
+                    >
+ <div className="flex items-center justify-between">
+ <span className="flex items-center gap-3">
+ <span className="text-2xl">{tag.icon}</span>
+ <span>{getWhyTagName(tag, user.language || 'en')}</span>
+ </span>
+ {isSelected && <span>✓</span>}
+ </div>
+ </motion.button>
+ );
+ })}
+ </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowTagModal(false)}
+                  className="flex-1 bg-gray-200 text-gray-900 py-4 px-6 rounded-xl font-bold hover:bg-gray-300 transition-colors text-base"
+                >
+                  ❌ Cancel
+                </button>
+                <button
+                  onClick={() => handleAddEntry(selectedPreset.tags || [])}
+                  className="flex-1 py-4 px-6 rounded-xl font-bold text-base"
+                  style={{
+                    background: 'linear-gradient(135deg, #F5C61A 0%, #FFD93D 100%)',
+                    color: '#1D1D1F',
+                    boxShadow: '0 4px 12px rgba(245, 198, 26, 0.4)',
+                  }}
+                >
+                  ✅ Add Entry
+                </button>
+              </div>
+ </motion.div>
+ </motion.div>
+ )}
+ </AnimatePresence>
+
+ <Navigation />
+ </div>
+ );
 }

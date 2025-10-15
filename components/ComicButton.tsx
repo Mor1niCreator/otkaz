@@ -38,7 +38,7 @@ export default function ComicButton({
     orange: 'comic-button-orange',
     lime: 'comic-button-lime',
     cyan: 'comic-button-cyan',
-    danger: 'bg-gradient-to-br from-red-500 to-red-600 text-white border-4 border-black rounded-2xl font-black shadow-comic',
+    danger: 'bg-gradient-to-br from-red-500 to-red-600 text-black border-2 border-gray-200 rounded-2xl font-semibold shadow-comic',
   };
 
   const effectClass = {

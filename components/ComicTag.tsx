@@ -43,7 +43,7 @@ export default function ComicTag({
       className={`
         ${sizeClasses[size]} 
         ${color}
-        rounded-2xl border-4 border-black font-black uppercase
+        rounded-2xl border-2 border-gray-200 font-semibold uppercase
         flex items-center gap-2 cursor-pointer
         transition-all duration-200
         ${isSelected ? 'shadow-comic-xl' : 'shadow-comic'}
@@ -129,7 +129,7 @@ export default function ComicTag({
       {/* Count badge */}
       {count !== undefined && (
         <motion.span
-          className="ml-auto bg-black text-comic-yellow rounded-full w-7 h-7 flex items-center justify-center text-xs font-black border-2 border-comic-yellow relative z-10"
+          className="ml-auto bg-black text-comic-yellow rounded-full w-7 h-7 flex items-center justify-center text-xs font-semibold border-2 border-comic-yellow relative z-10"
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
           whileHover={{ scale: 1.2, rotate: 360 }}

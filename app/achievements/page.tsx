@@ -68,23 +68,28 @@ export default function AchievementsPage() {
   const progress = all.length > 0 ? (unlocked.length / all.length) * 100 : 0;
 
   return (
-    <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto">
+    <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto relative min-h-screen">
       <AchievementAnimation 
         show={showAchievement} 
         onComplete={() => setShowAchievement(false)}
         achievement={currentAchievement || { icon: '🏅', name: 'Achievement', description: 'Description' }}
       />
       
-      <div className="comic-panel mb-6">
-        <h1 className="text-4xl font-bold mb-4">🏅 {t('achievementsTitle')}</h1>
+      <div className="enough-panel mb-6">
+        <h1 className="text-4xl font-bold tracking-tight mb-4">🏅 {t('achievementsTitle')}</h1>
         
-        <div className="bg-comic-yellow rounded-xl border-4 border-black p-4 mb-4">
-          <div className="flex justify-between items-center mb-2">
-            <p className="font-bold">{t('progress')}</p>
-            <p className="text-2xl font-bold">{unlocked.length}/{all.length}</p>
+        <div className="bg-white p-6 rounded-xl border border-gray-200">
+          <div className="flex justify-between items-center mb-3">
+            <p className="font-semibold text-gray-700">{t('progress')}</p>
+            <p className="text-2xl font-bold text-gray-900">{unlocked.length}/{all.length}</p>
           </div>
-          <div className="progress-bar">
-            <div className="progress-fill" style={{ width: `${progress}%` }} />
+          <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+            <motion.div 
+              className="h-full bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-full"
+              initial={{ width: 0 }}
+              animate={{ width: `${progress}%` }}
+              transition={{ duration: 1, ease: 'easeOut' }}
+            />
           </div>
         </div>
       </div>
@@ -99,94 +104,37 @@ export default function AchievementsPage() {
               key={achievement.id}
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05, type: 'spring', stiffness: 200 }}
-              whileHover={isUnlocked ? { scale: 1.05, rotate: 2, y: -5 } : {}}
-              whileTap={isUnlocked ? { scale: 0.95 } : {}}
-              className={`comic-panel relative overflow-hidden cursor-pointer ${
+              transition={{ delay: index * 0.05, type: 'spring', stiffness: 200, damping: 15 }}
+              whileHover={isUnlocked ? { scale: 1.02, y: -3 } : {}}
+              whileTap={isUnlocked ? { scale: 0.98 } : {}}
+              className={`enough-panel relative overflow-hidden ${
                 isUnlocked
-                  ? 'bg-gradient-to-br from-comic-orange via-comic-yellow to-comic-lime'
-                  : 'bg-gray-200 opacity-60'
+                  ? 'bg-white cursor-pointer'
+                  : 'bg-gray-100 opacity-50 cursor-not-allowed'
               }`}
               onClick={() => isUnlocked && showAchievementAnimation(achievement)}
             >
-              {/* Shine effect for unlocked achievements */}
-              {isUnlocked && (
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-20 animate-[shine_3s_ease-in-out_infinite]" />
-              )}
-              
-              {/* Glow effect */}
-              {isUnlocked && (
-                <motion.div
-                  className="absolute inset-0 bg-yellow-300 opacity-20"
-                  animate={{
-                    scale: [1, 1.05, 1],
-                    opacity: [0.1, 0.3, 0.1]
-                  }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                />
-              )}
-
               <div className="flex items-center gap-4 relative z-10">
-                <motion.div 
-                  className={`comic-icon text-6xl ${!isUnlocked && 'grayscale'}`}
-                  animate={isUnlocked ? {
-                    rotate: [0, -10, 10, -10, 0],
-                    scale: [1, 1.1, 1]
-                  } : {}}
-                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-                >
+                <div className={`text-6xl ${!isUnlocked && 'grayscale opacity-40'}`}>
                   {achievement.icon}
-                  {isUnlocked && (
-                    <motion.span
-                      className="absolute -top-2 -right-2 text-3xl"
-                      animate={{
-                        scale: [1, 1.3, 1],
-                        rotate: [0, 180, 360]
-                      }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    >
-                      ⭐
-                    </motion.span>
-                  )}
-                </motion.div>
+                </div>
                 <div className="flex-1">
-                  <h3 className="text-xl font-bold flex items-center gap-2">
+                  <h3 className="text-xl font-bold text-gray-900 mb-1">
                     {user.language === 'ru' ? achievement.nameRu : achievement.nameEn}
-                    {isUnlocked && (
-                      <motion.span
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        className="text-2xl"
-                      >
-                        ✨
-                      </motion.span>
-                    )}
+                    {isUnlocked && <span className="ml-2">✨</span>}
                   </h3>
                   <p className="text-sm text-gray-700">
                     {user.language === 'ru' ? achievement.descriptionRu : achievement.descriptionEn}
                   </p>
                   {isUnlocked && userAchievement && (
-                    <motion.p 
-                      className="text-xs text-gray-600 mt-1 flex items-center gap-1"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                    >
+                    <p className="text-xs text-gray-600 mt-2">
                       🎉 Unlocked: {new Date(userAchievement.unlockedAt).toLocaleDateString()}
-                    </motion.p>
-                  )}
-                  {!isUnlocked && (
-                    <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
-                      🔒 {t('locked')}
                     </p>
                   )}
-                  {isUnlocked && (
-                    <motion.p 
-                      className="text-xs text-purple-600 mt-1 font-bold"
-                      animate={{ opacity: [0.5, 1, 0.5] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    >
-                      💫 Click to celebrate!
-                    </motion.p>
+                  {!isUnlocked && (
+                    <p className="text-xs text-gray-500 mt-2">
+                      🔒 {t('locked')}
+                    </p>
                   )}
                 </div>
               </div>
@@ -196,8 +144,8 @@ export default function AchievementsPage() {
       </div>
 
       {unlocked.length === 0 && (
-        <div className="speech-bubble text-center mt-6">
-          <p className="text-lg">
+        <div className="enough-panel text-center mt-6 bg-gray-50">
+          <p className="text-lg text-gray-700">
             Start tracking your refusals to unlock achievements! 🚀
           </p>
         </div>

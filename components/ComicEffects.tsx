@@ -60,7 +60,7 @@ export function ComicExplosion({ show, type = 'pow', position = 'center' }: Comi
             transition={{ duration: 0.6, ease: 'easeOut' }}
           >
             <div
-              className="text-8xl font-black uppercase"
+              className="text-8xl font-semibold uppercase"
               style={{
                 color: effect.colors[0],
                 textShadow: `
@@ -107,7 +107,7 @@ export function ComicExplosion({ show, type = 'pow', position = 'center' }: Comi
           {effect.colors.map((color, i) => (
             <motion.div
               key={i}
-              className="absolute rounded-full border-4 border-black"
+              className="absolute rounded-full border-2 border-gray-200"
               style={{
                 width: 100 + i * 50,
                 height: 100 + i * 50,
