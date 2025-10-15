@@ -3,13 +3,13 @@ import './globals.css';
 import { Toaster } from 'react-hot-toast';
 
 export const metadata: Metadata = {
-  title: 'Отказник - Gamified Savings PWA',
+  title: 'Enough - Gamified Savings PWA',
   description: 'Track your savings, earn achievements, and see crypto ROI',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'Отказник',
+    title: 'Enough',
   },
 };
 

@@ -1,4 +1,4 @@
-# 💰 Отказник PWA
+# 💰 Enough PWA
 
 Gamified savings tracker PWA with multi-currency support.
 

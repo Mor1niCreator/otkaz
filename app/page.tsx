@@ -118,7 +118,7 @@ export default function HomePage() {
               }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              ОТКАЗНИК
+              ENOUGH
             </motion.h1>
 
             {/* Floating emojis */}
@@ -170,7 +170,7 @@ export default function HomePage() {
                   textShadow: '2px 2px 0px rgba(0,0,0,0.2)',
                 }}
               >
-                Save Money • Earn Points • Win Life 🎮
+                Know When to Stop • Save Smart • Live Better 🌟
               </p>
             </div>
           </motion.div>
@@ -388,9 +388,9 @@ export default function HomePage() {
               transition={{ delay: 0.8 }}
             >
               {[
-                { icon: '💰', text: 'Track Savings', color: 'from-yellow-400 to-orange-400' },
-                { icon: '🏆', text: 'Earn Rewards', color: 'from-orange-400 to-pink-500' },
-                { icon: '📊', text: 'See Growth', color: 'from-cyan-400 to-blue-500' },
+                { icon: '✋', text: 'Say Enough', color: 'from-purple-400 to-pink-500' },
+                { icon: '💎', text: 'Build Wealth', color: 'from-yellow-400 to-orange-400' },
+                { icon: '🎯', text: 'Reach Goals', color: 'from-cyan-400 to-blue-500' },
               ].map((item, i) => (
                 <motion.div
                   key={i}
