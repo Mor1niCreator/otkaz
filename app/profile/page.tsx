@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
 import Navigation from '@/components/Navigation';
 import { CURRENCIES } from '@/lib/currencies';
-import { RANKS, getRankForPoints } from '@/lib/ranks';
+import { getRankForPoints } from '@/lib/ranks';
 import toast from 'react-hot-toast';
 import { useTranslation } from '@/lib/i18n';
 import { getUserFromStorage } from '@/lib/user-sync';
@@ -17,13 +18,7 @@ export default function ProfilePage() {
   const [language, setLanguage] = useState('en');
   const [username, setUsername] = useState('');
   const [name, setName] = useState('');
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [passwordStrength, setPasswordStrength] = useState<{ score: number; feedback: string[] }>({ score: 0, feedback: [] });
-  const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null);
-  const [isCheckingUsername, setIsCheckingUsername] = useState(false);
-  const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const [referralStats, setReferralStats] = useState<any>(null);
   
   const { t } = useTranslation(user?.language || 'en');
 
@@ -38,128 +33,43 @@ export default function ProfilePage() {
     setLanguage(parsedUser.language || 'en');
     setUsername(parsedUser.username || '');
     setName(parsedUser.name || '');
+    loadReferralStats(parsedUser.id);
   }, [router]);
 
-  // Функция для проверки доступности никнейма
-  const checkUsernameAvailability = async (username: string) => {
-    if (!username || username === user?.username) {
-      setUsernameAvailable(null);
-      return;
-    }
-
-    setIsCheckingUsername(true);
+  const loadReferralStats = async (userId: string) => {
     try {
-      const res = await fetch('/api/user/check-username', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, userId: user?.id })
-      });
+      const res = await fetch(`/api/referrals/stats?userId=${userId}`);
       const data = await res.json();
-      setUsernameAvailable(data.available);
+      if (res.ok) {
+        setReferralStats(data);
+      }
     } catch (error) {
-      console.error('Error checking username:', error);
-      setUsernameAvailable(null);
-    } finally {
-      setIsCheckingUsername(false);
+      console.error('Failed to load referral stats:', error);
     }
-  };
-
-  // Функция для проверки силы пароля
-  const checkPasswordStrength = (password: string) => {
-    if (!password) {
-      setPasswordStrength({ score: 0, feedback: [] });
-      return;
-    }
-
-    let score = 0;
-    const feedback: string[] = [];
-
-    if (password.length >= 8) score += 1;
-    else feedback.push('Use at least 8 characters');
-
-    if (password.length >= 12) score += 1;
-    else feedback.push('Use 12+ characters for better security');
-
-    if (/[a-z]/.test(password)) score += 1;
-    else feedback.push('Add lowercase letters');
-
-    if (/[A-Z]/.test(password)) score += 1;
-    else feedback.push('Add uppercase letters');
-
-    if (/\d/.test(password)) score += 1;
-    else feedback.push('Add numbers');
-
-    if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) score += 1;
-    else feedback.push('Add special characters');
-
-    if (password.length >= 16) score += 1;
-
-    setPasswordStrength({ score, feedback });
   };
 
   const handleSave = async () => {
     try {
-      // Подготавливаем обновления
-      const updates: any = {
-        currency,
-        language
-      };
+      const updates: any = { currency, language };
+      if (username) updates.username = username;
+      if (name) updates.name = name;
 
-      // Добавляем имя и никнейм, если они изменились
-      if (name !== user.name) {
-        updates.name = name;
-      }
-      if (username !== user.username) {
-        updates.username = username;
-      }
-
-      // Добавляем пароль, если он указан
-      if (newPassword) {
-        if (newPassword !== confirmPassword) {
-          toast.error('Passwords do not match');
-          return;
-        }
-        if (passwordStrength.score < 3) {
-          toast.error('Password is too weak');
-          return;
-        }
-        updates.password = newPassword;
-      }
-
-      const res = await fetch('/api/user/update-profile', {
-        method: 'PUT',
+      const res = await fetch('/api/user/update', {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: user.id,
-          currentPassword: currentPassword || undefined,
-          updates
-        }),
+        body: JSON.stringify({ userId: user.id, ...updates }),
       });
 
-      const data = await res.json();
-
       if (res.ok) {
-        const updatedUser = { ...user, ...data.user };
-        localStorage.setItem('user', JSON.stringify(updatedUser));
-        setUser(updatedUser);
+        const data = await res.json();
+        localStorage.setItem('user', JSON.stringify(data.user));
+        setUser(data.user);
         setEditMode(false);
-        setShowPasswordForm(false);
-        
-        // Очищаем формы
-        setCurrentPassword('');
-        setNewPassword('');
-        setConfirmPassword('');
-        setPasswordStrength({ score: 0, feedback: [] });
-        
-        toast.success('Profile updated successfully! ✅');
-        
-        // Trigger storage event to notify other components
-        window.dispatchEvent(new Event('storage'));
-      } else {
-        toast.error(data.error || 'Failed to save settings');
+        toast.success('Profile updated!');
+        window.location.reload();
       }
     } catch (error) {
-      toast.error('Network error');
+      toast.error('Failed to update profile');
     }
   };
 
@@ -169,281 +79,163 @@ export default function ProfilePage() {
   };
 
   const copyReferralLink = () => {
-    const link = `${window.location.origin}/?ref=${user.referralCode}`;
-    navigator.clipboard.writeText(link);
-    toast.success(t('referralLinkCopied') + ' 📋');
+    if (referralStats?.stats?.referralCode) {
+      const link = `${window.location.origin}?ref=${referralStats.stats.referralCode}`;
+      navigator.clipboard.writeText(link);
+      toast.success('Referral link copied!');
+    }
   };
 
   if (!user) return null;
 
-  const currentRank = getRankForPoints(user.points);
-  const nextRankIndex = RANKS.findIndex(r => r.name === currentRank.name) + 1;
-  const nextRank = nextRankIndex < RANKS.length ? RANKS[nextRankIndex] : null;
-  const progressToNext = nextRank
-    ? ((user.points - currentRank.minPoints) / (nextRank.minPoints - currentRank.minPoints)) * 100
-    : 100;
+  const currentRank = getRankForPoints(Number(user.points) || 0);
 
   return (
-    <div className="pb-24 px-4 py-6 max-w-screen-lg mx-auto">
-      <div className="comic-panel mb-6">
-        <h1 className="text-4xl font-bold mb-2">👤 {t('profile')}</h1>
-        <div className="bg-gradient-to-r from-comic-purple to-comic-pink rounded-2xl border-4 border-black p-6 mt-4 text-white">
-          <p className="text-2xl font-bold mb-1">{user.name || user.email}</p>
-          {user.username && (
-            <p className="text-lg font-bold mb-1">@{user.username}</p>
-          )}
-          <p className="text-sm opacity-90">{user.email}</p>
-        </div>
+    <div className="pb-24 px-4 py-6 max-w-4xl mx-auto" style={{ background: '#FAFAFA', minHeight: '100vh' }}>
+      <div className="mb-8">
+        <h1 className="text-3xl font-black mb-2" style={{ fontWeight: 900, color: '#212121' }}>
+          {t('profile')}
+        </h1>
+        <p className="text-gray-500 text-sm font-medium">Manage your account</p>
       </div>
 
-      <div className="comic-panel mb-6">
-        <h2 className="text-2xl font-bold mb-4">{t('rankProgress')}</h2>
-        <div className="bg-comic-yellow rounded-xl border-4 border-black p-4 mb-4">
-          <div className="flex justify-between items-center mb-2">
-            <div>
-              <p className="text-sm text-gray-700">{t('currentRank')}</p>
-              <p className="text-2xl font-bold" style={{ color: currentRank.color }}>
-                {language === 'ru' ? currentRank.nameRu : currentRank.name}
-              </p>
-            </div>
-            <div className="text-right">
-              <p className="text-sm text-gray-700">{t('points')}</p>
-              <p className="text-3xl font-bold">{user.points.toFixed(0)}</p>
-            </div>
+      {/* Rank Card */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="card mb-6"
+        style={{ background: 'linear-gradient(135deg, #FFC107 0%, #FFB300 100%)', border: 'none' }}
+      >
+        <div className="text-center">
+          <div className="text-sm font-semibold text-gray-900 mb-2">Current Rank</div>
+          <div className="text-4xl font-black mb-1" style={{ color: currentRank.color }}>
+            {user.language === 'ru' ? currentRank.nameRu : currentRank.name}
           </div>
+          <div className="text-2xl font-bold text-gray-900">{user.points || 0} points</div>
         </div>
+      </motion.div>
 
-        {nextRank && (
-          <div>
-            <div className="flex justify-between items-center mb-2">
-              <p className="text-sm text-gray-700">{t('nextRank')}</p>
-              <p className="font-bold" style={{ color: nextRank.color }}>
-                {language === 'ru' ? nextRank.nameRu : nextRank.name}
-              </p>
-            </div>
-            <div className="progress-bar">
-              <div className="progress-fill" style={{ width: `${progressToNext}%` }} />
-            </div>
-            <p className="text-xs text-center text-gray-600 mt-2">
-              {(nextRank.minPoints - user.points).toFixed(0)} {t('pointsToGo')}
-            </p>
-          </div>
-        )}
-      </div>
-
-      <div className="comic-panel mb-6">
-        <h2 className="text-2xl font-bold mb-4">{t('referralSystem')}</h2>
-        <div className="bg-comic-cyan rounded-xl border-4 border-black p-4 mb-3">
-          <p className="text-sm text-gray-700 mb-2">{t('yourReferralCode')}</p>
-          <p className="text-3xl font-bold text-center mb-2">{user.referralCode}</p>
-          <button onClick={copyReferralLink} className="w-full comic-button text-sm">
-            {t('copyLink')}
-          </button>
-        </div>
-        <div className="text-sm text-gray-700 space-y-1">
-          <p>• Invite friends and earn bonus points!</p>
-          <p>• +50 pts when they make their first entry</p>
-          <p>• +20 pts for them when they sign up</p>
-          <p>• +25 pts for both when they stay active!</p>
-        </div>
-      </div>
-
-      <div className="comic-panel mb-6">
+      {/* Profile Info */}
+      <div className="card mb-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">{t('settings')}</h2>
+          <h2 className="text-lg font-bold text-gray-900">Account Info</h2>
           {!editMode && (
-            <button
-              onClick={() => setEditMode(true)}
-              className="comic-button-lime rounded-full px-4 py-2"
-            >
-              ✏️ {t('edit')}
+            <button onClick={() => setEditMode(true)} className="text-sm font-semibold text-yellow-600">
+              {t('edit')}
             </button>
           )}
         </div>
 
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-bold mb-2">Display Name</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              disabled={!editMode}
-              placeholder="Enter your display name"
-              className="w-full px-4 py-3 border-4 border-black rounded-xl disabled:bg-gray-100"
-            />
-          </div>
+        {editMode ? (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-xs font-semibold text-gray-700 mb-2">Name</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="input"
+              />
+            </div>
 
-          <div>
-            <label className="block text-sm font-bold mb-2">Username</label>
-            <div className="relative">
+            <div>
+              <label className="block text-xs font-semibold text-gray-700 mb-2">Username</label>
               <input
                 type="text"
                 value={username}
-                onChange={(e) => {
-                  setUsername(e.target.value);
-                  checkUsernameAvailability(e.target.value);
-                }}
-                disabled={!editMode}
-                placeholder="Enter your username"
-                className="w-full px-4 py-3 border-4 border-black rounded-xl disabled:bg-gray-100 pr-12"
+                onChange={(e) => setUsername(e.target.value)}
+                className="input"
+                placeholder="username"
               />
-              {isCheckingUsername && (
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-black"></div>
-                </div>
-              )}
-              {!isCheckingUsername && username && username !== user?.username && (
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  {usernameAvailable === true && <span className="text-green-600 text-xl">✓</span>}
-                  {usernameAvailable === false && <span className="text-red-600 text-xl">✗</span>}
-                </div>
-              )}
             </div>
-            {username && username !== user?.username && usernameAvailable === false && (
-              <p className="text-red-600 text-sm mt-1">Username is already taken</p>
-            )}
-            {username && username !== user?.username && usernameAvailable === true && (
-              <p className="text-green-600 text-sm mt-1">Username is available</p>
-            )}
-          </div>
 
-          <div>
-            <label className="block text-sm font-bold mb-2">{t('currency')}</label>
-            <select
-              value={currency}
-              onChange={(e) => setCurrency(e.target.value)}
-              disabled={!editMode}
-              className="w-full px-4 py-3 border-4 border-black rounded-xl disabled:bg-gray-100"
-            >
-              {Object.entries(CURRENCIES).map(([code, data]) => (
-                <option key={code} value={code}>
-                  {code} - {data.name} ({data.symbol})
-                </option>
-              ))}
-            </select>
-          </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold text-gray-700 mb-2">Currency</label>
+                <select value={currency} onChange={(e) => setCurrency(e.target.value)} className="input">
+                  {Object.keys(CURRENCIES).map(code => (
+                    <option key={code} value={code}>{code}</option>
+                  ))}
+                </select>
+              </div>
 
-          <div>
-            <label className="block text-sm font-bold mb-2">{t('language')}</label>
-            <select
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
-              disabled={!editMode}
-              className="w-full px-4 py-3 border-4 border-black rounded-xl disabled:bg-gray-100"
-            >
-              <option value="en">English 🇬🇧</option>
-              <option value="ru">Русский 🇷🇺</option>
-            </select>
-          </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-700 mb-2">Language</label>
+                <select value={language} onChange={(e) => setLanguage(e.target.value)} className="input">
+                  <option value="en">English</option>
+                  <option value="ru">Русский</option>
+                </select>
+              </div>
+            </div>
 
-          {editMode && (
+            <div className="flex gap-3 pt-4">
+              <button onClick={() => setEditMode(false)} className="btn-secondary flex-1">
+                {t('cancel')}
+              </button>
+              <button onClick={handleSave} className="btn-primary flex-1">
+                {t('save')}
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-3">
             <div>
-              <button
-                onClick={() => setShowPasswordForm(!showPasswordForm)}
-                className="comic-button-cyan w-full"
-              >
-                🔒 {showPasswordForm ? 'Hide Password Change' : 'Change Password'}
-              </button>
+              <div className="text-xs text-gray-500 mb-1">Name</div>
+              <div className="font-semibold text-gray-900">{user.name}</div>
             </div>
-          )}
-
-          {showPasswordForm && (
-            <div className="space-y-4 p-4 bg-gray-100 rounded-xl border-4 border-black">
-              <h3 className="text-lg font-bold">Change Password</h3>
-              
+            <div>
+              <div className="text-xs text-gray-500 mb-1">Email</div>
+              <div className="font-semibold text-gray-900">{user.email}</div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-bold mb-2">Current Password</label>
-                <input
-                  type="password"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                  placeholder="Enter current password"
-                  className="w-full px-4 py-3 border-4 border-black rounded-xl"
-                />
+                <div className="text-xs text-gray-500 mb-1">Currency</div>
+                <div className="font-semibold text-gray-900">{user.currency}</div>
               </div>
-
               <div>
-                <label className="block text-sm font-bold mb-2">New Password</label>
-                <input
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => {
-                    setNewPassword(e.target.value);
-                    checkPasswordStrength(e.target.value);
-                  }}
-                  placeholder="Enter new password"
-                  className="w-full px-4 py-3 border-4 border-black rounded-xl"
-                />
-                {newPassword && (
-                  <div className="mt-2">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm font-bold">Strength:</span>
-                      <div className="flex gap-1">
-                        {[1, 2, 3, 4, 5, 6].map((level) => (
-                          <div
-                            key={level}
-                            className={`w-4 h-2 rounded ${
-                              level <= passwordStrength.score
-                                ? level <= 2
-                                  ? 'bg-red-500'
-                                  : level <= 4
-                                  ? 'bg-yellow-500'
-                                  : 'bg-green-500'
-                                : 'bg-gray-300'
-                            }`}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                    {passwordStrength.feedback.length > 0 && (
-                      <ul className="text-xs text-gray-600">
-                        {passwordStrength.feedback.map((tip, index) => (
-                          <li key={index}>• {tip}</li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold mb-2">Confirm New Password</label>
-                <input
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Confirm new password"
-                  className="w-full px-4 py-3 border-4 border-black rounded-xl"
-                />
-                {confirmPassword && newPassword !== confirmPassword && (
-                  <p className="text-red-600 text-sm mt-1">Passwords do not match</p>
-                )}
+                <div className="text-xs text-gray-500 mb-1">Language</div>
+                <div className="font-semibold text-gray-900">{user.language === 'ru' ? 'Русский' : 'English'}</div>
               </div>
             </div>
-          )}
+          </div>
+        )}
+      </div>
 
-          {editMode && (
-            <div className="flex gap-2">
-              <button onClick={handleSave} className="flex-1 comic-button-lime">
-                💾 {t('save')}
-              </button>
-              <button
-                onClick={() => setEditMode(false)}
-                className="flex-1 comic-button-secondary"
-              >
-                ❌ {t('cancel')}
-              </button>
+      {/* Referral Card */}
+      {referralStats && (
+        <div className="card mb-6">
+          <h2 className="text-lg font-bold text-gray-900 mb-4">Referrals</h2>
+          
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <div className="text-center p-4 bg-gray-50 rounded-xl">
+              <div className="text-2xl font-bold text-gray-900">{referralStats.stats.totalReferrals}</div>
+              <div className="text-xs text-gray-500">Total</div>
+            </div>
+            <div className="text-center p-4 bg-gray-50 rounded-xl">
+              <div className="text-2xl font-bold text-gray-900">{referralStats.stats.activeReferrals}</div>
+              <div className="text-xs text-gray-500">Active</div>
+            </div>
+          </div>
+
+          {referralStats.stats.referralCode && (
+            <div>
+              <div className="text-xs font-semibold text-gray-700 mb-2">Your Code</div>
+              <div className="flex gap-2">
+                <div className="flex-1 px-4 py-3 bg-gray-50 rounded-xl font-mono font-bold text-gray-900">
+                  {referralStats.stats.referralCode}
+                </div>
+                <button onClick={copyReferralLink} className="btn-primary px-4">
+                  Copy
+                </button>
+              </div>
             </div>
           )}
         </div>
-      </div>
+      )}
 
-      <button
-        onClick={handleLogout}
-        className="w-full bg-red-500 text-white font-bold py-3 px-6 rounded-full border-4 border-black shadow-comic hover:shadow-comic-lg transition-all hover:-translate-y-1 active:translate-y-0"
-      >
-        🚪 {t('logout')}
+      {/* Logout */}
+      <button onClick={handleLogout} className="btn-secondary w-full">
+        {t('logout')}
       </button>
 
       <Navigation />

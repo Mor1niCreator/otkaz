@@ -96,12 +96,16 @@ export default function CalendarPage() {
           pricePerUnit: preset.price,
           quantity: 1,
           category: preset.category,
+          currency: user.currency || 'USD',
         }),
       });
 
       if (res.ok) {
         toast.success(`${preset.icon} ${preset.name} added!`);
         loadEntries(user.id);
+      } else {
+        const data = await res.json();
+        toast.error(data.error || 'Failed to add entry');
       }
     } catch (error) {
       toast.error('Failed to add entry');
@@ -122,6 +126,7 @@ export default function CalendarPage() {
           pricePerUnit: parseFloat(formData.pricePerUnit),
           quantity: parseInt(formData.quantity),
           category: formData.category,
+          currency: user.currency || 'USD',
         }),
       });
 
@@ -130,6 +135,9 @@ export default function CalendarPage() {
         setShowForm(false);
         setFormData({ name: '', pricePerUnit: '', quantity: '1', category: 'other', note: '' });
         loadEntries(user.id);
+      } else {
+        const data = await res.json();
+        toast.error(data.error || 'Failed to add entry');
       }
     } catch (error) {
       toast.error('Failed to add entry');
