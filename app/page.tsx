@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CURRENCIES } from '@/lib/currencies';
+import { CURRENCIES_ARRAY } from '@/lib/currencies';
 
 export default function HomePage() {
   const router = useRouter();
