@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ComicExplosion } from './ComicEffects';
 
 interface BoomAnimationProps {
   show: boolean;
@@ -15,8 +14,8 @@ interface BoomAnimationProps {
 export default function BoomAnimation({ 
   show, 
   onComplete, 
-  text = 'BOOM!', 
-  emoji = '💥',
+  text = 'SAVED!', 
+  emoji = '💰',
   type = 'boom'
 }: BoomAnimationProps) {
   useEffect(() => {
@@ -29,119 +28,109 @@ export default function BoomAnimation({
   }, [show, onComplete]);
 
   return (
-    <>
-      <ComicExplosion show={show} type={type} />
-      
-      <AnimatePresence>
-        {show && (
+    <AnimatePresence>
+      {show && (
+        <motion.div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 pointer-events-none"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+        >
           <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 pointer-events-none"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            className="text-center relative"
+            initial={{ scale: 0, y: 50 }}
+            animate={{ 
+              scale: [0, 1.1, 1], 
+              y: [50, -10, 0]
+            }}
+            exit={{ scale: 0, opacity: 0, y: -50 }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
           >
-            {/* Main text with comic effect */}
-            <motion.div
-              className="text-center relative"
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{ 
-                scale: [0, 1.3, 1], 
-                rotate: [-180, 20, 0] 
-              }}
-              exit={{ scale: 0, opacity: 0, rotate: 180 }}
-              transition={{ duration: 0.6, ease: 'easeOut' }}
-            >
-              {/* Burst rays background */}
-              <div className="absolute inset-0 -z-10">
-                {[...Array(16)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute"
-                    style={{
-                      width: '6px',
-                      height: '80px',
-                      backgroundColor: '#FFE030',
-                      border: '2px solid #000',
-                      left: '50%',
-                      top: '50%',
-                      transformOrigin: 'top center',
-                      rotate: `${i * 22.5}deg`,
-                    }}
-                    initial={{ scaleY: 0 }}
-                    animate={{ scaleY: [0, 1.5, 1.2] }}
-                    transition={{ 
-                      duration: 0.5,
-                      delay: i * 0.02,
-                      ease: 'easeOut'
-                    }}
-                  />
-                ))}
-              </div>
-
-              <motion.div 
-                className="text-9xl mb-4"
-                animate={{ 
-                  scale: [1, 1.2, 1],
-                  rotate: [0, -10, 10, 0]
-                }}
-                transition={{ duration: 0.5 }}
-                style={{
-                  filter: 'drop-shadow(6px 6px 0px #000)',
-                }}
-              >
-                {emoji}
-              </motion.div>
-              
-              <motion.div 
-                className="text-8xl uppercase"
-                style={{ 
-                  fontFamily: "'Shrikhand', 'Russo One', cursive, sans-serif",
-                  fontWeight: 400,
-                  background: 'linear-gradient(135deg, #FFE030 0%, #FF6B35 50%, #FF006E 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  filter: 'drop-shadow(6px 6px 0px #000)',
-                  letterSpacing: '0.1em',
-                  WebkitTextStroke: '3px #000',
-                  transform: 'scaleY(1.15) rotate(2deg)',
-                }}
-                animate={{
-                  scale: [1, 1.15, 1],
-                  rotate: [2, -2, 2],
-                }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-              >
-                {text}
-              </motion.div>
-
-              {/* Sparkles around */}
-              {['✨', '💫', '⭐', '✨', '💫'].map((sparkle, i) => (
+            {/* Background burst */}
+            <div className="absolute inset-0 -z-10">
+              {[...Array(12)].map((_, i) => (
                 <motion.div
                   key={i}
-                  className="absolute text-4xl"
+                  className="absolute bg-enough-yellow border-2 border-black"
                   style={{
-                    left: `${20 + i * 20}%`,
-                    top: `${10 + (i % 2) * 80}%`,
+                    width: '6px',
+                    height: '60px',
+                    left: '50%',
+                    top: '50%',
+                    transformOrigin: 'top center',
+                    rotate: `${i * 30}deg`,
                   }}
-                  initial={{ scale: 0, rotate: 0 }}
-                  animate={{ 
-                    scale: [0, 1.5, 1],
-                    rotate: [0, 360, 720],
-                    opacity: [0, 1, 0]
-                  }}
+                  initial={{ scaleY: 0 }}
+                  animate={{ scaleY: [0, 1.3, 1] }}
                   transition={{ 
-                    duration: 1,
-                    delay: 0.2 + i * 0.1,
+                    duration: 0.4,
+                    delay: i * 0.02,
+                    ease: 'easeOut'
                   }}
-                >
-                  {sparkle}
-                </motion.div>
+                />
               ))}
+            </div>
+
+            <motion.div 
+              className="text-8xl mb-4"
+              animate={{ 
+                scale: [1, 1.15, 1],
+              }}
+              transition={{ duration: 0.4, repeat: 2 }}
+              style={{
+                filter: 'drop-shadow(4px 4px 0px #000)',
+              }}
+            >
+              {emoji}
             </motion.div>
+            
+            <motion.div 
+              className="bg-enough-yellow border-4 border-black px-8 py-4"
+              style={{
+                boxShadow: '0 6px 0px #000',
+              }}
+              animate={{
+                scale: [1, 1.05, 1],
+              }}
+              transition={{ duration: 0.4, delay: 0.1 }}
+            >
+              <div
+                className="text-4xl font-black uppercase tracking-wider"
+                style={{
+                  color: '#000',
+                }}
+              >
+                {text}
+              </div>
+            </motion.div>
+
+            {/* Sparkles */}
+            {['✨', '💫', '⭐'].map((sparkle, i) => (
+              <motion.div
+                key={i}
+                className="absolute text-3xl"
+                style={{
+                  left: `${15 + i * 35}%`,
+                  top: `${-10 + (i % 2) * 120}%`,
+                }}
+                initial={{ scale: 0, rotate: 0 }}
+                animate={{ 
+                  scale: [0, 1.3, 1],
+                  rotate: [0, 180, 360],
+                  opacity: [0, 1, 0]
+                }}
+                transition={{ 
+                  duration: 0.8,
+                  delay: 0.2 + i * 0.1,
+                }}
+              >
+                {sparkle}
+              </motion.div>
+            ))}
           </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

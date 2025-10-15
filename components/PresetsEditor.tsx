@@ -67,19 +67,19 @@ export default function PresetsEditor({
   };
 
   return (
-    <div className="fixed inset-0 comic-modal-overlay flex items-center justify-center p-4 z-50 overflow-y-auto">
-      <div className="comic-modal max-w-2xl w-full my-8">
+    <div className="fixed inset-0 enough-modal-overlay flex items-center justify-center p-4 z-50 overflow-y-auto">
+      <div className="enough-modal max-w-2xl w-full my-8">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">⚙️ {t('customizePresets')}</h2>
+          <h2 className="text-2xl font-black uppercase">⚙️ {t('customizePresets')}</h2>
           <button
             onClick={onClose}
-            className="text-2xl hover:text-red-500 font-bold"
+            className="text-3xl hover:text-red-500 font-bold"
           >
             ×
           </button>
         </div>
 
-        <p className="text-sm text-gray-600 mb-4">
+        <p className="text-sm text-gray-700 mb-4 font-bold">
           {t('customizePresetsDescription')}
         </p>
 
@@ -87,7 +87,8 @@ export default function PresetsEditor({
           {presets.map((preset) => (
             <div
               key={preset.id}
-              className="bg-white rounded-xl border-4 border-black p-3"
+              className="bg-enough-cream border-3 border-black p-3"
+              style={{ boxShadow: '0 2px 0px #000' }}
             >
               {editingId === preset.id ? (
                 <div className="space-y-2">
@@ -96,7 +97,7 @@ export default function PresetsEditor({
                     <button
                       type="button"
                       onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                      className="text-3xl border-2 border-black rounded-lg px-3 py-2 hover:bg-gray-100"
+                      className="text-3xl border-3 border-black px-3 py-2 hover:bg-enough-yellow transition-colors"
                     >
                       {editForm.icon || '💰'}
                     </button>
@@ -107,7 +108,7 @@ export default function PresetsEditor({
                       value={editForm.name}
                       onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
                       placeholder={t('presetName')}
-                      className="flex-1 px-3 py-2 border-2 border-black rounded-lg"
+                      className="flex-1 px-3 py-2"
                     />
 
                     {/* Price input */}
@@ -118,19 +119,19 @@ export default function PresetsEditor({
                       value={editForm.price}
                       onChange={(e) => setEditForm({ ...editForm, price: e.target.value })}
                       placeholder={t('price')}
-                      className="w-24 px-3 py-2 border-2 border-black rounded-lg"
+                      className="w-24 px-3 py-2"
                     />
                   </div>
 
                   {/* Emoji picker grid */}
                   {showEmojiPicker && (
-                    <div className="bg-gray-50 rounded-lg border-2 border-gray-300 p-2 grid grid-cols-8 gap-1 max-h-40 overflow-y-auto">
+                    <div className="bg-enough-white border-2 border-black p-2 grid grid-cols-8 gap-1 max-h-40 overflow-y-auto">
                       {PRESET_EMOJI_OPTIONS.map((emoji) => (
                         <button
                           key={emoji}
                           type="button"
                           onClick={() => selectEmoji(emoji)}
-                          className="text-2xl hover:bg-gray-200 rounded p-1 transition-colors"
+                          className="text-2xl hover:bg-enough-yellow transition-colors p-1"
                         >
                           {emoji}
                         </button>
@@ -141,7 +142,7 @@ export default function PresetsEditor({
                   <div className="flex gap-2">
                     <button
                       onClick={() => handleSave(preset.id)}
-                      className="flex-1 comic-button py-2 text-sm"
+                      className="flex-1 enough-button-primary py-2 text-sm"
                     >
                       {t('save')}
                     </button>
@@ -150,7 +151,7 @@ export default function PresetsEditor({
                         setEditingId(null);
                         setShowEmojiPicker(false);
                       }}
-                      className="flex-1 comic-button-secondary py-2 text-sm"
+                      className="flex-1 enough-button-secondary py-2 text-sm"
                     >
                       {t('cancel')}
                     </button>
@@ -161,15 +162,15 @@ export default function PresetsEditor({
                   <div className="flex items-center gap-3">
                     <span className="text-3xl">{preset.icon}</span>
                     <div>
-                      <div className="font-bold">{preset.name}</div>
-                      <div className="text-sm text-gray-600">
+                      <div className="font-black uppercase tracking-wide">{preset.name}</div>
+                      <div className="text-sm font-bold text-gray-700">
                         {formatCurrency(preset.price, currency)}
                       </div>
                     </div>
                   </div>
                   <button
                     onClick={() => handleEdit(preset)}
-                    className="comic-button-secondary px-4 py-2 text-sm"
+                    className="enough-button-secondary px-4 py-2 text-sm"
                   >
                     ✏️ {t('edit')}
                   </button>
@@ -182,13 +183,13 @@ export default function PresetsEditor({
         <div className="flex gap-2">
           <button
             onClick={handleReset}
-            className="flex-1 comic-button-secondary py-3"
+            className="flex-1 enough-button-secondary py-3"
           >
             🔄 {t('resetToDefaults')}
           </button>
           <button
             onClick={onClose}
-            className="flex-1 comic-button py-3"
+            className="flex-1 enough-button-primary py-3"
           >
             ✅ {t('done')}
           </button>
