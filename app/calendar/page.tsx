@@ -161,7 +161,7 @@ export default function CalendarPage() {
         <p className="text-lg font-bold text-gray-700">{format(new Date(), 'MMMM d, yyyy')}</p>
         
         <div 
-          className="mt-4 bg-white p-6 text-center rounded-2xl elevation-2 elevation-2"
+          className="mt-4 bg-white p-6 text-center rounded-2xl elevation-2"
         >
           <p className="text-sm font-semibold tracking-normal mb-1 text-gray-700">
             {t('savedToday')}
@@ -198,7 +198,7 @@ export default function CalendarPage() {
                 key={preset.id}
                 onClick={() => handlePreset(preset)}
                 className="p-5 bg-white font-semibold transition-all hover:shadow-[0_0_20px_rgba(245,198,26,0.6),0_6px_0px_#000] hover:bg-[rgba(245,198,26,0.08)] hover:-translate-y-1 elevation-2"
-                style={{ boxShadow: '0 4px 0px #000' }}
+                
               >
                 <div className="text-4xl mb-2">{preset.icon}</div>
                 <div className="font-semibold text-base tracking-tight text-gray-900">{preset.name}</div>

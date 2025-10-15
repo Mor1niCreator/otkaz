@@ -192,7 +192,9 @@ export default function WhyPage() {
                     className={`p-4  font-semibold tracking-tight text-left transition-all
                       ${isSelected ? 'bg-white' : 'bg-white hover:bg-white'}`}
                     style={{
-                      boxShadow: isSelected ? '0 4px 0px #000' : '0 2px 0px #000',
+                      boxShadow: isSelected 
+                        ? '0 2px 6px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.06)' 
+                        : '0 1px 3px rgba(0,0,0,0.04)',
                     }}
                   >
                     <div className="flex items-center gap-3">
