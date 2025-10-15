@@ -123,7 +123,7 @@ export default function AchievementsPage() {
                     opacity: [0.1, 0.3, 0.1]
                   }}
                   transition={{ duration: 2, repeat: Infinity }}
-                />
+                ></motion.div>
               )}
 
               <div className="flex items-center gap-4 relative z-10">
