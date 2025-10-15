@@ -99,13 +99,13 @@ export default function AchievementsPage() {
               key={achievement.id}
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05, type: 'spring', stiffness: 200 }}
-              whileHover={isUnlocked ? { scale: 1.05, rotate: 2, y: -5 } : {}}
-              whileTap={isUnlocked ? { scale: 0.95 } : {}}
-              className={`enough-panel relative overflow-hidden cursor-pointer ${
+              transition={{ delay: index * 0.05, type: 'spring', stiffness: 200, damping: 15 }}
+              whileHover={isUnlocked ? { scale: 1.02, y: -3 } : {}}
+              whileTap={isUnlocked ? { scale: 0.98 } : {}}
+              className={`enough-panel relative overflow-hidden ${
                 isUnlocked
-                  ? 'bg-white from-black via-enough-yellow to-enough-yellow'
-                  : 'bg-gray-200 opacity-60'
+                  ? 'bg-white cursor-pointer'
+                  : 'bg-gray-100 opacity-50 cursor-not-allowed'
               }`}
               onClick={() => isUnlocked && showAchievementAnimation(achievement)}
             >
@@ -117,13 +117,16 @@ export default function AchievementsPage() {
               {/* Glow effect */}
               {isUnlocked && (
                 <motion.div
-                  className="absolute inset-0 bg-yellow-300 opacity-20 elevation-2"
-                  animate={{
-                    scale: [1, 1.05, 1],
-                    opacity: [0.1, 0.3, 0.1]
+                  className="absolute inset-0 opacity-20 pointer-events-none"
+                  style={{
+                    background: 'radial-gradient(circle at 50% 50%, rgba(245, 198, 26, 0.3) 0%, transparent 70%)',
                   }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                ></motion.div>
+                  animate={{
+                    scale: [1, 1.03, 1],
+                    opacity: [0.1, 0.25, 0.1]
+                  }}
+                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                />
               )}
 
               <div className="flex items-center gap-4 relative z-10">
@@ -137,12 +140,12 @@ export default function AchievementsPage() {
                   {achievement.icon}
                   {isUnlocked && (
                     <motion.span
-                      className="absolute -top-2 -right-2 text-3xl elevation-2"
+                      className="absolute -top-2 -right-2 text-3xl"
                       animate={{
-                        scale: [1, 1.3, 1],
-                        rotate: [0, 180, 360]
+                        scale: [1, 1.2, 1],
+                        rotate: [0, 10, 0, -10, 0]
                       }}
-                      transition={{ duration: 2, repeat: Infinity }}
+                      transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
                     >
                       ⭐
                     </motion.span>
@@ -155,7 +158,8 @@ export default function AchievementsPage() {
                       <motion.span
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        className="text-2xl elevation-2"
+                        transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+                        className="text-2xl"
                       >
                         ✨
                       </motion.span>
