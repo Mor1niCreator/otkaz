@@ -254,6 +254,7 @@ export default function GoalsPage() {
                   <p className="text-xs font-bold text-gray-600 mt-2 text-center">
                     {formatCurrency(convertedSavings, user.currency)} / {formatCurrency(convertedTarget, user.currency)}
                   </p>
+                  </div>
                 </div>
               );
             })}
@@ -398,7 +399,6 @@ export default function GoalsPage() {
           </motion.div>
         )}
       </AnimatePresence>
-      </div>
 
       <Navigation />
     </div>
