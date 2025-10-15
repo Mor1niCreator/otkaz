@@ -230,7 +230,7 @@ export default function CalendarPage() {
                     )}
                   </div>
                 )}
-              </motion.button>
+              </button>
             );
           })}
         </div>
