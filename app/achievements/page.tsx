@@ -35,14 +35,26 @@ export default function AchievementsPage() {
   const { t } = useTranslation(user?.language || 'en');
 
   useEffect(() => {
-    const parsedUser = getUserFromStorage();
-    if (!parsedUser) {
-      router.push('/');
-      return;
-    }
-    setUser(parsedUser);
-    loadAchievements(parsedUser.id);
-  }, [router]);
+    const handleUserUpdate = () => {
+      const parsedUser = getUserFromStorage();
+      if (!parsedUser) {
+        router.push('/');
+      } else {
+        setUser(parsedUser);
+        if (user && parsedUser.id !== user.id) {
+          loadAchievements(parsedUser.id);
+        }
+      }
+    };
+
+    handleUserUpdate(); // Initial load
+
+    window.addEventListener('storage', handleUserUpdate);
+
+    return () => {
+      window.removeEventListener('storage', handleUserUpdate);
+    };
+  }, [router, user]);
 
   const loadAchievements = async (userId: string) => {
     try {
