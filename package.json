@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && prisma migrate deploy && next build",
+    "build": "prisma migrate deploy && next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate",
+    "postinstall": "DATABASE_URL=\"postgresql://user:password@host:port/db\" prisma generate",
     "db:init": "prisma generate && prisma migrate dev --name init && tsx prisma/seed.ts",
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio"
