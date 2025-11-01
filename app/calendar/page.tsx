@@ -125,7 +125,7 @@ export default function CalendarPage() {
         body: JSON.stringify({
           userId: user.id,
           ...formData,
-          pricePerUnit: parseFloat(formData.pricePerUnit),
+          pricePerUnit: Number(formData.pricePerUnit),
           quantity: parseFloat(formData.quantity),
           currency: user.currency || 'USD',
         }),
