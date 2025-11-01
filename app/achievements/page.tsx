@@ -84,7 +84,15 @@ export default function AchievementsPage() {
       <AchievementAnimation 
         show={showAchievement} 
         onComplete={() => setShowAchievement(false)}
-        achievement={currentAchievement || { icon: '🏅', name: 'Achievement', description: 'Description' }}
+        achievement={
+          currentAchievement
+            ? {
+                icon: currentAchievement.icon,
+                name: user.language === 'ru' ? currentAchievement.nameRu : currentAchievement.nameEn,
+                description: user.language === 'ru' ? currentAchievement.descriptionRu : currentAchievement.descriptionEn,
+              }
+            : { icon: '🏅', name: 'Achievement', description: 'Description' }
+        }
       />
       
       <div className="comic-panel mb-6">
